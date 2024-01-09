@@ -1,13 +1,15 @@
 import 'dart:convert';
+
+import 'package:cropsync/json/user.dart';
+import 'package:cropsync/screens/main_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/services/user_model.dart';
+import 'package:cropsync/services/user_token.dart';
+import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:watch_it/watch_it.dart';
-import '../json/user.dart';
-import '../widgets/buttons.dart';
-import 'main_screen.dart';
 
 Future<String> _loadData() async {
   return await rootBundle.loadString('assets/user.json');
@@ -23,6 +25,7 @@ class WelcomeScreen extends StatelessWidget {
     User user = User.fromJson(data);
 
     di<UserModel>().user = user;
+    UserToken.setToken(data['token']);
 
     if (!context.mounted) return;
     Navigator.of(context).pushReplacement(

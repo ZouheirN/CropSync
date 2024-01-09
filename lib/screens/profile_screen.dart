@@ -3,7 +3,6 @@ import 'package:cropsync/services/user_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:hive/hive.dart';
 import 'package:watch_it/watch_it.dart';
 
 class ProfileScreen extends WatchingWidget {

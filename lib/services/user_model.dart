@@ -1,4 +1,5 @@
 import 'package:cropsync/json/user.dart';
+import 'package:cropsync/services/user_token.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -28,6 +29,7 @@ class UserModel extends ChangeNotifier {
       isVerified: false,
     );
     userInfoBox.delete('user');
+    UserToken.deleteToken();
     notifyListeners();
   }
 }
