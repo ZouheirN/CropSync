@@ -22,16 +22,14 @@ class PrimaryButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 40,
-          vertical: 20,
-        ),
         textStyle: const TextStyle(
           fontSize: 20,
         ),
-        minimumSize: const Size(double.maxFinite, 50),
+        minimumSize: const Size(double.infinity, 60),
       ),
-      child: Text(text),
+      child: isLoading
+          ? const CircularProgressIndicator(color: Colors.white)
+          : Text(text),
     );
   }
 }

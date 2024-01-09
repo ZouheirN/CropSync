@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:email_validator/email_validator.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
@@ -41,6 +41,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() {
         _isLoading = true;
       });
+
+      await Future.delayed(const Duration(seconds: 2));
 
       // Hash the password
       final String hashedPassword = BCrypt.hashpw(
@@ -108,6 +110,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             if (value == null || value.isEmpty) {
               return 'Please enter your full name';
             }
+
+            RegExp nameRegex = RegExp(r"^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$");
+            if (!nameRegex.hasMatch(value)) {
+              return 'Please enter a valid name';
+            }
+
             return null;
           },
         ),
@@ -137,6 +145,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             if (value == null || value.isEmpty) {
               return 'Please enter your email';
             }
+
+            if (!EmailValidator.validate(value, true, true)) {
+              return 'Please enter a valid email';
+            }
+
             return null;
           },
         ),
@@ -260,6 +273,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           hintText: 'Enter your password again',
           textController: _confirmPasswordTextController,
           prefixIcon: const Icon(Icons.lock),
+          obscureText: true,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter your password again';

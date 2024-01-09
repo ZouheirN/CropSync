@@ -38,6 +38,7 @@ dependencies:
   gap: ^3.0.1
   fancy_password_field: ^2.0.2
   bcrypt: ^1.1.3
+  email_validator: ^2.1.17
 
 dev_dependencies:
   flutter_test:
