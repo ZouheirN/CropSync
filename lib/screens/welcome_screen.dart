@@ -1,3 +1,4 @@
+import 'package:cropsync/screens/main_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -84,7 +85,13 @@ class WelcomeScreen extends StatelessWidget {
   Widget _buildButtons(BuildContext context) {
     return Column(
       children: [
-        PrimaryButton(text: 'Login', onPressed: () {}),
+        PrimaryButton(text: 'Login', onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MainScreen(),
+            ),
+          );
+        }),
         const Gap(20),
         Row(
           children: [
