@@ -1,13 +1,20 @@
+import 'package:cropsync/main.dart';
 import 'package:cropsync/screens/welcome_screen.dart';
 import 'package:cropsync/services/user_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hive/hive.dart';
 import 'package:watch_it/watch_it.dart';
 
-class ProfileScreen extends WatchingWidget {
+class ProfileScreen extends WatchingStatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   void _logout(BuildContext context) {
     di<UserModel>().logout();
 
@@ -46,6 +53,29 @@ class ProfileScreen extends WatchingWidget {
                 },
               ),
               PrimaryButton(text: 'Logout', onPressed: () => _logout(context)),
+              ListTile(
+                leading: Icon(MyApp.themeNotifier.value == ThemeMode.light
+                    ? Icons.dark_mode
+                    : Icons.light_mode),
+                title: Text(MyApp.themeNotifier.value == ThemeMode.light
+                    ? 'Switch to Dark Mode'
+                    : 'Switch to Light Mode'),
+                onTap: () async {
+                  final userPrefsBox = Hive.box('userPrefs');
+
+                  userPrefsBox.put(
+                    'darkModeEnabled',
+                    MyApp.themeNotifier.value == ThemeMode.light ? true : false,
+                  );
+
+                  setState(() {
+                    MyApp.themeNotifier.value =
+                        MyApp.themeNotifier.value == ThemeMode.light
+                            ? ThemeMode.dark
+                            : ThemeMode.light;
+                  });
+                },
+              ),
             ],
           ),
         ),
