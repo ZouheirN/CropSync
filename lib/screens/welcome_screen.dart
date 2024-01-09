@@ -1,3 +1,4 @@
+import 'package:cropsync/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -29,7 +30,7 @@ class WelcomeScreen extends StatelessWidget {
                   children: [
                     _buildText(),
                     const Gap(380),
-                    _buildButtons(),
+                    _buildButtons(context),
                   ],
                 ),
               ),
@@ -80,10 +81,10 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   // Buttons
-  Widget _buildButtons() {
+  Widget _buildButtons(BuildContext context) {
     return Column(
       children: [
-        Buttons.primaryButton(text: 'Login', onPressed: () {}),
+        PrimaryButton(text: 'Login', onPressed: () {}),
         const Gap(20),
         Row(
           children: [
@@ -115,7 +116,16 @@ class WelcomeScreen extends StatelessWidget {
           ],
         ),
         const Gap(20),
-        Buttons.primaryButton(text: 'Register', onPressed: () {}),
+        PrimaryButton(
+          text: 'Register',
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const RegisterScreen(),
+              ),
+            );
+          },
+        ),
       ],
     );
   }

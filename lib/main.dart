@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
           seedColor: const Color(0xFF57CC99),
         ),
       ),
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: const WelcomeScreen(),
     );
