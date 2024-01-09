@@ -1,12 +1,10 @@
 import 'dart:convert';
-
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/services/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:watch_it/watch_it.dart';
-
 import '../json/user.dart';
 import '../widgets/buttons.dart';
 import 'main_screen.dart';
@@ -27,7 +25,7 @@ class WelcomeScreen extends StatelessWidget {
     di<UserModel>().user = user;
 
     if (!context.mounted) return;
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const MainScreen(),
       ),

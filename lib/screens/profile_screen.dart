@@ -25,8 +25,8 @@ class ProfileScreen extends WatchingWidget {
   Widget build(BuildContext context) {
     final user = watchPropertyValue((UserModel m) => m.user);
 
-    return Center(
-      child: SafeArea(
+    return SafeArea(
+      child: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
