@@ -1,6 +1,7 @@
-import 'package:cropsync/services/user_info.dart';
+import 'package:cropsync/services/user_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -21,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final microId = watchPropertyValue((UserInfoModel m) => m.microId);
+    final microId = watchPropertyValue((UserModel m) => m.user.microId);
 
     if (microId.isEmpty) {
       return noDeviceAdded();
@@ -58,8 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const Text(
                 'You do not have any devices added. Please add a device.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20)
-            ),
+                style: TextStyle(fontSize: 20)),
             const Gap(16),
             PrimaryButton(text: 'Add a Device', onPressed: () {})
           ],

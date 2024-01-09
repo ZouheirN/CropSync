@@ -1,12 +1,38 @@
-import 'package:cropsync/screens/main_screen.dart';
-import 'package:cropsync/screens/register_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'dart:convert';
 
+import 'package:cropsync/screens/register_screen.dart';
+import 'package:cropsync/services/user_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
+import 'package:watch_it/watch_it.dart';
+
+import '../json/user.dart';
 import '../widgets/buttons.dart';
+import 'main_screen.dart';
+
+Future<String> _loadData() async {
+  return await rootBundle.loadString('assets/user.json');
+}
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
+
+  void _login(BuildContext context) async {
+    // TODO get user info from api
+    String jsonString = await _loadData();
+    final data = json.decode(jsonString);
+    User user = User.fromJson(data);
+
+    di<UserModel>().user = user;
+
+    if (!context.mounted) return;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const MainScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,13 +111,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget _buildButtons(BuildContext context) {
     return Column(
       children: [
-        PrimaryButton(text: 'Login', onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const MainScreen(),
-            ),
-          );
-        }),
+        PrimaryButton(text: 'Login', onPressed: () => _login(context)),
         const Gap(20),
         Row(
           children: [
