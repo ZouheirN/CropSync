@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../widgets/buttons.dart';
+
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
@@ -26,7 +28,7 @@ class WelcomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     _buildText(),
-                    const Gap(400),
+                    const Gap(380),
                     _buildButtons(),
                   ],
                 ),
@@ -81,14 +83,39 @@ class WelcomeScreen extends StatelessWidget {
   Widget _buildButtons() {
     return Column(
       children: [
-        ElevatedButton(
-          onPressed: () {},
-          child: const Text('Login'),
+        Buttons.primaryButton(text: 'Login', onPressed: () {}),
+        const Gap(20),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.only(left: 5, right: 15),
+                child: const Divider(
+                  color: Colors.white,
+                  height: 10,
+                ),
+              ),
+            ),
+            const Text(
+              'or',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.only(left: 15, right: 5),
+                child: const Divider(
+                  color: Colors.white,
+                  height: 10,
+                ),
+              ),
+            ),
+          ],
         ),
-        ElevatedButton(
-          onPressed: () {},
-          child: const Text('Register'),
-        ),
+        const Gap(20),
+        Buttons.primaryButton(text: 'Register', onPressed: () {}),
       ],
     );
   }
