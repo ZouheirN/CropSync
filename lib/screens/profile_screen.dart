@@ -52,7 +52,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   di<UserModel>().user.microId = [];
                 },
               ),
-              PrimaryButton(text: 'Logout', onPressed: () => _logout(context)),
               ListTile(
                 leading: Icon(MyApp.themeNotifier.value == ThemeMode.light
                     ? Icons.dark_mode
@@ -76,6 +75,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   });
                 },
               ),
+              ListTile(
+                leading: const Icon(Icons.logout_rounded),
+                title: const Text('Logout'),
+                onTap: () => _logout(context),
+              )
             ],
           ),
         ),

@@ -1,6 +1,9 @@
+import 'package:cropsync/services/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:watch_it/watch_it.dart';
 
-class DevicesScreen extends StatefulWidget {
+class DevicesScreen extends WatchingStatefulWidget {
   const DevicesScreen({super.key});
 
   @override
@@ -10,23 +13,37 @@ class DevicesScreen extends StatefulWidget {
 class _DevicesScreenState extends State<DevicesScreen> {
   @override
   Widget build(BuildContext context) {
+    final microId = watchPropertyValue((UserModel m) => m.user.microId);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Total Devices: .'),
+        title: Text('Total Devices: ${microId.length}'),
         centerTitle: false,
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
         ],
-
       ),
-      body: ListView(
-        children: const [
-          ListTile(
-            title: Text('Device 1'),
-            subtitle: Text('Device 1 description'),
-            trailing: Icon(Icons.arrow_forward_ios_rounded),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+        child: AnimationLimiter(
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 375),
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: ListTile(
+                      title: Text('Device ${index+1}'),
+                      subtitle: Text(microId[index]),
+                    ),
+                  ),
+                ),
+              );
+            },
+            itemCount: microId.length,
           ),
-        ],
+        ),
       ),
     );
   }

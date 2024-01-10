@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/screens/main_screen.dart';
@@ -40,12 +41,37 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset(
-            'assets/images/background.jpg',
-            fit: BoxFit.cover,
-            height: double.infinity,
-            width: double.infinity,
-            alignment: Alignment.center,
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: ExactAssetImage('assets/images/background.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+              child: Container(
+                decoration:
+                    BoxDecoration(color: Colors.white.withOpacity(0.0)),
+              ),
+            ),
+          ),
+          Opacity(
+            opacity: 0.2,
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment(0.8, 1),
+                  colors: <Color>[
+                    Color(0xffA53B00),
+                    Color(0xff9C9C9C),
+                    Color(0xff1A552A),
+                  ],
+                  tileMode: TileMode.mirror,
+                ),
+              ),
+            ),
           ),
           SafeArea(
             child: SingleChildScrollView(
@@ -89,6 +115,7 @@ class WelcomeScreen extends StatelessWidget {
                 text: ' Crop',
                 style: TextStyle(
                   color: Color.fromARGB(255, 0, 65, 54),
+                  // color: Colors.green,
                   fontWeight: FontWeight.bold,
                   fontSize: 40,
                 ),
