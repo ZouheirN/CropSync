@@ -22,43 +22,43 @@ class WelcomeScreen extends StatelessWidget {
               ),
             ),
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
-              child: Container(
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
-              ),
-            ),
-          ),
-          Opacity(
-            opacity: 0.2,
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment(0.8, 1),
-                  colors: <Color>[
-                    Color(0xffA53B00),
-                    Color(0xff9C9C9C),
-                    Color(0xff1A552A),
-                  ],
-                  tileMode: TileMode.mirror,
+              filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+              child: Opacity(
+                opacity: 0.55,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color.fromRGBO(164, 59, 0, 0.5400000214576721),
+                        Color.fromRGBO(161, 99, 64, 0.500598132610321),
+                        Color.fromRGBO(156, 156, 156, 0.4449999928474426),
+                        Color.fromRGBO(25, 85, 41, 0.699999988079071)
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
           SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 20,
-                ),
-                child: Column(
-                  children: [
-                    _buildText(),
-                    const Gap(380),
-                    _buildButtons(context),
-                  ],
-                ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 40,
+                right: 40,
+                top: 20,
+                bottom: 80,
+              ),
+              child: Column(
+                children: [
+                  _buildTitle(),
+                  // const Gap(270),
+                  Expanded(flex: 5, child: Container()),
+                  _buildText(),
+                  const Spacer(),
+                  _buildButtons(context),
+                ],
               ),
             ),
           ),
@@ -67,8 +67,8 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  // Text
-  Widget _buildText() {
+  // Title
+  Widget _buildTitle() {
     return Column(
       children: [
         const Gap(40),
@@ -89,7 +89,7 @@ class WelcomeScreen extends StatelessWidget {
                   color: Color.fromARGB(255, 0, 65, 54),
                   // color: Colors.green,
                   fontWeight: FontWeight.bold,
-                  fontSize: 40,
+                  fontSize: 50,
                 ),
               ),
               TextSpan(
@@ -97,10 +97,27 @@ class WelcomeScreen extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 40,
+                  fontSize: 50,
                 ),
               ),
             ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Text
+  Widget _buildText() {
+    return const Column(
+      children: [
+        Gap(20),
+        Text(
+          'Monitor your crops and get real-time updates!',
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
           ),
         ),
       ],

@@ -141,7 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
             RegExp nameRegex =
                 RegExp(r"^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$");
-            if (!nameRegex.hasMatch(value)) {
+            if (!nameRegex.hasMatch(value.trim())) {
               return 'Please enter a valid name';
             }
 
@@ -174,7 +174,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               return 'Please enter your email';
             }
 
-            if (!EmailValidator.validate(value, true, true)) {
+            if (!EmailValidator.validate(value.trim(), true, true)) {
               return 'Please enter a valid email';
             }
 

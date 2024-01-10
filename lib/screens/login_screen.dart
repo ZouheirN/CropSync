@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
               return 'Please enter your email';
             }
 
-            if (!EmailValidator.validate(value, true, true)) {
+            if (!EmailValidator.validate(value.trim(), true, true)) {
               return 'Please enter a valid email';
             }
 
@@ -183,17 +183,13 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         const Gap(10),
         PrimaryTextField(
-          hintText: 'Enter your password again',
+          hintText: 'Enter your password',
           textController: _passwordTextController,
           prefixIcon: const Icon(Icons.lock),
           obscureText: true,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter your password again';
-            }
-
-            if (value != _passwordTextController.text) {
-              return 'Password does not match';
+              return 'Please enter your password';
             }
 
             return null;
