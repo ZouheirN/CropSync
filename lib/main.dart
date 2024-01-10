@@ -5,9 +5,13 @@ import 'package:cropsync/services/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:watch_it/watch_it.dart';
+import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await FlutterMapTileCaching.initialise();
+  await FMTC.instance('mapStore').manage.createAsync();
 
   await Hive.initFlutter();
   Hive.registerAdapter<User>(UserAdapter());

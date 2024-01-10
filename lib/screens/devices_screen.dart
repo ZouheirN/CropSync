@@ -2,6 +2,7 @@ import 'package:cropsync/services/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:watch_it/watch_it.dart';
+import 'add_device_screen.dart';
 
 class DevicesScreen extends WatchingStatefulWidget {
   const DevicesScreen({super.key});
@@ -11,6 +12,14 @@ class DevicesScreen extends WatchingStatefulWidget {
 }
 
 class _DevicesScreenState extends State<DevicesScreen> {
+  void _addDevice(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const AddDeviceScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final microId = watchPropertyValue((UserModel m) => m.user.microId);
@@ -20,7 +29,9 @@ class _DevicesScreenState extends State<DevicesScreen> {
         title: Text('Total Devices: ${microId.length}'),
         centerTitle: false,
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+          IconButton(
+              onPressed: () => _addDevice(context),
+              icon: const Icon(Icons.add)),
         ],
       ),
       body: Padding(
@@ -34,7 +45,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 child: SlideAnimation(
                   child: FadeInAnimation(
                     child: ListTile(
-                      title: Text('Device ${index+1}'),
+                      title: Text('Device ${index + 1}'),
                       subtitle: Text(microId[index]),
                     ),
                   ),
