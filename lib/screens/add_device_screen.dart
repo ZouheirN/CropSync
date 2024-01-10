@@ -27,6 +27,8 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
 
   bool _isLoading = false;
 
+  List<CircleMarker> _circles = [];
+
   void _confirm() {
     if (_formKey.currentState!.validate()) {}
   }
@@ -66,11 +68,67 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         desiredAccuracy: LocationAccuracy.high);
   }
 
+  Future<void> _onMapTap(tapPosition, LatLng position) async {
+    _panelController.open();
+
+    setState(() {
+      _isLoading = true;
+      _circles = [
+        CircleMarker(
+          point: position,
+          color: Colors.red.withOpacity(0.3),
+          borderColor: Colors.red.withOpacity(0.7),
+          borderStrokeWidth: 2,
+          radius: 1000,
+          useRadiusInMeter: true,
+        )
+      ];
+    });
+
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          position.latitude, position.longitude,
+          localeIdentifier: 'en_LB');
+
+      print(placemarks);
+
+      setState(() {
+        _cityTextController.text = placemarks[0].subAdministrativeArea!;
+        _countryTextController.text = placemarks[0].country!;
+      });
+    } on Exception {
+      if (!mounted) return;
+      showErrorDialog('Network Error', 'Please try again.', context);
+    } catch (e) {
+      if (!mounted) return;
+      showErrorDialog('Unknown Error', 'Please try again.', context);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Device'),
+        actions: [
+          if (_circles.isNotEmpty)
+            IconButton(
+              onPressed: () {
+                _mapController.move(_circles[0].point, 13);
+              },
+              icon: const Icon(Icons.gps_not_fixed_rounded),
+            )
+        ],
       ),
       body: SlidingUpPanel(
         parallaxEnabled: true,
@@ -102,6 +160,8 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                 text: 'Get Current Location',
                 isLoading: _isLoading,
                 onPressed: () async {
+                  if (_isLoading) return;
+
                   setState(() {
                     _isLoading = true;
                   });
@@ -110,13 +170,24 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                     try {
                       List<Placemark> placemarks =
                           await placemarkFromCoordinates(
-                              value.latitude, value.longitude);
+                              value.latitude, value.longitude,
+                              localeIdentifier: 'en_LB');
 
                       _panelController.open();
                       _mapController.move(
                           LatLng(value.latitude, value.longitude), 15);
 
                       setState(() {
+                        _circles = [
+                          CircleMarker(
+                            point: LatLng(value.latitude, value.longitude),
+                            color: Colors.red.withOpacity(0.3),
+                            borderColor: Colors.red.withOpacity(0.7),
+                            borderStrokeWidth: 2,
+                            radius: 1000,
+                            useRadiusInMeter: true,
+                          )
+                        ];
                         _cityTextController.text =
                             placemarks[0].subAdministrativeArea!;
                         _countryTextController.text = placemarks[0].country!;
@@ -182,10 +253,11 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
   Widget _buildMap() {
     return FlutterMap(
       mapController: _mapController,
-      options: const MapOptions(
-        initialCenter: LatLng(33.8547, 35.8623),
+      options: MapOptions(
+        initialCenter: const LatLng(33.8547, 35.8623),
         initialZoom: 3.2,
-        interactionOptions: InteractionOptions(
+        onTap: _onMapTap,
+        interactionOptions: const InteractionOptions(
           enableMultiFingerGestureRace: true,
           flags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
         ),
@@ -196,6 +268,9 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
           userAgentPackageName: 'com.zouheirn.cropsync',
           tileProvider: FMTC.instance('mapStore').getTileProvider(),
         ),
+        CircleLayer(circles: [
+          ..._circles,
+        ])
       ],
     );
   }

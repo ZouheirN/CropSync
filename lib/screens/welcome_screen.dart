@@ -1,40 +1,13 @@
-import 'dart:convert';
 import 'dart:ui';
 
-import 'package:cropsync/json/user.dart';
-import 'package:cropsync/screens/main_screen.dart';
+import 'package:cropsync/screens/login_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
-import 'package:cropsync/services/user_model.dart';
-import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
-import 'package:watch_it/watch_it.dart';
-
-Future<String> _loadData() async {
-  return await rootBundle.loadString('assets/user.json');
-}
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
-
-  void _login(BuildContext context) async {
-    // TODO get user info from api
-    String jsonString = await _loadData();
-    final data = json.decode(jsonString);
-    User user = User.fromJson(data);
-
-    di<UserModel>().user = user;
-    UserToken.setToken(data['token']);
-
-    if (!context.mounted) return;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const MainScreen(),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +24,7 @@ class WelcomeScreen extends StatelessWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
               child: Container(
-                decoration:
-                    BoxDecoration(color: Colors.white.withOpacity(0.0)),
+                decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
               ),
             ),
           ),
@@ -139,7 +111,16 @@ class WelcomeScreen extends StatelessWidget {
   Widget _buildButtons(BuildContext context) {
     return Column(
       children: [
-        PrimaryButton(text: 'Login', onPressed: () => _login(context)),
+        PrimaryButton(
+          text: 'Login',
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const LoginScreen(),
+              ),
+            );
+          },
+        ),
         const Gap(20),
         Row(
           children: [

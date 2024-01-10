@@ -1,3 +1,4 @@
+import 'package:cropsync/screens/add_device_screen.dart';
 import 'package:cropsync/services/user_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
@@ -67,11 +68,21 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-                'You do not have any devices added. Please add a device.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20)),
+              'You do not have any devices added. Please add a device.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20),
+            ),
             const Gap(16),
-            PrimaryButton(text: 'Add a Device', onPressed: () {})
+            PrimaryButton(
+              text: 'Add a Device',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AddDeviceScreen(),
+                  ),
+                );
+              },
+            )
           ],
         ),
       ),

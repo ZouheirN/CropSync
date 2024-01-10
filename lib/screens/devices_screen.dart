@@ -2,6 +2,7 @@ import 'package:cropsync/services/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:watch_it/watch_it.dart';
+
 import 'add_device_screen.dart';
 
 class DevicesScreen extends WatchingStatefulWidget {
@@ -30,8 +31,9 @@ class _DevicesScreenState extends State<DevicesScreen> {
         centerTitle: false,
         actions: [
           IconButton(
-              onPressed: () => _addDevice(context),
-              icon: const Icon(Icons.add)),
+            onPressed: () => _addDevice(context),
+            icon: const Icon(Icons.add),
+          ),
         ],
       ),
       body: Padding(

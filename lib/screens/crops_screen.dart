@@ -1,3 +1,4 @@
+import 'package:cropsync/screens/add_device_screen.dart';
 import 'package:cropsync/services/user_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,16 @@ class _CropsScreenState extends State<CropsScreen> {
               style: TextStyle(fontSize: 20),
             ),
             const Gap(16),
-            PrimaryButton(text: 'Add a Device', onPressed: () {})
+            PrimaryButton(
+              text: 'Add a Device',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AddDeviceScreen(),
+                  ),
+                );
+              },
+            )
           ],
         ),
       ),

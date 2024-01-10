@@ -1,8 +1,10 @@
 import 'dart:math';
-import 'package:email_validator/email_validator.dart';
+
 import 'package:bcrypt/bcrypt.dart';
+import 'package:cropsync/screens/login_screen.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:fancy_password_field/fancy_password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -77,10 +79,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               children: [
                 _buildFullNameTextInputField(),
+                const Gap(20),
                 _buildEmailTextInputField(),
+                const Gap(20),
                 _buildPasswordTextInputField(),
+                const Gap(20),
                 _buildConfirmPasswordTextInputField(),
+                const Gap(20),
                 _buildRegisterButton(),
+                const Gap(20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Already have an account? '),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -111,7 +139,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               return 'Please enter your full name';
             }
 
-            RegExp nameRegex = RegExp(r"^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$");
+            RegExp nameRegex =
+                RegExp(r"^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$");
             if (!nameRegex.hasMatch(value)) {
               return 'Please enter a valid name';
             }
@@ -119,7 +148,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             return null;
           },
         ),
-        const Gap(20),
       ],
     );
   }
@@ -153,7 +181,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             return null;
           },
         ),
-        const Gap(20),
       ],
     );
   }
@@ -199,7 +226,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           },
           validationRuleBuilder: (rules, value) {
             return SizedBox(
-              height: 120,
               child: ListView(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -213,7 +239,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ruleValidated ? Icons.check : Icons.close,
                           color: ruleValidated ? Colors.green : Colors.red,
                         ),
-                        const SizedBox(width: 8),
+                        const Gap(8),
                         Text(
                           rule.name,
                           style: TextStyle(
@@ -286,17 +312,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
             return null;
           },
         ),
-        const Gap(20),
       ],
     );
   }
 
   // Register Button
   Widget _buildRegisterButton() {
-    return PrimaryButton(
-      text: 'Register',
-      onPressed: _register,
-      isLoading: _isLoading,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: PrimaryButton(
+        text: 'Register',
+        onPressed: _register,
+        isLoading: _isLoading,
+      ),
     );
   }
 }
