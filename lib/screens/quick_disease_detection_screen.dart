@@ -3,7 +3,11 @@ import 'dart:io';
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/image_model.dart';
+import 'package:cropsync/widgets/disease_picture.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:watch_it/watch_it.dart';
@@ -30,10 +34,11 @@ class _QuickDiseaseDetectionScreenState
     setState(() {
       di<ImageModel>().addImage(ImageObject(
         image: img!.readAsBytesSync(),
-        status: 'pending',
         result: '',
       ));
     });
+
+    //todo send to server
   }
 
   Future<File?> _cropImage({required File imageFile}) async {
@@ -81,28 +86,7 @@ class _QuickDiseaseDetectionScreenState
         padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
         child: Column(
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
-              width: double.infinity,
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                ),
-                itemCount: images.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                        image: MemoryImage(images[index].image),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            _buildGrid(images),
             const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -118,6 +102,65 @@ class _QuickDiseaseDetectionScreenState
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGrid(images) {
+    int columnCount = MediaQuery.of(context).size.width > 600 ? 3 : 2;
+
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.7,
+      child: AnimationLimiter(
+        child: GridView.count(
+          crossAxisCount: columnCount,
+          children: List.generate(
+            images.length,
+            (index) {
+              return AnimationConfiguration.staggeredGrid(
+                position: index,
+                duration: const Duration(milliseconds: 375),
+                columnCount: columnCount,
+                child: ScaleAnimation(
+                  child: FadeInAnimation(
+                    child: FocusedMenuHolder(
+                      menuItems: [
+                        FocusedMenuItem(
+                          title: const Text(
+                            'Delete',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              di<ImageModel>().deleteImage(index);
+                            });
+                          },
+                          backgroundColor: Colors.red,
+                          trailingIcon:
+                              const Icon(Icons.delete_forever_rounded),
+                        ),
+                      ],
+                      menuWidth: MediaQuery.of(context).size.width * 0.5,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HeroPhotoViewRouteWrapper(
+                              imageProvider: MemoryImage(
+                                images[index].image,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      child: DiseasePicture(index: index),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

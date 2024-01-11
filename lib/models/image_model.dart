@@ -15,4 +15,10 @@ class ImageModel extends ChangeNotifier {
     imageBox.add(image);
     notifyListeners();
   }
+
+  void deleteImage(int index) {
+    _images.removeAt(index);
+    imageBox.deleteAt(index);
+    notifyListeners();
+  }
 }

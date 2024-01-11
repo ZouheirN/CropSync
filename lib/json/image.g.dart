@@ -18,20 +18,17 @@ class ImageObjectAdapter extends TypeAdapter<ImageObject> {
     };
     return ImageObject(
       image: fields[0] as Uint8List,
-      status: fields[1] as String?,
-      result: fields[2] as String?,
+      result: fields[1] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ImageObject obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.image)
       ..writeByte(1)
-      ..write(obj.status)
-      ..writeByte(2)
       ..write(obj.result);
   }
 
