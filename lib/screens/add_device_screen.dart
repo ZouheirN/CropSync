@@ -37,7 +37,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       if (!mounted) return Future.error('Location services are disabled.');
-      showErrorDialog('Location services are disabled',
+      Dialogs.showErrorDialog('Location services are disabled',
           'Please enable location services to continue.', context);
       return Future.error('Location services are disabled.');
     }
@@ -47,7 +47,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         if (!mounted) return Future.error('Location permissions are denied');
-        showErrorDialog('Location permissions are denied',
+        Dialogs.showErrorDialog('Location permissions are denied',
             'Please enable location permissions to continue.', context);
         return Future.error('Location permissions are denied');
       }
@@ -58,7 +58,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         return Future.error(
             'Location permissions are permanently denied, we cannot request permissions.');
       }
-      showErrorDialog('Location permissions are permanently denied',
+      Dialogs.showErrorDialog('Location permissions are permanently denied',
           'Please enable location permissions to continue.', context);
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
@@ -98,10 +98,10 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
       });
     } on Exception {
       if (!mounted) return;
-      showErrorDialog('Network Error', 'Please try again.', context);
+      Dialogs.showErrorDialog('Network Error', 'Please try again.', context);
     } catch (e) {
       if (!mounted) return;
-      showErrorDialog('Unknown Error', 'Please try again.', context);
+      Dialogs.showErrorDialog('Unknown Error', 'Please try again.', context);
     } finally {
       setState(() {
         _isLoading = false;
@@ -202,11 +202,11 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                       });
                     } on Exception {
                       if (!mounted) return;
-                      showErrorDialog(
+                      Dialogs.showErrorDialog(
                           'Network Error', 'Please try again.', context);
                     } catch (e) {
                       if (!mounted) return;
-                      showErrorDialog(
+                      Dialogs.showErrorDialog(
                           'Unknown Error', 'Please try again.', context);
                     } finally {
                       setState(() {

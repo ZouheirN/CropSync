@@ -4,7 +4,9 @@ enum ReturnTypes {
   fail,
 }
 
-// TODO checkCredentials
-Future<ReturnTypes> checkCredentials(String username, String password) async {
-  return ReturnTypes.success;
+class ApiRequests {
+  static Future<ReturnTypes> checkCredentials(String username,
+      String password) async {
+    return ReturnTypes.success;
+  }
 }

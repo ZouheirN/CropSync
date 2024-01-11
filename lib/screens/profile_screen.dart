@@ -1,5 +1,6 @@
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/user_model.dart';
+import 'package:cropsync/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
@@ -14,9 +15,14 @@ class ProfileScreen extends WatchingStatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  void _logout(BuildContext context) {
+  Future<void> _logout(BuildContext context) async {
+    if (await Dialogs.showConfirmationDialog(
+            'Logout', 'Are you sure you want to logout?', context) ==
+        false) return;
+
     di<UserModel>().logout();
 
+    if (!mounted) return;
     Navigator.of(context).pushNamedAndRemoveUntil('/welcome', (route) => false);
   }
 
@@ -46,6 +52,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const Gap(20),
                   Text(user.fullName, style: const TextStyle(fontSize: 24)),
                   const Gap(100),
+                  const ListTile(
+                    leading: Icon(Icons.person_rounded),
+                    trailing: Icon(Icons.chevron_right_rounded),
+                    title: Text('Account Settings'),
+                  ),
+                  const Divider(
+                    height: 10,
+                    endIndent: 16,
+                    indent: 16,
+                  ),
                   ListTile(
                     leading: Icon(MyApp.themeNotifier.value == ThemeMode.light
                         ? Icons.dark_mode
