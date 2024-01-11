@@ -52,10 +52,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const Gap(20),
                   Text(user.fullName, style: const TextStyle(fontSize: 24)),
                   const Gap(100),
-                  const ListTile(
-                    leading: Icon(Icons.person_rounded),
-                    trailing: Icon(Icons.chevron_right_rounded),
-                    title: Text('Account Settings'),
+                  ListTile(
+                    leading: const Icon(Icons.person_rounded),
+                    trailing: const Icon(Icons.chevron_right_rounded),
+                    title: const Text('Account Information'),
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/account-information');
+                    },
                   ),
                   const Divider(
                     height: 10,
