@@ -1,4 +1,6 @@
+import 'package:cropsync/json/image.dart';
 import 'package:cropsync/json/user.dart';
+import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
 import 'package:cropsync/screens/login_screen.dart';
@@ -17,9 +19,14 @@ Future<void> main() async {
   await FMTC.instance('mapStore').manage.createAsync();
 
   await Hive.initFlutter();
+
+  // Register Adapters
   Hive.registerAdapter<User>(UserAdapter());
+  Hive.registerAdapter<ImageObject>(ImageObjectAdapter());
+
   var userInfoBox = await Hive.openBox('userInfo');
   var userPrefsBox = await Hive.openBox('userPrefs');
+  var imageBox = await Hive.openBox('imageBox');
 
   registerManagers();
 
@@ -29,6 +36,11 @@ Future<void> main() async {
     final user = userInfoBox.get('user') as User;
     di<UserModel>().user = user;
     isUserLoggedIn = true;
+  }
+
+  if (imageBox.isNotEmpty) {
+    final images = imageBox.values.toList().cast<ImageObject>();
+    di<ImageModel>().images.addAll(images);
   }
 
   runApp(
@@ -93,4 +105,5 @@ class MyApp extends StatelessWidget {
 
 void registerManagers() {
   di.registerSingleton<UserModel>(UserModel());
+  di.registerSingleton<ImageModel>(ImageModel());
 }

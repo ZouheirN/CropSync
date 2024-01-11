@@ -30,6 +30,7 @@ class UserModel extends ChangeNotifier {
     );
     userInfoBox.delete('user');
     UserToken.deleteToken();
+    // todo delete images
     notifyListeners();
   }
 }
