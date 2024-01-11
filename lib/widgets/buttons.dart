@@ -40,6 +40,7 @@ class SecondaryButton extends StatelessWidget {
   final IconData icon;
   final bool isLoading;
   final void Function()? onPressed;
+  final Color loadingColor;
 
   const SecondaryButton({
     super.key,
@@ -47,6 +48,7 @@ class SecondaryButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     this.isLoading = false,
+    this.loadingColor = Colors.black,
   });
 
   @override
@@ -60,30 +62,36 @@ class SecondaryButton extends StatelessWidget {
         minimumSize: const Size(double.infinity, 60),
       ),
       child: isLoading
-          ? const CircularProgressIndicator(color: Colors.white)
+          ? CircularProgressIndicator(color: loadingColor)
           : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Icon(
-                  icon,
-                  color: Colors.black,
-                ),
-                const Gap(14),
-                Text(
-                  text,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                )
-              ],
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: Colors.black,
+          ),
+          const Gap(14),
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.black,
             ),
+          )
+        ],
+      ),
     );
   }
 }
 
 class CommonButton extends StatelessWidget {
+  final String text;
+  final Color textColor;
+  final Color backgroundColor;
+  final void Function()? onPressed;
+  final bool isLoading;
+  final Color loadingColor;
+
   const CommonButton({
     super.key,
     required this.text,
@@ -91,13 +99,8 @@ class CommonButton extends StatelessWidget {
     required this.backgroundColor,
     required this.onPressed,
     this.isLoading = false,
+    this.loadingColor = Colors.white,
   });
-
-  final String text;
-  final Color textColor;
-  final Color backgroundColor;
-  final void Function()? onPressed;
-  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -110,11 +113,11 @@ class CommonButton extends StatelessWidget {
         minimumSize: const Size(double.infinity, 60),
       ),
       child: isLoading
-          ? const CircularProgressIndicator(color: Colors.white)
+          ? CircularProgressIndicator(color: loadingColor)
           : Text(
-              text,
-              style: TextStyle(color: textColor, fontSize: 18),
-            ),
+        text,
+        style: TextStyle(color: textColor, fontSize: 18),
+      ),
     );
   }
 }
