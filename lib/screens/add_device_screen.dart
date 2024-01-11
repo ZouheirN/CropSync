@@ -153,7 +153,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
           ),
           color: MyApp.themeNotifier.value == ThemeMode.light
               ? Colors.white
-              : const Color(0xFF191C1B),
+              : const Color(0xFF1B2522),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),

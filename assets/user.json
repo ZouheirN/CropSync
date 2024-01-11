@@ -1,9 +1,22 @@
 {
   "token": "u8wyatgyhujiwog782awfbe",
-  "fullName" : "Zouheir Nakouzi",
-  "email" : "zouheir2002@gmail.com",
-  "microId" : [
-    "1234"
-  ],
-  "isVerified" : true
+  "fullName": "Zouheir Nakouzi",
+  "email": "zouheir2002@gmail.com",
+  "isVerified": true,
+  "devices": [
+    {
+      "id": 1,
+      "name": "Raspberry Pi 3",
+      "crop": {
+        "name": "Tomato"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Raspberry Pi Zero W",
+      "crop": {
+        "name": "Potato"
+      }
+    }
+  ]
 }

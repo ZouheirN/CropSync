@@ -64,22 +64,22 @@ class SecondaryButton extends StatelessWidget {
       child: isLoading
           ? CircularProgressIndicator(color: loadingColor)
           : Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: Colors.black,
-          ),
-          const Gap(14),
-          Text(
-            text,
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.black,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  color: Colors.black,
+                ),
+                const Gap(14),
+                Text(
+                  text,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
     );
   }
 }
@@ -115,9 +115,9 @@ class CommonButton extends StatelessWidget {
       child: isLoading
           ? CircularProgressIndicator(color: loadingColor)
           : Text(
-        text,
-        style: TextStyle(color: textColor, fontSize: 18),
-      ),
+              text,
+              style: TextStyle(color: textColor, fontSize: 18),
+            ),
     );
   }
 }

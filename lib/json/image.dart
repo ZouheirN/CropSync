@@ -4,11 +4,11 @@ import 'package:hive/hive.dart';
 
 part 'image.g.dart';
 
-@HiveType(typeId: 1)
+@HiveType(typeId: 0)
 class ImageObject extends HiveObject {
-  @HiveField(0)
-  Uint8List image;
   @HiveField(1)
+  Uint8List image;
+  @HiveField(2)
   String? result;
 
   ImageObject({

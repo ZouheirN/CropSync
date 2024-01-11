@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
@@ -15,13 +16,15 @@ class CropsScreen extends WatchingStatefulWidget {
 class _CropsScreenState extends State<CropsScreen> {
   @override
   Widget build(BuildContext context) {
-    final microId = watchPropertyValue((UserModel m) => m.user.microId);
+    final devices = watchPropertyValue((UserModel m) => m.user.devices);
 
-    if (microId.isEmpty) return noDeviceAdded();
+    List<String> cropNames = devices.map((device) => device.crop.name).toList();
+
+    if (devices.isEmpty) return noDeviceAdded();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Total Crops: .'),
+        title: Text('Total Crops: ${cropNames.length}'),
         centerTitle: false,
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
@@ -38,13 +41,36 @@ class _CropsScreenState extends State<CropsScreen> {
                 child: SlideAnimation(
                   child: FadeInAnimation(
                     child: ListTile(
-                      title: Text('Crop ${index + 1}'),
+                      leading: CachedNetworkImage(
+                        imageUrl:
+                            "https://s.yimg.com/os/creatr-uploaded-images/2021-02/76161010-77b7-11eb-a9ff-e5c3108c9869",
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) =>
+                                CircularProgressIndicator(
+                                    value: downloadProgress.progress,
+                                    color: Colors.white),
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: 50.0,
+                          height: 50.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
+                      title: Text(cropNames[index]),
+                      subtitle: Text('Connected to ${devices[index].name}'),
                     ),
                   ),
                 ),
               );
             },
-            itemCount: 1,
+            itemCount: cropNames.length,
           ),
         ),
       ),

@@ -17,9 +17,9 @@ class HomeScreen extends WatchingStatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final microId = watchPropertyValue((UserModel m) => m.user.microId);
+    final devices = watchPropertyValue((UserModel m) => m.user.devices);
 
-    if (microId.isEmpty) return noDeviceAdded();
+    if (devices.isEmpty) return noDeviceAdded();
 
     return SafeArea(
       child: Padding(

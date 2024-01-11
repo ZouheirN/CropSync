@@ -16,7 +16,7 @@ class Dialogs {
       text: text,
       backgroundColor: MyApp.themeNotifier.value == ThemeMode.light
           ? Colors.white
-          : const Color.fromARGB(255, 66, 66, 66),
+          : const Color(0xFF1B2522),
       textColor: MyApp.themeNotifier.value == ThemeMode.light
           ? Colors.black
           : Colors.white,
@@ -43,7 +43,7 @@ class Dialogs {
       animType: QuickAlertAnimType.slideInUp,
       backgroundColor: MyApp.themeNotifier.value == ThemeMode.light
           ? Colors.white
-          : const Color.fromARGB(255, 66, 66, 66),
+          : const Color(0xFF1B2522),
       textColor: MyApp.themeNotifier.value == ThemeMode.light
           ? Colors.black
           : Colors.white,

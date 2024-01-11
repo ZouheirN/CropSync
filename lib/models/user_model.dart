@@ -9,23 +9,26 @@ class UserModel extends ChangeNotifier {
   User get user => _user;
 
   User _user = User(
-    fullName: "",
-    email: "",
-    microId: [],
-    isVerified: false,
+      token: "",
+      fullName: "",
+      email: "",
+      devices: [],
+      isVerified: false,
   );
 
   set user(User user) {
     _user = user;
     userInfoBox.put('user', user);
+    UserToken.setToken(user.token);
     notifyListeners();
   }
 
   void logout() {
     _user = User(
+      token: "",
       fullName: "",
       email: "",
-      microId: [],
+      devices: [],
       isVerified: false,
     );
     userInfoBox.delete('user');

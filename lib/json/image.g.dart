@@ -8,7 +8,7 @@ part of 'image.dart';
 
 class ImageObjectAdapter extends TypeAdapter<ImageObject> {
   @override
-  final int typeId = 1;
+  final int typeId = 0;
 
   @override
   ImageObject read(BinaryReader reader) {
@@ -17,8 +17,8 @@ class ImageObjectAdapter extends TypeAdapter<ImageObject> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ImageObject(
-      image: fields[0] as Uint8List,
-      result: fields[1] as String?,
+      image: fields[1] as Uint8List,
+      result: fields[2] as String?,
     );
   }
 
@@ -26,9 +26,9 @@ class ImageObjectAdapter extends TypeAdapter<ImageObject> {
   void write(BinaryWriter writer, ImageObject obj) {
     writer
       ..writeByte(2)
-      ..writeByte(0)
-      ..write(obj.image)
       ..writeByte(1)
+      ..write(obj.image)
+      ..writeByte(2)
       ..write(obj.result);
   }
 

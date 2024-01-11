@@ -5,6 +5,7 @@ import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/screens/main_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
+import 'package:cropsync/services/http_requests.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
@@ -12,6 +13,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:hive/hive.dart';
 import 'package:watch_it/watch_it.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -29,10 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isLoading = false;
 
-  Future<String> _loadData() async {
-    return await rootBundle.loadString('assets/user.json');
-  }
-
   Future<void> _login() async {
     FocusManager.instance.primaryFocus?.unfocus();
 
@@ -42,8 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = true;
       });
-
-      await Future.delayed(const Duration(seconds: 2));
 
       // Hash the password
       final String hashedPassword = BCrypt.hashpw(
@@ -56,24 +52,19 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       // TODO get user info from api
-      String jsonString = await _loadData();
-      final data = json.decode(jsonString);
-      User user = User.fromJson(data);
-
+      final data = await ApiRequests.checkCredentials(
+        _emailTextController.text,
+        hashedPassword,
+      );
+      User user = userFromJson(data);
       di<UserModel>().user = user;
-      UserToken.setToken(data['token']);
 
       setState(() {
         _isLoading = false;
       });
 
       if (!context.mounted) return;
-      Navigator.pop(context);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const MainScreen(),
-        ),
-      );
+      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
     }
   }
 
@@ -123,7 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       child: const Text(
                         'Register',
-                        style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],

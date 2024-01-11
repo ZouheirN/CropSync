@@ -17,11 +17,11 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final microId = watchPropertyValue((UserModel m) => m.user.microId);
+    final devices = watchPropertyValue((UserModel m) => m.user.devices);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Total Devices: ${microId.length}'),
+        title: Text('Total Devices: ${devices.length}'),
         centerTitle: false,
         actions: [
           IconButton(
@@ -41,14 +41,13 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 child: SlideAnimation(
                   child: FadeInAnimation(
                     child: ListTile(
-                      title: Text('Device ${index + 1}'),
-                      subtitle: Text(microId[index]),
+                      title: Text(devices[index].name),
                     ),
                   ),
                 ),
               );
             },
-            itemCount: microId.length,
+            itemCount: devices.length,
           ),
         ),
       ),
