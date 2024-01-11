@@ -316,8 +316,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildRegisterButton() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.7,
-      child: PrimaryButton(
+      child: CommonButton(
         text: 'Register',
+        backgroundColor: Theme.of(context).primaryColor,
+        textColor: Colors.white,
         onPressed: _register,
         isLoading: _isLoading,
       ),

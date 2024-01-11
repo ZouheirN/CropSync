@@ -15,20 +15,6 @@ class HomeScreen extends WatchingStatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Widget> listElements = [
-    const Text(
-      'Overview',
-      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-    ),
-    const Gap(16),
-    overviewCard(),
-    const Gap(20),
-    const Text(
-      'Alerts',
-      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final microId = watchPropertyValue((UserModel m) => m.user.microId);
@@ -39,19 +25,32 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Padding(
         padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
         child: AnimationLimiter(
-          child: ListView.builder(
-            itemCount: listElements.length,
-            itemBuilder: (BuildContext context, int index) {
-              return AnimationConfiguration.staggeredList(
-                position: index,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: AnimationConfiguration.toStaggeredList(
                 duration: const Duration(milliseconds: 375),
-                child: SlideAnimation(
+                childAnimationBuilder: (widget) => SlideAnimation(
+                  horizontalOffset: 50.0,
                   child: FadeInAnimation(
-                    child: listElements[index],
+                    child: widget,
                   ),
                 ),
-              );
-            },
+                children: [
+                  const Text(
+                    'Overview',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const Gap(16),
+                  overviewCard(),
+                  const Gap(20),
+                  const Text(
+                    'Alerts',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -72,8 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(fontSize: 20),
             ),
             const Gap(16),
-            PrimaryButton(
+            CommonButton(
               text: 'Add a Device',
+              backgroundColor: Theme.of(context).primaryColor,
+              textColor: Colors.white,
               onPressed: () {
                 Navigator.of(context).pushNamed('/add-device');
               },

@@ -65,8 +65,10 @@ class _CropsScreenState extends State<CropsScreen> {
               style: TextStyle(fontSize: 20),
             ),
             const Gap(16),
-            PrimaryButton(
+            CommonButton(
               text: 'Add a Device',
+              backgroundColor: Theme.of(context).primaryColor,
+              textColor: Colors.white,
               onPressed: () {
                 Navigator.of(context).pushNamed('/add-device');
               },

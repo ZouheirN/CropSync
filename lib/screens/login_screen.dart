@@ -203,8 +203,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildLoginButton() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.7,
-      child: PrimaryButton(
+      child: CommonButton(
         text: 'Login',
+        backgroundColor: Theme.of(context).primaryColor,
+        textColor: Colors.white,
         onPressed: _login,
         isLoading: _isLoading,
       ),

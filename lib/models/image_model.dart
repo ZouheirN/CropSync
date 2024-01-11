@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import '../json/image.dart';
 
 class ImageModel extends ChangeNotifier {
-  final imageBox = Hive.box('imageBox');
+  final imagesBox = Hive.box('images');
 
   List<ImageObject> get images => _images;
 
@@ -12,13 +12,13 @@ class ImageModel extends ChangeNotifier {
 
   void addImage(ImageObject image) {
     _images.add(image);
-    imageBox.add(image);
+    imagesBox.add(image);
     notifyListeners();
   }
 
   void deleteImage(int index) {
     _images.removeAt(index);
-    imageBox.deleteAt(index);
+    imagesBox.deleteAt(index);
     notifyListeners();
   }
 }

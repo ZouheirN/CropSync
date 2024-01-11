@@ -127,8 +127,10 @@ class WelcomeScreen extends StatelessWidget {
   Widget _buildButtons(BuildContext context) {
     return Column(
       children: [
-        PrimaryButton(
+        CommonButton(
           text: 'Login',
+          backgroundColor: Theme.of(context).primaryColor,
+          textColor: Colors.white,
           onPressed: () {
             Navigator.of(context).pushNamed('/login');
           },
@@ -164,8 +166,10 @@ class WelcomeScreen extends StatelessWidget {
           ],
         ),
         const Gap(20),
-        PrimaryButton(
+        CommonButton(
           text: 'Register',
+          backgroundColor: Theme.of(context).primaryColor,
+          textColor: Colors.white,
           onPressed: () {
             Navigator.of(context).pushNamed('/register');
           },

@@ -134,6 +134,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         parallaxEnabled: true,
         defaultPanelState: PanelState.CLOSED,
         controller: _panelController,
+        color: Colors.transparent,
         maxHeight: MediaQuery.of(context).size.height * 0.3,
         panel: _buildPanel(),
         body: _buildMap(),
@@ -145,9 +146,15 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
     return Form(
       key: _formKey,
       child: Container(
-        color: MyApp.themeNotifier.value == ThemeMode.light
-            ? Colors.white
-            : const Color(0xFF191C1B),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
+          color: MyApp.themeNotifier.value == ThemeMode.light
+              ? Colors.white
+              : const Color(0xFF191C1B),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -156,7 +163,8 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                 Icons.drag_handle_rounded,
                 color: Colors.grey,
               ),
-              PrimaryButton(
+              SecondaryButton(
+                icon: Icons.gps_fixed_rounded,
                 text: 'Get Current Location',
                 isLoading: _isLoading,
                 onPressed: () async {
@@ -239,8 +247,10 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                 ],
               ),
               const Gap(16),
-              PrimaryButton(
+              CommonButton(
                 text: 'Confirm',
+                textColor: Colors.white,
+                backgroundColor: Theme.of(context).primaryColor,
                 onPressed: _confirm,
               ),
             ],

@@ -26,7 +26,7 @@ Future<void> main() async {
 
   var userInfoBox = await Hive.openBox('userInfo');
   var userPrefsBox = await Hive.openBox('userPrefs');
-  var imageBox = await Hive.openBox('imageBox');
+  var imagesBox = await Hive.openBox('images');
 
   registerManagers();
 
@@ -38,8 +38,8 @@ Future<void> main() async {
     isUserLoggedIn = true;
   }
 
-  if (imageBox.isNotEmpty) {
-    final images = imageBox.values.toList().cast<ImageObject>();
+  if (imagesBox.isNotEmpty) {
+    final images = imagesBox.values.toList().cast<ImageObject>();
     di<ImageModel>().images.addAll(images);
   }
 

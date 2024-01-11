@@ -1,13 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
-class PrimaryButton extends StatelessWidget {
+// class PrimaryButton extends StatelessWidget {
+//   final String text;
+//   final Function onPressed;
+//   final bool isLoading;
+//
+//   const PrimaryButton({
+//     super.key,
+//     required this.text,
+//     required this.onPressed,
+//     this.isLoading = false,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return ElevatedButton(
+//       onPressed: () => onPressed(),
+//       style: ElevatedButton.styleFrom(
+//         foregroundColor: Colors.white,
+//         backgroundColor: Colors.green,
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(20),
+//         ),
+//         textStyle: const TextStyle(
+//           fontSize: 20,
+//         ),
+//         minimumSize: const Size(double.infinity, 60),
+//       ),
+//       child: isLoading
+//           ? const CircularProgressIndicator(color: Colors.white)
+//           : Text(text),
+//     );
+//   }
+// }
+
+class SecondaryButton extends StatelessWidget {
   final String text;
-  final Function onPressed;
+  final IconData icon;
   final bool isLoading;
+  final void Function()? onPressed;
 
-  const PrimaryButton({
+  const SecondaryButton({
     super.key,
     required this.text,
+    required this.icon,
     required this.onPressed,
     this.isLoading = false,
   });
@@ -15,21 +52,69 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => onPressed(),
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.green,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        textStyle: const TextStyle(
-          fontSize: 20,
-        ),
+        elevation: 10,
+        backgroundColor: Colors.grey.shade200,
+        shape: const StadiumBorder(),
         minimumSize: const Size(double.infinity, 60),
       ),
       child: isLoading
           ? const CircularProgressIndicator(color: Colors.white)
-          : Text(text),
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Icon(
+                  icon,
+                  color: Colors.black,
+                ),
+                const Gap(14),
+                Text(
+                  text,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                )
+              ],
+            ),
+    );
+  }
+}
+
+class CommonButton extends StatelessWidget {
+  const CommonButton({
+    super.key,
+    required this.text,
+    required this.textColor,
+    required this.backgroundColor,
+    required this.onPressed,
+    this.isLoading = false,
+  });
+
+  final String text;
+  final Color textColor;
+  final Color backgroundColor;
+  final void Function()? onPressed;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        elevation: 10,
+        backgroundColor: backgroundColor,
+        shape: const StadiumBorder(),
+        minimumSize: const Size(double.infinity, 60),
+      ),
+      child: isLoading
+          ? const CircularProgressIndicator(color: Colors.white)
+          : Text(
+              text,
+              style: TextStyle(color: textColor, fontSize: 18),
+            ),
     );
   }
 }

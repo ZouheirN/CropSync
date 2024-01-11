@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/image_model.dart';
+import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/disease_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:gap/gap.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:watch_it/watch_it.dart';
@@ -73,6 +75,57 @@ class _QuickDiseaseDetectionScreenState
     return File(croppedImage.path);
   }
 
+  void _showSelectPhotoOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16),
+        ),
+      ),
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.28,
+        maxChildSize: 0.4,
+        minChildSize: 0.28,
+        expand: false,
+        builder: (context, scrollController) {
+          return SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+              child: Column(
+                children: [
+                  const Icon(
+                    Icons.drag_handle_rounded,
+                    color: Colors.grey,
+                  ),
+                  SecondaryButton(
+                    onPressed: () => _pickImage(ImageSource.gallery),
+                    icon: Icons.image,
+                    text: 'Browse Gallery',
+                  ),
+                  const Gap(10),
+                  const Center(
+                    child: Text(
+                      'OR',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  const Gap(10),
+                  SecondaryButton(
+                    onPressed: () => _pickImage(ImageSource.camera),
+                    icon: Icons.camera_alt_outlined,
+                    text: 'Use a Camera',
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final images = watchPropertyValue((ImageModel m) => m.images);
@@ -81,26 +134,20 @@ class _QuickDiseaseDetectionScreenState
       appBar: AppBar(
         title: const Text('Quick Disease Detection'),
         centerTitle: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_a_photo_rounded),
+            onPressed: () {
+              _showSelectPhotoOptions(context);
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
         child: Column(
           children: [
             _buildGrid(images),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  onPressed: () => _pickImage(ImageSource.camera),
-                  icon: const Icon(Icons.camera_alt_rounded),
-                ),
-                IconButton(
-                  onPressed: () => _pickImage(ImageSource.gallery),
-                  icon: const Icon(Icons.image),
-                ),
-              ],
-            ),
           ],
         ),
       ),
