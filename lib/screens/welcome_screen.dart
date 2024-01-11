@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:cropsync/screens/login_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
@@ -131,11 +130,7 @@ class WelcomeScreen extends StatelessWidget {
         PrimaryButton(
           text: 'Login',
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const LoginScreen(),
-              ),
-            );
+            Navigator.of(context).pushNamed('/login');
           },
         ),
         const Gap(20),
@@ -172,11 +167,7 @@ class WelcomeScreen extends StatelessWidget {
         PrimaryButton(
           text: 'Register',
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const RegisterScreen(),
-              ),
-            );
+            Navigator.of(context).pushNamed('/register');
           },
         ),
       ],

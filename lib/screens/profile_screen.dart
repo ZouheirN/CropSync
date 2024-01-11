@@ -1,7 +1,5 @@
 import 'package:cropsync/main.dart';
-import 'package:cropsync/screens/welcome_screen.dart';
-import 'package:cropsync/services/user_model.dart';
-import 'package:cropsync/widgets/buttons.dart';
+import 'package:cropsync/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
@@ -18,13 +16,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _logout(BuildContext context) {
     di<UserModel>().logout();
 
-    Navigator.of(context).popUntil((route) => route.isFirst);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const WelcomeScreen(),
-      ),
-    );
+    Navigator.of(context).pushNamedAndRemoveUntil('/welcome', (route) => false);
   }
 
   @override

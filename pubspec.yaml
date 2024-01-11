@@ -52,12 +52,16 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   latlong2: ^0.9.0
   flutter_map_tile_caching: ^9.0.0-dev.5
+  image_cropper: ^5.0.1
+  image_picker: ^1.0.7
+  path_provider: ^2.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   hive_generator: ^2.0.1
   build_runner: ^2.4.7
+  change_app_package_name: ^1.1.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

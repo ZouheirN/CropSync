@@ -1,4 +1,4 @@
-package com.zouheirn.cropsync.cropsync
+package com.zouheirn.cropsync
 
 import io.flutter.embedding.android.FlutterActivity
 

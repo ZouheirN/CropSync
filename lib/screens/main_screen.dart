@@ -1,4 +1,5 @@
 import 'package:cropsync/screens/profile_screen.dart';
+import 'package:cropsync/screens/quick_disease_detection_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'crops_screen.dart';
@@ -18,6 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   final screens = [
     const HomeScreen(),
     const CropsScreen(),
+    const QuickDiseaseDetectionScreen(),
     const DevicesScreen(),
     const ProfileScreen(),
   ];
@@ -40,11 +42,15 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Crops',
           ),
           NavigationDestination(
+            icon: Icon(Icons.camera_rounded),
+            label: 'Camera',
+          ),
+          NavigationDestination(
             icon: Icon(Icons.device_hub_rounded),
             label: 'Devices',
           ),
           NavigationDestination(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person_rounded),
             label: 'Profile',
           ),
         ],

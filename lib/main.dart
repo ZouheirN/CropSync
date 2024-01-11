@@ -1,11 +1,14 @@
 import 'package:cropsync/json/user.dart';
+import 'package:cropsync/models/user_model.dart';
+import 'package:cropsync/screens/add_device_screen.dart';
+import 'package:cropsync/screens/login_screen.dart';
 import 'package:cropsync/screens/main_screen.dart';
+import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/screens/welcome_screen.dart';
-import 'package:cropsync/services/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:watch_it/watch_it.dart';
-import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,8 +45,11 @@ class MyApp extends StatelessWidget {
 
   static late ValueNotifier<ThemeMode> themeNotifier;
 
-  const MyApp(
-      {super.key, required this.isUserLoggedIn, required this.darkModeEnabled});
+  const MyApp({
+    super.key,
+    required this.isUserLoggedIn,
+    required this.darkModeEnabled,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +75,16 @@ class MyApp extends StatelessWidget {
           ),
           themeMode: currentMode,
           debugShowCheckedModeBanner: false,
-          home: isUserLoggedIn ? const MainScreen() : const WelcomeScreen(),
+          routes: {
+            '/': (context) => isUserLoggedIn
+                ? const MainScreen()
+                : const WelcomeScreen(),
+            '/main': (context) => const MainScreen(),
+            '/welcome': (context) => const WelcomeScreen(),
+            '/register': (context) => const RegisterScreen(),
+            '/login': (context) => const LoginScreen(),
+            '/add-device': (context) => const AddDeviceScreen(),
+          }
         );
       },
     );

@@ -1,5 +1,4 @@
-import 'package:cropsync/screens/add_device_screen.dart';
-import 'package:cropsync/services/user_model.dart';
+import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -69,11 +68,7 @@ class _CropsScreenState extends State<CropsScreen> {
             PrimaryButton(
               text: 'Add a Device',
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const AddDeviceScreen(),
-                  ),
-                );
+                Navigator.of(context).pushNamed('/add-device');
               },
             )
           ],
