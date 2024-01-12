@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // backgroundImage: NetworkImage(user.profilePictureUrl),
                   ),
                   const Gap(20),
-                  Text(user.fullName, style: const TextStyle(fontSize: 24)),
+                  Text(user.fullName!, style: const TextStyle(fontSize: 24)),
                   const Gap(100),
                   ListTile(
                     leading: const Icon(Icons.person_rounded),

@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
 
-Widget overviewCard() {
+Widget overviewCard(String title) {
   return Card(
     elevation: 4,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8),
     ),
-    child: const Padding(
-      padding: EdgeInsets.all(16),
+    child: Padding(
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           Row(
             children: [
-              Icon(Icons.wb_sunny),
-              SizedBox(width: 8),
-              Text('Temperature'),
+              const Icon(Icons.wb_sunny),
+              const SizedBox(width: 8),
+              Text(title),
             ],
           ),
-          SizedBox(height: 16),
-          Row(
+          const SizedBox(height: 16),
+          const Row(
             children: [
               Icon(Icons.opacity),
               SizedBox(width: 8),
               Text('Humidity'),
             ],
           ),
-          SizedBox(height: 16),
-          Row(
+          const SizedBox(height: 16),
+          const Row(
             children: [
               Icon(Icons.waves),
               SizedBox(width: 8),

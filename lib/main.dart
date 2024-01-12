@@ -23,6 +23,8 @@ Future<void> main() async {
 
   // Register Adapters
   Hive.registerAdapter<User>(UserAdapter());
+  Hive.registerAdapter<Devices>(DevicesAdapter());
+  Hive.registerAdapter<Crop>(CropAdapter());
   Hive.registerAdapter<ImageObject>(ImageObjectAdapter());
 
   var userInfoBox = await Hive.openBox('userInfo');

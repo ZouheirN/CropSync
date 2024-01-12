@@ -1,8 +1,10 @@
+import 'package:cropsync/main.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:watch_it/watch_it.dart';
 
 import '../widgets/overview_card.dart';
@@ -15,11 +17,17 @@ class HomeScreen extends WatchingStatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _pageController = PageController(viewportFraction: 0.8, keepPage: true);
+
   @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((UserModel m) => m.user.devices);
+    final pages = [
+      overviewCard('test 1'),
+      overviewCard('test 2'),
+    ];
 
-    if (devices.isEmpty) return noDeviceAdded();
+    if (devices!.isEmpty) return noDeviceAdded();
 
     return SafeArea(
       child: Padding(
@@ -42,7 +50,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const Gap(16),
-                  overviewCard(),
+                  SizedBox(
+                    height: 240,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: pages.length,
+                      itemBuilder: (_, index) {
+                        return pages[index % pages.length];
+                      },
+                    ),
+                  ),
+                  const Gap(16),
+                  Container(
+                    alignment: Alignment.center,
+                    child: SmoothPageIndicator(
+                      controller: _pageController,
+                      count: pages.length,
+                      effect: ExpandingDotsEffect(
+                        dotHeight: 16,
+                        dotWidth: 16,
+                        activeDotColor:
+                            MyApp.themeNotifier.value == ThemeMode.light
+                                ? const Color(0xFF202C26)
+                                : const Color(0xFFE3EDE7),
+                      ),
+                    ),
+                  ),
                   const Gap(20),
                   const Text(
                     'Alerts',

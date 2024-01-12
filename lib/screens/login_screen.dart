@@ -1,19 +1,15 @@
-import 'dart:convert';
 import 'dart:math';
+
 import 'package:bcrypt/bcrypt.dart';
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/user_model.dart';
-import 'package:cropsync/screens/main_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/services/http_requests.dart';
-import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
-import 'package:hive/hive.dart';
 import 'package:watch_it/watch_it.dart';
 
 class LoginScreen extends StatefulWidget {

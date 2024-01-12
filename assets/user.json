@@ -17,6 +17,12 @@
       "crop": {
         "name": "Potato"
       }
+    },
+    {
+      "id": 3,
+      "name": "Raspberry Pi 3 Model B+",
+      "crop": {
+      }
     }
   ]
 }

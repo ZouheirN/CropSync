@@ -32,26 +32,46 @@ class _MainScreenState extends State<MainScreen> {
         height: 70,
         selectedIndex: index,
         onDestinationSelected: (index) => setState(() => this.index = index),
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.home_rounded),
+            icon: const Icon(Icons.home_rounded),
             label: 'Home',
+            selectedIcon: Icon(
+              Icons.home_rounded,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
           NavigationDestination(
-            icon: Icon(Icons.grass_rounded),
+            icon: const Icon(Icons.grass_rounded),
             label: 'Crops',
+            selectedIcon: Icon(
+              Icons.grass_rounded,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
           NavigationDestination(
-            icon: Icon(Icons.camera_rounded),
+            icon: const Icon(Icons.camera_rounded),
             label: 'Camera',
+            selectedIcon: Icon(
+              Icons.camera_rounded,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
           NavigationDestination(
-            icon: Icon(Icons.device_hub_rounded),
+            icon: const Icon(Icons.device_hub_rounded),
             label: 'Devices',
+            selectedIcon: Icon(
+              Icons.device_hub_rounded,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_rounded),
+            icon: const Icon(Icons.person_rounded),
             label: 'Profile',
+            selectedIcon: Icon(
+              Icons.person_rounded,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
         ],
       ),

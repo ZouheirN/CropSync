@@ -1,0 +1,18 @@
+[
+  {
+    "deviceId": 1,
+    "deviceName": "Raspberry Pi 3",
+    "location": "Saida, Lebanon",
+    "humidity": 50,
+    "temperature": 25,
+    "moisture": 50
+  },
+  {
+    "deviceId": 2,
+    "deviceName": "Raspberry Pi Zero W",
+    "location": "Beirut, Lebanon",
+    "humidity": 45,
+    "temperature": 20,
+    "moisture": 30
+  }
+]

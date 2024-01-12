@@ -2,6 +2,7 @@ import 'package:cropsync/json/user.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:watch_it/watch_it.dart';
 
 class UserModel extends ChangeNotifier {
   final userInfoBox = Hive.box('userInfo');
@@ -9,17 +10,17 @@ class UserModel extends ChangeNotifier {
   User get user => _user;
 
   User _user = User(
-      token: "",
-      fullName: "",
-      email: "",
-      devices: [],
-      isVerified: false,
+    token: "",
+    fullName: "",
+    email: "",
+    devices: [],
+    isVerified: false,
   );
 
   set user(User user) {
     _user = user;
     userInfoBox.put('user', user);
-    UserToken.setToken(user.token);
+    UserToken.setToken(user.token ?? "");
     notifyListeners();
   }
 

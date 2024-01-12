@@ -46,7 +46,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
               ),
             ),
             const Gap(10),
-            PrimaryTextField(hintText: user!.fullName, enabled: false),
+            PrimaryTextField(hintText: user.fullName!, enabled: false),
             const Gap(20),
             const Text(
               'Email',
@@ -56,7 +56,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
               ),
             ),
             const Gap(10),
-            PrimaryTextField(hintText: user!.email, enabled: false),
+            PrimaryTextField(hintText: user.email!, enabled: false),
             const Gap(20),
             const Text(
               'Password',
