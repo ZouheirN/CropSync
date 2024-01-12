@@ -6,7 +6,8 @@ class PrimaryTextField extends StatefulWidget {
   final bool enabled;
   final String? Function(String?)? validator;
   final bool? obscureText;
-  final Icon? prefixIcon;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
 
   const PrimaryTextField({
     super.key,
@@ -16,6 +17,7 @@ class PrimaryTextField extends StatefulWidget {
     this.validator,
     this.obscureText,
     this.prefixIcon,
+    this.suffixIcon
   });
 
   @override
@@ -39,6 +41,7 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
             const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         filled: true,
         prefixIcon: widget.prefixIcon,
+        suffixIcon: widget.suffixIcon,
         // fillColor: ,
         hintText: widget.hintText,
         border: const OutlineInputBorder(

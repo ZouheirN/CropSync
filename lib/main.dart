@@ -5,6 +5,7 @@ import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/account_information_screen.dart';
+import 'package:cropsync/screens/add_device_map_screen.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
 import 'package:cropsync/screens/login_screen.dart';
 import 'package:cropsync/screens/main_screen.dart';
@@ -102,6 +103,7 @@ class MyApp extends StatelessWidget {
             '/register': (context) => const RegisterScreen(),
             '/login': (context) => const LoginScreen(),
             '/add-device': (context) => const AddDeviceScreen(),
+            '/add-device-map': (context) => const AddDeviceMapScreen(),
             '/account-information': (context) => const AccountInformationScreen(),
           }
         );
