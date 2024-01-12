@@ -19,18 +19,18 @@ class AddDeviceScreen extends StatefulWidget {
 }
 
 class _AddDeviceScreenState extends State<AddDeviceScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _cityTextController = TextEditingController();
-  final _countryTextController = TextEditingController();
-  final _panelController = PanelController();
-  final _mapController = MapController();
+  final formKey = GlobalKey<FormState>();
+  final cityTextController = TextEditingController();
+  final countryTextController = TextEditingController();
+  final panelController = PanelController();
+  final mapController = MapController();
 
-  bool _isLoading = false;
+  bool isLoading = false;
 
   List<CircleMarker> _circles = [];
 
   void _confirm() {
-    if (_formKey.currentState!.validate()) {}
+    if (formKey.currentState!.validate()) {}
   }
 
   Future<Position> _getCurrentLocation() async {
@@ -69,10 +69,10 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
   }
 
   Future<void> _onMapTap(tapPosition, LatLng position) async {
-    _panelController.open();
+    panelController.open();
 
     setState(() {
-      _isLoading = true;
+      isLoading = true;
       _circles = [
         CircleMarker(
           point: position,
@@ -93,8 +93,8 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
       print(placemarks);
 
       setState(() {
-        _cityTextController.text = placemarks[0].subAdministrativeArea!;
-        _countryTextController.text = placemarks[0].country!;
+        cityTextController.text = placemarks[0].subAdministrativeArea!;
+        countryTextController.text = placemarks[0].country!;
       });
     } on Exception {
       if (!mounted) return;
@@ -104,14 +104,14 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
       Dialogs.showErrorDialog('Unknown Error', 'Please try again.', context);
     } finally {
       setState(() {
-        _isLoading = false;
+        isLoading = false;
       });
     }
   }
 
   @override
   void dispose() {
-    _mapController.dispose();
+    mapController.dispose();
     super.dispose();
   }
 
@@ -124,7 +124,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
           if (_circles.isNotEmpty)
             IconButton(
               onPressed: () {
-                _mapController.move(_circles[0].point, 13);
+                mapController.move(_circles[0].point, 13);
               },
               icon: const Icon(Icons.gps_not_fixed_rounded),
             )
@@ -133,7 +133,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
       body: SlidingUpPanel(
         parallaxEnabled: true,
         defaultPanelState: PanelState.CLOSED,
-        controller: _panelController,
+        controller: panelController,
         color: Colors.transparent,
         maxHeight: MediaQuery.of(context).size.height * 0.3,
         panel: _buildPanel(),
@@ -144,7 +144,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
 
   Widget _buildPanel() {
     return Form(
-      key: _formKey,
+      key: formKey,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
@@ -166,12 +166,12 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
               SecondaryButton(
                 icon: Icons.gps_fixed_rounded,
                 text: 'Get Current Location',
-                isLoading: _isLoading,
+                isLoading: isLoading,
                 onPressed: () async {
-                  if (_isLoading) return;
+                  if (isLoading) return;
 
                   setState(() {
-                    _isLoading = true;
+                    isLoading = true;
                   });
 
                   await _getCurrentLocation().then((value) async {
@@ -181,8 +181,8 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                               value.latitude, value.longitude,
                               localeIdentifier: 'en_LB');
 
-                      _panelController.open();
-                      _mapController.move(
+                      panelController.open();
+                      mapController.move(
                           LatLng(value.latitude, value.longitude), 15);
 
                       setState(() {
@@ -196,9 +196,9 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                             useRadiusInMeter: true,
                           )
                         ];
-                        _cityTextController.text =
+                        cityTextController.text =
                             placemarks[0].subAdministrativeArea!;
-                        _countryTextController.text = placemarks[0].country!;
+                        countryTextController.text = placemarks[0].country!;
                       });
                     } on Exception {
                       if (!mounted) return;
@@ -210,7 +210,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                           'Unknown Error', 'Please try again.', context);
                     } finally {
                       setState(() {
-                        _isLoading = false;
+                        isLoading = false;
                       });
                     }
                   });
@@ -222,7 +222,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                   Expanded(
                     child: PrimaryTextField(
                       hintText: 'City',
-                      textController: _cityTextController,
+                      textController: cityTextController,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter city';
@@ -235,7 +235,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                   Expanded(
                     child: PrimaryTextField(
                       hintText: 'Country',
-                      textController: _countryTextController,
+                      textController: countryTextController,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter country';
@@ -262,7 +262,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
 
   Widget _buildMap() {
     return FlutterMap(
-      mapController: _mapController,
+      mapController: mapController,
       options: MapOptions(
         initialCenter: const LatLng(33.8547, 35.8623),
         initialZoom: 3.2,

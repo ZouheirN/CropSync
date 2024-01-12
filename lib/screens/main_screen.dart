@@ -24,7 +24,7 @@ class _MainScreenState extends State<MainScreen> {
   int index = 0;
   bool pauseData = false;
 
-  void _weather() async {
+  void weather() async {
     final weatherData = await ApiRequests.getWeatherData();
     final weather = weatherFromJson(weatherData);
     di<WeatherModel>().weather = weather;
@@ -43,7 +43,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     // Initialize Periodic Timers
-    _weather();
+    weather();
     super.initState();
   }
 

@@ -24,12 +24,12 @@ class QuickDiseaseDetectionScreen extends WatchingStatefulWidget {
 
 class _QuickDiseaseDetectionScreenState
     extends State<QuickDiseaseDetectionScreen> {
-  void _pickImage(ImageSource source) async {
+  void pickImage(ImageSource source) async {
     final image = await ImagePicker().pickImage(source: source);
     if (image == null) return;
 
     File? img = File(image.path);
-    img = await _cropImage(imageFile: img);
+    img = await cropImage(imageFile: img);
 
     if (img == null) return;
 
@@ -43,7 +43,7 @@ class _QuickDiseaseDetectionScreenState
     //todo send to server
   }
 
-  Future<File?> _cropImage({required File imageFile}) async {
+  Future<File?> cropImage({required File imageFile}) async {
     CroppedFile? croppedImage = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
       aspectRatioPresets: const [
@@ -75,7 +75,7 @@ class _QuickDiseaseDetectionScreenState
     return File(croppedImage.path);
   }
 
-  void _showSelectPhotoOptions(BuildContext context) {
+  void showSelectPhotoOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -100,7 +100,7 @@ class _QuickDiseaseDetectionScreenState
                     color: Colors.grey,
                   ),
                   SecondaryButton(
-                    onPressed: () => _pickImage(ImageSource.gallery),
+                    onPressed: () => pickImage(ImageSource.gallery),
                     icon: Icons.image,
                     text: 'Browse Gallery',
                   ),
@@ -113,7 +113,7 @@ class _QuickDiseaseDetectionScreenState
                   ),
                   const Gap(10),
                   SecondaryButton(
-                    onPressed: () => _pickImage(ImageSource.camera),
+                    onPressed: () => pickImage(ImageSource.camera),
                     icon: Icons.camera_alt_outlined,
                     text: 'Use a Camera',
                   ),
@@ -138,7 +138,7 @@ class _QuickDiseaseDetectionScreenState
           IconButton(
             icon: const Icon(Icons.add_a_photo_rounded),
             onPressed: () {
-              _showSelectPhotoOptions(context);
+              showSelectPhotoOptions(context);
             },
           )
         ],
@@ -147,14 +147,14 @@ class _QuickDiseaseDetectionScreenState
         padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
         child: Column(
           children: [
-            _buildGrid(images),
+            buildGrid(images),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildGrid(images) {
+  Widget buildGrid(images) {
     int columnCount = MediaQuery.of(context).size.width > 600 ? 3 : 2;
 
     return SizedBox(

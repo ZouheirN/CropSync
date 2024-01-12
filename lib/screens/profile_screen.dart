@@ -15,7 +15,7 @@ class ProfileScreen extends WatchingStatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  Future<void> _logout(BuildContext context) async {
+  Future<void> logout(BuildContext context) async {
     if (await Dialogs.showConfirmationDialog(
             'Logout', 'Are you sure you want to logout?', context) ==
         false) return;
@@ -93,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ListTile(
                     leading: const Icon(Icons.logout_rounded),
                     title: const Text('Logout'),
-                    onTap: () => _logout(context),
+                    onTap: () => logout(context),
                   )
                 ],
               ),

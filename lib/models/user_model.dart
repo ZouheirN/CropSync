@@ -2,7 +2,6 @@ import 'package:cropsync/json/user.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:watch_it/watch_it.dart';
 
 class UserModel extends ChangeNotifier {
   final userInfoBox = Hive.box('userInfo');

@@ -17,47 +17,47 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
-  final _fullNameTextController = TextEditingController();
-  final _emailTextController = TextEditingController();
-  final _passwordTextController = TextEditingController();
-  final FancyPasswordController _passwordValidatorController =
+  final fullNameTextController = TextEditingController();
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+  final FancyPasswordController passwordValidatorController =
       FancyPasswordController();
-  final _confirmPasswordTextController = TextEditingController();
+  final confirmPasswordTextController = TextEditingController();
 
-  bool _isLoading = false;
+  bool isLoading = false;
 
   @override
   void dispose() {
-    _passwordValidatorController.dispose();
+    passwordValidatorController.dispose();
     super.dispose();
   }
 
-  Future<void> _register() async {
+  Future<void> register() async {
     FocusManager.instance.primaryFocus?.unfocus();
 
-    if (_formKey.currentState!.validate()) {
-      if (_isLoading) return;
+    if (formKey.currentState!.validate()) {
+      if (isLoading) return;
 
       setState(() {
-        _isLoading = true;
+        isLoading = true;
       });
 
       await Future.delayed(const Duration(seconds: 2));
 
       // Hash the password
       final String hashedPassword = BCrypt.hashpw(
-        _passwordTextController.text,
+        passwordTextController.text,
         BCrypt.gensalt(
           secureRandom: Random(
-            _passwordTextController.text.length,
+            passwordTextController.text.length,
           ),
         ),
       );
 
       setState(() {
-        _isLoading = false;
+        isLoading = false;
       });
     }
   }
@@ -75,18 +75,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
             vertical: 16,
           ),
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               children: [
-                _buildFullNameTextInputField(),
+                buildFullNameTextInputField(),
                 const Gap(20),
-                _buildEmailTextInputField(),
+                buildEmailTextInputField(),
                 const Gap(20),
-                _buildPasswordTextInputField(),
+                buildPasswordTextInputField(),
                 const Gap(20),
-                _buildConfirmPasswordTextInputField(),
+                buildConfirmPasswordTextInputField(),
                 const Gap(20),
-                _buildRegisterButton(),
+                buildRegisterButton(),
                 const Gap(20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -114,7 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   // Full Name Text Input Field
-  Widget _buildFullNameTextInputField() {
+  Widget buildFullNameTextInputField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -128,7 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         const Gap(10),
         PrimaryTextField(
           hintText: 'Enter your full name',
-          textController: _fullNameTextController,
+          textController: fullNameTextController,
           prefixIcon: const Icon(Icons.person),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -149,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   // Email Text Input Field
-  Widget _buildEmailTextInputField() {
+  Widget buildEmailTextInputField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -163,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         const Gap(10),
         PrimaryTextField(
           hintText: 'Enter your email',
-          textController: _emailTextController,
+          textController: emailTextController,
           prefixIcon: const Icon(Icons.email),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -182,7 +182,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   // Password Text Input Field
-  Widget _buildPasswordTextInputField() {
+  Widget buildPasswordTextInputField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -203,8 +203,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Icons.visibility_outlined,
             color: Colors.grey,
           ),
-          controller: _passwordTextController,
-          passwordController: _passwordValidatorController,
+          controller: passwordTextController,
+          passwordController: passwordValidatorController,
           validationRules: {
             DigitValidationRule(),
             UppercaseValidationRule(),
@@ -216,7 +216,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               return 'Please enter your password';
             }
 
-            return _passwordValidatorController.areAllRulesValidated
+            return passwordValidatorController.areAllRulesValidated
                 ? null
                 : 'Please validate all rules';
           },
@@ -279,7 +279,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   // Confirm Password Text Input Field
-  Widget _buildConfirmPasswordTextInputField() {
+  Widget buildConfirmPasswordTextInputField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -293,7 +293,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         const Gap(10),
         PrimaryTextField(
           hintText: 'Enter your password again',
-          textController: _confirmPasswordTextController,
+          textController: confirmPasswordTextController,
           prefixIcon: const Icon(Icons.lock),
           obscureText: true,
           validator: (value) {
@@ -301,7 +301,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               return 'Please enter your password again';
             }
 
-            if (value != _passwordTextController.text) {
+            if (value != passwordTextController.text) {
               return 'Password does not match';
             }
 
@@ -313,15 +313,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   // Register Button
-  Widget _buildRegisterButton() {
+  Widget buildRegisterButton() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.7,
       child: CommonButton(
         text: 'Register',
         backgroundColor: Theme.of(context).primaryColor,
         textColor: Colors.white,
-        onPressed: _register,
-        isLoading: _isLoading,
+        onPressed: register,
+        isLoading: isLoading,
       ),
     );
   }

@@ -20,43 +20,43 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
-  final _emailTextController = TextEditingController();
-  final _passwordTextController = TextEditingController();
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
 
-  bool _isLoading = false;
+  bool isLoading = false;
 
   Future<void> _login() async {
     FocusManager.instance.primaryFocus?.unfocus();
 
-    if (_formKey.currentState!.validate()) {
-      if (_isLoading) return;
+    if (formKey.currentState!.validate()) {
+      if (isLoading) return;
 
       setState(() {
-        _isLoading = true;
+        isLoading = true;
       });
 
       // Hash the password
       final String hashedPassword = BCrypt.hashpw(
-        _passwordTextController.text,
+        passwordTextController.text,
         BCrypt.gensalt(
           secureRandom: Random(
-            _passwordTextController.text.length,
+            passwordTextController.text.length,
           ),
         ),
       );
 
       // TODO get user info from api
       final userData = await ApiRequests.checkCredentials(
-        _emailTextController.text,
+        emailTextController.text,
         hashedPassword,
       );
       User user = userFromJson(userData);
       di<UserModel>().user = user;
 
       setState(() {
-        _isLoading = false;
+        isLoading = false;
       });
 
       if (!context.mounted) return;
@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
             vertical: 16,
           ),
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               children: [
                 _buildEmailTextInputField(),
@@ -139,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
         const Gap(10),
         PrimaryTextField(
           hintText: 'Enter your email',
-          textController: _emailTextController,
+          textController: emailTextController,
           prefixIcon: const Icon(Icons.email),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
         const Gap(10),
         PrimaryTextField(
           hintText: 'Enter your password',
-          textController: _passwordTextController,
+          textController: passwordTextController,
           prefixIcon: const Icon(Icons.lock),
           obscureText: true,
           validator: (value) {
@@ -196,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         textColor: Colors.white,
         onPressed: _login,
-        isLoading: _isLoading,
+        isLoading: isLoading,
       ),
     );
   }

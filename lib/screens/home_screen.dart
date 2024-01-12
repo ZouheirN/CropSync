@@ -18,7 +18,7 @@ class HomeScreen extends WatchingStatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _pageController = PageController(viewportFraction: 0.8, keepPage: true);
+  final pageController = PageController(viewportFraction: 0.8, keepPage: true);
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 children: [
-                  _buildOverview(pages),
+                  buildOverview(pages),
                   const Gap(20),
-                  _buildAlerts(),
+                  buildAlerts(),
                 ],
               ),
             ),
@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Overview
-  Widget _buildOverview(pages) {
+  Widget buildOverview(pages) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(
           height: 240,
           child: PageView.builder(
-            controller: _pageController,
+            controller: pageController,
             itemCount: pages.length,
             itemBuilder: (_, index) {
               return pages[index % pages.length];
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 alignment: Alignment.center,
                 child: SmoothPageIndicator(
-                  controller: _pageController,
+                  controller: pageController,
                   count: pages.length,
                   effect: ExpandingDotsEffect(
                     dotHeight: 16,
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildAlerts() {
+  Widget buildAlerts() {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -15,14 +15,14 @@ class AccountInformationScreen extends WatchingStatefulWidget {
 }
 
 class _AccountInformationScreenState extends State<AccountInformationScreen> {
-  String _version = '';
+  String version = '';
 
-  _changePassword() async {}
+  changePassword() async {}
 
   @override
   void initState() {
     PackageInfo.fromPlatform()
-        .then((value) => setState(() => _version = value.version));
+        .then((value) => setState(() => version = value.version));
     super.initState();
   }
 
@@ -68,7 +68,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
             const Gap(10),
             CommonButton(
               text: 'Change Password',
-              onPressed: _changePassword,
+              onPressed: changePassword,
               textColor: Colors.white,
               backgroundColor: Theme.of(context).primaryColor,
             ),
@@ -80,7 +80,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
             ),
             const Gap(10),
             Text(
-              'CropSync v$_version',
+              'CropSync v$version',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 12,

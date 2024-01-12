@@ -51,12 +51,12 @@ class WelcomeScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  _buildTitle(),
+                  buildTitle(),
                   // const Gap(270),
                   Expanded(flex: 5, child: Container()),
-                  _buildText(),
+                  buildText(),
                   const Spacer(),
-                  _buildButtons(context),
+                  buildButtons(context),
                 ],
               ),
             ),
@@ -67,7 +67,7 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   // Title
-  Widget _buildTitle() {
+  Widget buildTitle() {
     return Column(
       children: [
         const Gap(40),
@@ -107,7 +107,7 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   // Text
-  Widget _buildText() {
+  Widget buildText() {
     return const Column(
       children: [
         Gap(20),
@@ -124,7 +124,7 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   // Buttons
-  Widget _buildButtons(BuildContext context) {
+  Widget buildButtons(BuildContext context) {
     return Column(
       children: [
         CommonButton(
