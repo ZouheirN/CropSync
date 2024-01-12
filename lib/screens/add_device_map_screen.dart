@@ -33,7 +33,7 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
     if (formKey.currentState!.validate()) {
       final location =
           "${cityTextController.text.trim()}, ${countryTextController.text.trim()}";
-      Navigator.pop(context, location);
+      Navigator.of(context).pop(location);
     }
   }
 

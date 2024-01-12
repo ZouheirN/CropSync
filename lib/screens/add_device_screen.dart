@@ -76,9 +76,12 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                     onPressed: () async {
                       final location = await Navigator.of(context)
                           .pushNamed('/add-device-map');
-                      setState(() {
-                        deviceLocationController.text = location.toString();
-                      });
+
+                      if (location.toString() != "null") {
+                        setState(() {
+                          deviceLocationController.text = location.toString();
+                        });
+                      }
                     },
                     icon: const Icon(Icons.add_location_rounded))
               ],
