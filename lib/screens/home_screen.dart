@@ -1,5 +1,6 @@
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/user_model.dart';
+import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -22,10 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((UserModel m) => m.user.devices);
-    final pages = [
-      overviewCard('test 1'),
-      overviewCard('test 2'),
-    ];
+    final weather = watchPropertyValue((WeatherModel w) => w.weather);
+
+    final pages = weather.map((e) => overviewCard(e)).toList();
 
     if (devices!.isEmpty) return noDeviceAdded();
 
@@ -60,21 +60,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   ),
-                  const Gap(16),
-                  Container(
-                    alignment: Alignment.center,
-                    child: SmoothPageIndicator(
-                      controller: _pageController,
-                      count: pages.length,
-                      effect: ExpandingDotsEffect(
-                        dotHeight: 16,
-                        dotWidth: 16,
-                        activeDotColor:
+                  if (pages.isNotEmpty)
+                  Column(
+                    children: [
+                      const Gap(16),
+                      Container(
+                        alignment: Alignment.center,
+                        child: SmoothPageIndicator(
+                          controller: _pageController,
+                          count: pages.length,
+                          effect: ExpandingDotsEffect(
+                            dotHeight: 16,
+                            dotWidth: 16,
+                            activeDotColor:
                             MyApp.themeNotifier.value == ThemeMode.light
                                 ? const Color(0xFF202C26)
                                 : const Color(0xFFE3EDE7),
+                          ),
+                        ),
                       ),
-                    ),
+
+                    ],
                   ),
                   const Gap(20),
                   const Text(

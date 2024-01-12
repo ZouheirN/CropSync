@@ -1,6 +1,10 @@
+import 'package:cropsync/json/weather.dart';
+import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/profile_screen.dart';
 import 'package:cropsync/screens/quick_disease_detection_screen.dart';
+import 'package:cropsync/services/http_requests.dart';
 import 'package:flutter/material.dart';
+import 'package:watch_it/watch_it.dart';
 
 import 'crops_screen.dart';
 import 'devices_screen.dart';
@@ -15,6 +19,19 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int index = 0;
+
+  void _weather() async {
+    final weatherData = await ApiRequests.getWeatherData();
+    final weather = weatherFromJson(weatherData);
+    di<WeatherModel>().weather = weather;
+  }
+
+  @override
+  void initState() {
+    // Initialize Periodic Timers
+    _weather();
+    super.initState();
+  }
 
   final screens = [
     const HomeScreen(),

@@ -1,6 +1,8 @@
+import 'package:cropsync/json/weather.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
-Widget overviewCard(String title) {
+Widget overviewCard(Weather weather) {
   return Card(
     elevation: 4,
     shape: RoundedRectangleBorder(
@@ -12,25 +14,41 @@ Widget overviewCard(String title) {
         children: [
           Row(
             children: [
+              const Icon(Icons.phone_android_rounded),
+              const Gap(8),
+              Text(weather.deviceName!),
+            ],
+          ),
+          const Gap(16),
+          Row(
+            children: [
+              const Icon(Icons.location_on_rounded),
+              const Gap(8),
+              Text(weather.location!),
+            ],
+          ),
+          const Gap(16),
+          Row(
+            children: [
               const Icon(Icons.wb_sunny),
-              const SizedBox(width: 8),
-              Text(title),
+              const Gap(8),
+              Text(weather.temperature!.toString()),
             ],
           ),
-          const SizedBox(height: 16),
-          const Row(
+          const Gap(16),
+           Row(
             children: [
-              Icon(Icons.opacity),
-              SizedBox(width: 8),
-              Text('Humidity'),
+              const Icon(Icons.opacity),
+              const Gap(8),
+              Text(weather.humidity!.toString()),
             ],
           ),
-          const SizedBox(height: 16),
-          const Row(
+          const Gap(16),
+           Row(
             children: [
-              Icon(Icons.waves),
-              SizedBox(width: 8),
-              Text('Moisture'),
+              const Icon(Icons.waves),
+              const Gap(8),
+              Text(weather.moisture!.toString()),
             ],
           ),
         ],

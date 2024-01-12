@@ -1,5 +1,6 @@
-import 'package:hive/hive.dart';
 import 'dart:convert';
+
+import 'package:hive/hive.dart';
 
 part 'user.g.dart';
 
@@ -20,7 +21,13 @@ class User {
   @HiveField(4)
   List<Devices>? devices;
 
-  User({this.token, this.fullName, this.email, this.isVerified, this.devices});
+  User({
+    this.token,
+    this.fullName,
+    this.email,
+    this.isVerified,
+    this.devices,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     token = json['token'];
@@ -57,7 +64,11 @@ class Devices {
   @HiveField(2)
   Crop? crop;
 
-  Devices({this.id, this.name, this.crop});
+  Devices({
+    this.id,
+    this.name,
+    this.crop,
+  });
 
   Devices.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -81,7 +92,9 @@ class Crop {
   @HiveField(0)
   String? name;
 
-  Crop({this.name});
+  Crop({
+    this.name,
+  });
 
   Crop.fromJson(Map<String, dynamic> json) {
     name = json['name'];

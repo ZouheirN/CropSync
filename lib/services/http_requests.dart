@@ -8,14 +8,17 @@ enum ReturnTypes {
   fail,
 }
 
-Future<String> _loadData() async {
-  return await rootBundle.loadString('assets/user.json');
-}
-
 class ApiRequests {
   static Future<dynamic> checkCredentials(
       String username, String password) async {
-    String jsonString = await _loadData();
+    String jsonString = await rootBundle.loadString('assets/user.json');
+    final data = json.decode(jsonString);
+
+    return data;
+  }
+
+  static Future<dynamic> getWeatherData() async {
+    String jsonString = await rootBundle.loadString('assets/weather.json');
     final data = json.decode(jsonString);
 
     return data;

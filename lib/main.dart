@@ -1,7 +1,9 @@
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/json/user.dart';
+import 'package:cropsync/json/weather.dart';
 import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/user_model.dart';
+import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/account_information_screen.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
 import 'package:cropsync/screens/login_screen.dart';
@@ -25,6 +27,7 @@ Future<void> main() async {
   Hive.registerAdapter<User>(UserAdapter());
   Hive.registerAdapter<Devices>(DevicesAdapter());
   Hive.registerAdapter<Crop>(CropAdapter());
+  Hive.registerAdapter<Weather>(WeatherAdapter());
   Hive.registerAdapter<ImageObject>(ImageObjectAdapter());
 
   var userInfoBox = await Hive.openBox('userInfo');
@@ -110,4 +113,5 @@ class MyApp extends StatelessWidget {
 void registerManagers() {
   di.registerSingleton<UserModel>(UserModel());
   di.registerSingleton<ImageModel>(ImageModel());
+  di.registerSingleton<WeatherModel>(WeatherModel());
 }

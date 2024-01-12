@@ -48,11 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       // TODO get user info from api
-      final data = await ApiRequests.checkCredentials(
+      final userData = await ApiRequests.checkCredentials(
         _emailTextController.text,
         hashedPassword,
       );
-      User user = userFromJson(data);
+      User user = userFromJson(userData);
       di<UserModel>().user = user;
 
       setState(() {
