@@ -116,8 +116,29 @@ class _CropsScreenState extends State<CropsScreen> {
                 ],
               )
             else
-              const ListTile(
-                title: Text('Status'),
+              Column(
+                children: [
+                  const ListTile(
+                    title: Text('Status'),
+                  ),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {},
+                        child: const Column(
+                          children: <Widget>[
+                            Icon(Icons.edit_rounded),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 2.0),
+                            ),
+                            Text('Edit'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               )
           ],
         ),
