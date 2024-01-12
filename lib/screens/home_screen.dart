@@ -45,54 +45,71 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 children: [
-                  const Text(
-                    'Overview',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const Gap(16),
-                  SizedBox(
-                    height: 240,
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: pages.length,
-                      itemBuilder: (_, index) {
-                        return pages[index % pages.length];
-                      },
-                    ),
-                  ),
-                  if (pages.isNotEmpty)
-                  Column(
-                    children: [
-                      const Gap(16),
-                      Container(
-                        alignment: Alignment.center,
-                        child: SmoothPageIndicator(
-                          controller: _pageController,
-                          count: pages.length,
-                          effect: ExpandingDotsEffect(
-                            dotHeight: 16,
-                            dotWidth: 16,
-                            activeDotColor:
-                            MyApp.themeNotifier.value == ThemeMode.light
-                                ? const Color(0xFF202C26)
-                                : const Color(0xFFE3EDE7),
-                          ),
-                        ),
-                      ),
-
-                    ],
-                  ),
+                  _buildOverview(pages),
                   const Gap(20),
-                  const Text(
-                    'Alerts',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
+                  _buildAlerts(),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  // Overview
+  Widget _buildOverview(pages) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Overview',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        const Gap(16),
+        SizedBox(
+          height: 240,
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: pages.length,
+            itemBuilder: (_, index) {
+              return pages[index % pages.length];
+            },
+          ),
+        ),
+        if (pages.isNotEmpty)
+          Column(
+            children: [
+              const Gap(16),
+              Container(
+                alignment: Alignment.center,
+                child: SmoothPageIndicator(
+                  controller: _pageController,
+                  count: pages.length,
+                  effect: ExpandingDotsEffect(
+                    dotHeight: 16,
+                    dotWidth: 16,
+                    activeDotColor: MyApp.themeNotifier.value == ThemeMode.light
+                        ? const Color(0xFF202C26)
+                        : const Color(0xFFE3EDE7),
+                  ),
+                ),
+              ),
+            ],
+          ),
+      ],
+    );
+  }
+
+  Widget _buildAlerts() {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Alerts',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ],
     );
   }
 

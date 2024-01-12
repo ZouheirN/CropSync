@@ -14,5 +14,13 @@
     "humidity": 45,
     "temperature": 20,
     "moisture": 30
+  },
+  {
+    "deviceId": 3,
+    "deviceName": "Raspberry Pi 3 Model B+",
+    "location": "Sour, Lebanon",
+    "humidity": 15,
+    "temperature": 10,
+    "moisture": 40
   }
 ]
