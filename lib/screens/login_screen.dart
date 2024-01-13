@@ -6,6 +6,7 @@ import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/services/http_requests.dart';
 import 'package:cropsync/widgets/buttons.dart';
+import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -87,9 +88,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    child: const Text('Forgot Password?',
-                        style: TextStyle(color: Colors.green)),
-                    onPressed: () {},
+                    onPressed: () {
+                      Dialogs.showForgotPasswordDialog(context);
+                    },
+                    child: const Text(
+                      'Forgot Password?',
+                      style: TextStyle(color: Colors.green),
+                    ),
                   ),
                 ),
                 const Gap(10),

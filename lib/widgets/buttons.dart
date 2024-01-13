@@ -121,3 +121,41 @@ class CommonButton extends StatelessWidget {
     );
   }
 }
+
+class DialogButton extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final VoidCallback onPressed;
+  final bool isLoading;
+
+  const DialogButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.color,
+    this.isLoading = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size(100, 45),
+        backgroundColor: color ?? Theme.of(context).primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+      child: isLoading
+          ? const SizedBox(
+              height: 25,
+              width: 25,
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            )
+          : Text(text, style: const TextStyle(color: Colors.white)),
+    );
+  }
+}

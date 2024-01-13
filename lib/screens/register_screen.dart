@@ -67,7 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
 
       if (!mounted) return;
-      Navigator.of(context).pushNamed('/otp-screen', arguments: {
+      Navigator.of(context).pushNamed('/otp', arguments: {
         'token': token,
         'email': email,
       });

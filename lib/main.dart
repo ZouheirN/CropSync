@@ -106,7 +106,7 @@ class MyApp extends StatelessWidget {
             '/add-device': (context) => const AddDeviceScreen(),
             '/add-device-map': (context) => const AddDeviceMapScreen(),
             '/account-information': (context) => const AccountInformationScreen(),
-            '/otp-screen': (context) => const OTPScreen(),
+            '/otp': (context) => const OTPScreen(),
           }
         );
       },

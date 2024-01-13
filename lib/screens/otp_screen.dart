@@ -3,18 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
 
 class OTPScreen extends StatefulWidget {
-  final String? token;
-  final bool isNotVerifiedFromLogin;
-  final bool isResettingPassword;
-  final String? email;
-
-  const OTPScreen({
-    super.key,
-    this.isNotVerifiedFromLogin = false,
-    this.token,
-    this.isResettingPassword = false,
-    this.email,
-  });
+  const OTPScreen({super.key});
 
   @override
   State<OTPScreen> createState() => _OTPScreenState();
@@ -37,11 +26,18 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   void initState() {
+    final arg = ModalRoute.of(context)!.settings.arguments as Map;
+    final token = arg['token'];
+    final email = arg['email'];
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final arg = ModalRoute.of(context)!.settings.arguments as Map;
+    final isNotVerifiedFromLogin = arg['isNotVerifiedFromLogin'] ?? false;
+    final isResettingPassword = arg['isResettingPassword'] ?? false;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('One-Time Password'),
@@ -53,13 +49,13 @@ class _OTPScreenState extends State<OTPScreen> {
           child: Column(
             children: [
               const Gap(100),
-              if (widget.isNotVerifiedFromLogin)
+              if (isNotVerifiedFromLogin)
                 const Text(
                   'Your account is not verified yet. Please enter the OTP sent to your email to verify your account',
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 )
-              else if (widget.isResettingPassword)
+              else if (isResettingPassword)
                 const Text(
                     'In order to reset your password, please enter the OTP sent to your email',
                     style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
