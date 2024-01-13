@@ -8,6 +8,9 @@ class PrimaryTextField extends StatefulWidget {
   final bool? obscureText;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final Iterable<String>? autofillHints;
+  final TextInputAction? textInputAction;
+  final Function()? onEditingComplete;
 
   const PrimaryTextField({
     super.key,
@@ -17,7 +20,10 @@ class PrimaryTextField extends StatefulWidget {
     this.validator,
     this.obscureText,
     this.prefixIcon,
-    this.suffixIcon
+    this.suffixIcon,
+    this.autofillHints,
+    this.textInputAction,
+    this.onEditingComplete,
   });
 
   @override
@@ -54,6 +60,9 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
       ),
       enabled: widget.enabled,
       validator: widget.validator,
+      autofillHints: widget.autofillHints,
+      textInputAction: widget.textInputAction,
+      onEditingComplete: widget.onEditingComplete,
     );
   }
 }

@@ -10,6 +10,7 @@ import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -92,9 +93,15 @@ class _LoginScreenState extends State<LoginScreen> {
             key: formKey,
             child: Column(
               children: [
-                _buildEmailTextInputField(),
-                const Gap(20),
-                _buildPasswordTextInputField(),
+                AutofillGroup(
+                  child: Column(
+                    children: [
+                      _buildEmailTextInputField(),
+                      const Gap(20),
+                      _buildPasswordTextInputField(),
+                    ],
+                  ),
+                ),
                 const Gap(10),
                 Align(
                   alignment: Alignment.centerRight,
@@ -157,6 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: 'Enter your email',
           textController: emailTextController,
           prefixIcon: const Icon(Icons.email),
+          textInputAction: TextInputAction.next,
+          autofillHints: const [AutofillHints.email],
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter your email';
@@ -191,6 +200,8 @@ class _LoginScreenState extends State<LoginScreen> {
           textController: passwordTextController,
           prefixIcon: const Icon(Icons.lock),
           obscureText: true,
+          autofillHints: const [AutofillHints.password],
+          onEditingComplete: () => TextInput.finishAutofillContext(),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter your password';

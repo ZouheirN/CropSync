@@ -180,11 +180,11 @@ class _QuickDiseaseDetectionScreenState
                   child: FadeInAnimation(
                     child: FocusedMenuHolder(
                       menuItems: [
-                        if (images[index].result == 'Upload Failed')
                           FocusedMenuItem(
-                            title: const Text(
-                              'Retry Upload',
-                              style: TextStyle(color: Colors.black),
+                            title: Text(
+                              images[index].result == 'Upload Failed' ||
+                                  images[index].result == 'Uploading...' ? 'Retry Upload' : 'Re-Upload',
+                              style: const TextStyle(color: Colors.black),
                             ),
                             onPressed: () {
                               ApiRequests.uploadDiseaseImage(
