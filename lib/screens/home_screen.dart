@@ -138,7 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const Gap(16),
         SizedBox(
-          height: 240,
+          width: double.infinity,
+          height: 280,
           child: PageView.builder(
             controller: deviceCameraPageController,
             itemCount: pages.length,
