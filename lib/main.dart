@@ -1,6 +1,8 @@
+import 'package:cropsync/json/device_camera.dart';
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/json/weather.dart';
+import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
@@ -32,6 +34,7 @@ Future<void> main() async {
   Hive.registerAdapter<Crop>(CropAdapter());
   Hive.registerAdapter<Weather>(WeatherAdapter());
   Hive.registerAdapter<ImageObject>(ImageObjectAdapter());
+  Hive.registerAdapter<DeviceCamera>(DeviceCameraAdapter());
 
   var userInfoBox = await Hive.openBox('userInfo');
   var userPrefsBox = await Hive.openBox('userPrefs');
@@ -120,4 +123,5 @@ void registerManagers() {
   di.registerSingleton<UserModel>(UserModel());
   di.registerSingleton<ImageModel>(ImageModel());
   di.registerSingleton<WeatherModel>(WeatherModel());
+  di.registerSingleton<DeviceCameraModel>(DeviceCameraModel());
 }

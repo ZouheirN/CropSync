@@ -23,4 +23,11 @@ class ApiRequests {
 
     return data;
   }
+
+  static Future<dynamic> getDeviceCamera() async {
+    String jsonString = await rootBundle.loadString('assets/device_camera.json');
+    final data = json.decode(jsonString);
+
+    return data;
+  }
 }

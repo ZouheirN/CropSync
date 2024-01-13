@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:cropsync/json/device_camera.dart';
 import 'package:cropsync/json/weather.dart';
+import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/profile_screen.dart';
 import 'package:cropsync/screens/quick_disease_detection_screen.dart';
@@ -40,10 +42,27 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  void deviceCamera() async {
+    final deviceCameraData = await ApiRequests.getDeviceCamera();
+    final deviceCamera = deviceCameraFromJson(deviceCameraData);
+    di<DeviceCameraModel>().deviceCamera = deviceCamera;
+    debugPrint('Fetched Device Camera');
+
+    Timer.periodic(const Duration(minutes: 2), (timer) async {
+      if (pauseData == true) return;
+
+      final deviceCameraData = await ApiRequests.getDeviceCamera();
+      final deviceCamera = deviceCameraFromJson(deviceCameraData);
+      di<DeviceCameraModel>().deviceCamera = deviceCamera;
+      debugPrint('Fetched Device Camera');
+    });
+  }
+
   @override
   void initState() {
     // Initialize Periodic Timers
     weather();
+    deviceCamera();
     super.initState();
   }
 

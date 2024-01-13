@@ -1,7 +1,9 @@
 import 'package:cropsync/main.dart';
+import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
+import 'package:cropsync/widgets/device_camera_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
@@ -18,14 +20,17 @@ class HomeScreen extends WatchingStatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final pageController = PageController(viewportFraction: 0.8, keepPage: true);
+  final overviewPageController = PageController(viewportFraction: 0.8, keepPage: true);
+  final deviceCameraPageController = PageController(viewportFraction: 0.8, keepPage: true);
 
   @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((UserModel m) => m.user.devices);
     final weather = watchPropertyValue((WeatherModel w) => w.weather);
+    final deviceCamera = watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera);
 
-    final pages = weather.map((e) => overviewCard(e)).toList();
+    final overviewPages = weather.map((e) => overviewCard(e)).toList();
+    final deviceCameraPages = deviceCamera.map((e) => deviceCameraCard(e)).toList();
 
     if (devices!.isEmpty) return noDeviceAdded();
 
@@ -43,9 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               children: [
-                buildOverview(pages),
+                buildOverview(overviewPages),
                 const Gap(20),
-                buildAlerts(),
+                // buildAlerts(),
+                // const Gap(20),
+                buildDeviceCamera(deviceCameraPages),
               ],
             ),
           ),
@@ -70,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(
           height: 240,
           child: PageView.builder(
-            controller: pageController,
+            controller: overviewPageController,
             itemCount: pages.length,
             itemBuilder: (_, index) {
               return pages[index % pages.length];
@@ -84,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 alignment: Alignment.center,
                 child: SmoothPageIndicator(
-                  controller: pageController,
+                  controller: overviewPageController,
                   count: pages.length,
                   effect: ExpandingDotsEffect(
                     dotHeight: 16,
@@ -101,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Alerts
   Widget buildAlerts() {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,6 +120,53 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ),
+      ],
+    );
+  }
+
+  // Device Camera
+  Widget buildDeviceCamera(pages) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+          child: Text(
+            'Device Camera',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        ),
+        const Gap(16),
+        SizedBox(
+          height: 240,
+          child: PageView.builder(
+            controller: deviceCameraPageController,
+            itemCount: pages.length,
+            itemBuilder: (_, index) {
+              return pages[index % pages.length];
+            },
+          ),
+        ),
+        if (pages.isNotEmpty)
+          Column(
+            children: [
+              const Gap(16),
+              Container(
+                alignment: Alignment.center,
+                child: SmoothPageIndicator(
+                  controller: deviceCameraPageController,
+                  count: pages.length,
+                  effect: ExpandingDotsEffect(
+                    dotHeight: 16,
+                    dotWidth: 16,
+                    activeDotColor: MyApp.themeNotifier.value == ThemeMode.light
+                        ? const Color(0xFF202C26)
+                        : const Color(0xFFE3EDE7),
+                  ),
+                ),
+              ),
+            ],
+          ),
       ],
     );
   }
