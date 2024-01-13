@@ -32,7 +32,7 @@ Widget overviewCard(Weather weather) {
             children: [
               const Icon(Icons.wb_sunny),
               const Gap(8),
-              Text(weather.temperature!.toString()),
+              Text("Temperature: ${weather.temperature!} °C"),
             ],
           ),
           const Gap(16),
@@ -40,7 +40,7 @@ Widget overviewCard(Weather weather) {
             children: [
               const Icon(Icons.opacity),
               const Gap(8),
-              Text(weather.humidity!.toString()),
+              Text("Humidity: ${weather.humidity!}"),
             ],
           ),
           const Gap(16),
@@ -48,7 +48,7 @@ Widget overviewCard(Weather weather) {
             children: [
               const Icon(Icons.waves),
               const Gap(8),
-              Text(weather.moisture!.toString()),
+              Text("Moisture: ${weather.moisture!}"),
             ],
           ),
         ],
