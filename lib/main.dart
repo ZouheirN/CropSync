@@ -9,6 +9,7 @@ import 'package:cropsync/screens/add_device_map_screen.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
 import 'package:cropsync/screens/login_screen.dart';
 import 'package:cropsync/screens/main_screen.dart';
+import 'package:cropsync/screens/otp_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
@@ -105,6 +106,7 @@ class MyApp extends StatelessWidget {
             '/add-device': (context) => const AddDeviceScreen(),
             '/add-device-map': (context) => const AddDeviceMapScreen(),
             '/account-information': (context) => const AccountInformationScreen(),
+            '/otp-screen': (context) => const OTPScreen(),
           }
         );
       },

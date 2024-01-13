@@ -44,7 +44,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         isLoading = true;
       });
 
-      await Future.delayed(const Duration(seconds: 2));
+      final email = emailTextController.text.trim();
+      final fullName = capitalizeFirstLetterOfEachWord(
+        fullNameTextController.text.trim(),
+      );
 
       // Hash the password
       final String hashedPassword = BCrypt.hashpw(
@@ -56,10 +59,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       );
 
+      // TODO register and get token
+      const token = 'testtoken';
+
       setState(() {
         isLoading = false;
       });
+
+      if (!mounted) return;
+      Navigator.of(context).pushNamed('/otp-screen', arguments: {
+        'token': token,
+        'email': email,
+      });
     }
+  }
+
+  String? capitalizeFirstLetterOfEachWord(String? input) {
+    if (input == null || input.isEmpty) {
+      return input;
+    }
+
+    List<String> words = input.split(' ');
+
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].isNotEmpty) {
+        words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+      }
+    }
+
+    return words.join(' ');
   }
 
   @override
@@ -136,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             }
 
             RegExp nameRegex =
-                RegExp(r"^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$");
+                RegExp(r"(^[A-Za-z]{2,16})( ?)([A-Za-z]{2,16})?( ?)?([A-Za-z]{2,16})?( ?)?([A-Za-z]{2,16})");
             if (!nameRegex.hasMatch(value.trim())) {
               return 'Please enter a valid name';
             }

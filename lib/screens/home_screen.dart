@@ -30,26 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
     if (devices!.isEmpty) return noDeviceAdded();
 
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-        child: AnimationLimiter(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: AnimationConfiguration.toStaggeredList(
-                duration: const Duration(milliseconds: 375),
-                childAnimationBuilder: (widget) => SlideAnimation(
-                  horizontalOffset: 50.0,
-                  child: FadeInAnimation(
-                    child: widget,
-                  ),
+      child: AnimationLimiter(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: AnimationConfiguration.toStaggeredList(
+              duration: const Duration(milliseconds: 375),
+              childAnimationBuilder: (widget) => SlideAnimation(
+                horizontalOffset: 50.0,
+                child: FadeInAnimation(
+                  child: widget,
                 ),
-                children: [
-                  buildOverview(pages),
-                  const Gap(20),
-                  buildAlerts(),
-                ],
               ),
+              children: [
+                buildOverview(pages),
+                const Gap(20),
+                buildAlerts(),
+              ],
             ),
           ),
         ),
@@ -62,9 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Overview',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        const Padding(
+          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+          child: Text(
+            'Overview',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
         ),
         const Gap(16),
         SizedBox(
@@ -105,9 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Alerts',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        Padding(
+          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+          child: Text(
+            'Alerts',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
         ),
       ],
     );

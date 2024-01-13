@@ -62,6 +62,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   expansion_tile_card: ^3.0.0
   flutter_fgbg: ^0.3.0
+  pinput: ^3.0.1
 
 dev_dependencies:
   flutter_test:
