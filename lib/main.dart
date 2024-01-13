@@ -7,6 +7,7 @@ import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/account_information_screen.dart';
 import 'package:cropsync/screens/add_device_map_screen.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
+import 'package:cropsync/screens/change_password_screen.dart';
 import 'package:cropsync/screens/login_screen.dart';
 import 'package:cropsync/screens/main_screen.dart';
 import 'package:cropsync/screens/otp_screen.dart';
@@ -107,6 +108,7 @@ class MyApp extends StatelessWidget {
             '/add-device-map': (context) => const AddDeviceMapScreen(),
             '/account-information': (context) => const AccountInformationScreen(),
             '/otp': (context) => const OTPScreen(),
+            '/change-password': (context) => const ChangePasswordScreen(),
           }
         );
       },

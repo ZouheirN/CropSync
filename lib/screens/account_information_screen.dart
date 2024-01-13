@@ -17,7 +17,12 @@ class AccountInformationScreen extends WatchingStatefulWidget {
 class _AccountInformationScreenState extends State<AccountInformationScreen> {
   String version = '';
 
-  changePassword() async {}
+  changePassword() async {
+    Navigator.of(context).pushNamed(
+      '/change-password',
+      arguments: {'forgotPassword': false},
+    );
+  }
 
   @override
   void initState() {

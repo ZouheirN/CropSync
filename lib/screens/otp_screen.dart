@@ -13,11 +13,27 @@ class _OTPScreenState extends State<OTPScreen> {
   String status = '';
 
   Future<void> checkOTP(pin) async {
+    final arg = ModalRoute.of(context)!.settings.arguments as Map;
+    final isNotVerifiedFromLogin = arg['isNotVerifiedFromLogin'] ?? false;
+    final isResettingPassword = arg['isResettingPassword'] ?? false;
+
     setState(() {
       status = 'Checking OTP...';
     });
 
     await Future.delayed(const Duration(seconds: 2));
+
+    if (isNotVerifiedFromLogin) {
+
+    } else if (isResettingPassword) {
+      if (!mounted) return;
+      Navigator.of(context).pushNamed('/change-password', arguments: {
+        'forgotPassword': true,
+        'token': arg['token'],
+      });
+    } else {
+
+    }
 
     setState(() {
       status = 'Wrong OTP. Try again.';
@@ -25,11 +41,11 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   @override
-  void initState() {
+  void didChangeDependencies() {
     final arg = ModalRoute.of(context)!.settings.arguments as Map;
     final token = arg['token'];
     final email = arg['email'];
-    super.initState();
+    super.didChangeDependencies();
   }
 
   @override

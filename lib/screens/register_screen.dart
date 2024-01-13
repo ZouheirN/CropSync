@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bcrypt/bcrypt.dart';
-import 'package:cropsync/screens/login_screen.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:email_validator/email_validator.dart';
