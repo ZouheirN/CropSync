@@ -60,8 +60,19 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoading = false;
       });
 
-      if (!context.mounted) return;
-      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+      if (!user.isVerified!) {
+        if (!mounted) return;
+        Navigator.of(context).pushNamed(
+          '/otp',
+          arguments: {
+            'email': user.email,
+            'isNotVerifiedFromLogin': true,
+          },
+        );
+      } else {
+        if (!context.mounted) return;
+        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+      }
     }
   }
 
