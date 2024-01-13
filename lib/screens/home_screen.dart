@@ -20,17 +20,21 @@ class HomeScreen extends WatchingStatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final overviewPageController = PageController(viewportFraction: 0.8, keepPage: true);
-  final deviceCameraPageController = PageController(viewportFraction: 0.8, keepPage: true);
+  final overviewPageController =
+      PageController(viewportFraction: 0.8, keepPage: true);
+  final deviceCameraPageController =
+      PageController(viewportFraction: 0.8, keepPage: true);
 
   @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((UserModel m) => m.user.devices);
-    final weather = watchPropertyValue((WeatherModel w) => w.weather);
-    final deviceCamera = watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera);
+    final weather = watchPropertyValue((WeatherModel w) => w.weather.toList());
+    final deviceCamera =
+        watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera.toList());
 
     final overviewPages = weather.map((e) => overviewCard(e)).toList();
-    final deviceCameraPages = deviceCamera.map((e) => deviceCameraCard(e)).toList();
+    final deviceCameraPages =
+        deviceCamera.map((e) => deviceCameraCard(e)).toList();
 
     if (devices!.isEmpty) return noDeviceAdded();
 

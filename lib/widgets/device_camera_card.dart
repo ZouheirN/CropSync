@@ -30,6 +30,9 @@ Widget deviceCameraCard(DeviceCamera deviceCamera) {
           subtitle: Text(
             deviceCamera.location!,
           ),
+          trailing: Text(
+            deviceCamera.cropName!,
+          ),
         ),
       ],
     ),

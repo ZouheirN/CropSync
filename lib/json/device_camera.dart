@@ -19,6 +19,8 @@ class DeviceCamera {
   @HiveField(2)
   String? location;
   @HiveField(3)
+  String? cropName;
+  @HiveField(4)
   String? image;
 
   DeviceCamera({
@@ -32,6 +34,7 @@ class DeviceCamera {
     deviceId = json['deviceId'];
     deviceName = json['deviceName'];
     location = json['location'];
+    cropName = json['cropName'];
     image = json['image'];
   }
 
@@ -40,6 +43,7 @@ class DeviceCamera {
     data['deviceId'] = deviceId;
     data['deviceName'] = deviceName;
     data['location'] = location;
+    data['cropName'] = cropName;
     data['image'] = image;
     return data;
   }

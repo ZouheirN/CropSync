@@ -20,14 +20,14 @@ class DeviceCameraAdapter extends TypeAdapter<DeviceCamera> {
       deviceId: fields[0] as int?,
       deviceName: fields[1] as String?,
       location: fields[2] as String?,
-      image: fields[3] as String?,
-    );
+      image: fields[4] as String?,
+    )..cropName = fields[3] as String?;
   }
 
   @override
   void write(BinaryWriter writer, DeviceCamera obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.deviceId)
       ..writeByte(1)
@@ -35,6 +35,8 @@ class DeviceCameraAdapter extends TypeAdapter<DeviceCamera> {
       ..writeByte(2)
       ..write(obj.location)
       ..writeByte(3)
+      ..write(obj.cropName)
+      ..writeByte(4)
       ..write(obj.image);
   }
 
