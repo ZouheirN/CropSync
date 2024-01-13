@@ -9,6 +9,7 @@ import 'package:cropsync/screens/quick_disease_detection_screen.dart';
 import 'package:cropsync/services/http_requests.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
+import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
 import 'crops_screen.dart';
@@ -30,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
     final weatherData = await ApiRequests.getWeatherData();
     final weather = weatherFromJson(weatherData);
     di<WeatherModel>().weather = weather;
-    debugPrint('Fetched Weather');
+    Logger().d('Fetched Weather');
 
     Timer.periodic(const Duration(seconds: 30), (timer) async {
       if (pauseData == true) return;
@@ -38,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
       final weatherData = await ApiRequests.getWeatherData();
       final weather = weatherFromJson(weatherData);
       di<WeatherModel>().weather = weather;
-      debugPrint('Fetched Weather');
+      Logger().d('Fetched Weather');
     });
   }
 
@@ -46,7 +47,7 @@ class _MainScreenState extends State<MainScreen> {
     final deviceCameraData = await ApiRequests.getDeviceCamera();
     final deviceCamera = deviceCameraFromJson(deviceCameraData);
     di<DeviceCameraModel>().deviceCamera = deviceCamera;
-    debugPrint('Fetched Device Camera');
+    Logger().d('Fetched Device Camera');
 
     Timer.periodic(const Duration(minutes: 2), (timer) async {
       if (pauseData == true) return;
@@ -54,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
       final deviceCameraData = await ApiRequests.getDeviceCamera();
       final deviceCamera = deviceCameraFromJson(deviceCameraData);
       di<DeviceCameraModel>().deviceCamera = deviceCamera;
-      debugPrint('Fetched Device Camera');
+      Logger().d('Fetched Device Camera');
     });
   }
 
@@ -79,10 +80,10 @@ class _MainScreenState extends State<MainScreen> {
     return FGBGNotifier(
       onEvent: (event) {
         if (event == FGBGType.background) {
-          debugPrint('Paused Fetching');
+          Logger().d('Paused Fetching');
           pauseData = true;
         } else {
-          debugPrint('Resumed Fetching');
+          Logger().d('Resumed Fetching');
           pauseData = false;
         }
       },

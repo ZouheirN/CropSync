@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/image_model.dart';
+import 'package:cropsync/services/http_requests.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/disease_picture.dart';
 import 'package:flutter/material.dart';
@@ -33,14 +35,19 @@ class _QuickDiseaseDetectionScreenState
 
     if (img == null) return;
 
-    setState(() {
-      di<ImageModel>().addImage(ImageObject(
-        image: img!.readAsBytesSync(),
-        result: '',
-      ));
-    });
+    // setState(() {
+    di<ImageModel>().addImage(ImageObject(
+      image: img.readAsBytesSync(),
+      result: '',
+      uploadProgress: 0,
+    ));
+    // });
 
     //todo send to server
+    final response = ApiRequests.uploadDiseaseImage(
+      image: base64Encode(img.readAsBytesSync()),
+      index: di<ImageModel>().images.length - 1,
+    );
   }
 
   Future<File?> cropImage({required File imageFile}) async {
@@ -128,7 +135,7 @@ class _QuickDiseaseDetectionScreenState
 
   @override
   Widget build(BuildContext context) {
-    final images = watchPropertyValue((ImageModel m) => m.images);
+    final images = watchPropertyValue((ImageModel m) => m.images.toList());
 
     return Scaffold(
       appBar: AppBar(
@@ -173,15 +180,31 @@ class _QuickDiseaseDetectionScreenState
                   child: FadeInAnimation(
                     child: FocusedMenuHolder(
                       menuItems: [
+                        if (images[index].result == 'Upload Failed')
+                          FocusedMenuItem(
+                            title: const Text(
+                              'Retry Upload',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            onPressed: () {
+                              ApiRequests.uploadDiseaseImage(
+                                image: base64Encode(images[index].image),
+                                index: index,
+                              );
+                            },
+                            backgroundColor: Colors.white,
+                            trailingIcon: const Icon(
+                              Icons.file_upload_rounded,
+                              color: Colors.black,
+                            ),
+                          ),
                         FocusedMenuItem(
                           title: const Text(
                             'Delete',
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            setState(() {
-                              di<ImageModel>().deleteImage(index);
-                            });
+                            di<ImageModel>().deleteImage(index);
                           },
                           backgroundColor: Colors.red,
                           trailingIcon:

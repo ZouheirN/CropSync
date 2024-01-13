@@ -10,7 +10,13 @@ class DiseasePicture extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    final images = watchPropertyValue((ImageModel m) => m.images);
+    final images = watchPropertyValue((ImageModel m) => m.images.toList());
+
+    if (images.isEmpty) {
+      return Container();
+    }
+
+    final progress = images[index].uploadProgress;
 
     return Container(
       margin: const EdgeInsets.all(8),
@@ -24,6 +30,12 @@ class DiseasePicture extends WatchingWidget {
                 fit: BoxFit.cover,
               ),
             ),
+            if (progress != 1)
+              Positioned.fill(
+                child: Center(
+                  child: CircularProgressIndicator(value: progress),
+                ),
+              ),
             Align(
               alignment: Alignment.bottomRight,
               child: Container(
@@ -36,10 +48,8 @@ class DiseasePicture extends WatchingWidget {
                   color: Colors.black54,
                 ),
                 child: Text(
-                  images[index].result == ''
-                      ? 'Processing...'
-                      : images[index].result!,
-                  textAlign: TextAlign.end,
+                  images[index].result ?? '',
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
                   ),

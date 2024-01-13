@@ -21,4 +21,14 @@ class ImageModel extends ChangeNotifier {
     imagesBox.deleteAt(index);
     notifyListeners();
   }
+
+  void setProgress(int index, double progress) {
+    _images[index].uploadProgress = progress;
+    notifyListeners();
+  }
+
+  void setResult(int index, String result) {
+    _images[index].result = result;
+    notifyListeners();
+  }
 }

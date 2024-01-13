@@ -63,6 +63,7 @@ dependencies:
   expansion_tile_card: ^3.0.0
   flutter_fgbg: ^0.3.0
   pinput: ^3.0.1
+  logger: ^2.0.2+1
 
 dev_dependencies:
   flutter_test:

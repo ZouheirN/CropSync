@@ -2,6 +2,7 @@ import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:logger/logger.dart';
 
 class AddDeviceScreen extends StatefulWidget {
   const AddDeviceScreen({super.key});
@@ -24,8 +25,8 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         isLoading = true;
       });
 
-      debugPrint('Device Name ${deviceNameController.text}');
-      debugPrint('Device Location ${deviceLocationController.text}');
+      Logger().d('Device Name ${deviceNameController.text}');
+      Logger().d('Device Location ${deviceLocationController.text}');
 
       setState(() {
         isLoading = false;
