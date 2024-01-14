@@ -55,7 +55,6 @@ class ApiRequests {
 
           if (sent == total) {
             di<ImageModel>().setResult(index, 'Processing...');
-            di<ImageModel>().images;
           }
         },
       );

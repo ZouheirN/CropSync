@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/image_model.dart';
-import 'package:cropsync/services/http_requests.dart';
+import 'package:cropsync/services/api_service.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/disease_picture.dart';
 import 'package:flutter/material.dart';

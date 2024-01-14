@@ -4,7 +4,7 @@ import 'package:bcrypt/bcrypt.dart';
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/screens/register_screen.dart';
-import 'package:cropsync/services/http_requests.dart';
+import 'package:cropsync/services/api_service.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';

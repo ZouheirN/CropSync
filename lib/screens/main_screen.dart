@@ -6,7 +6,7 @@ import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/profile_screen.dart';
 import 'package:cropsync/screens/quick_disease_detection_screen.dart';
-import 'package:cropsync/services/http_requests.dart';
+import 'package:cropsync/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
 import 'package:logger/logger.dart';
