@@ -10,6 +10,7 @@ import 'package:cropsync/screens/account_information_screen.dart';
 import 'package:cropsync/screens/add_device_map_screen.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
 import 'package:cropsync/screens/change_password_screen.dart';
+import 'package:cropsync/screens/device_camera_screen.dart';
 import 'package:cropsync/screens/login_screen.dart';
 import 'package:cropsync/screens/main_screen.dart';
 import 'package:cropsync/screens/otp_screen.dart';
@@ -112,6 +113,7 @@ class MyApp extends StatelessWidget {
             '/account-information': (context) => const AccountInformationScreen(),
             '/otp': (context) => const OTPScreen(),
             '/change-password': (context) => const ChangePasswordScreen(),
+            '/device-camera': (context) => const DeviceCameraScreen(),
           }
         );
       },

@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final overviewPages = weather.map((e) => overviewCard(e)).toList();
     final deviceCameraPages =
-        deviceCamera.map((e) => deviceCameraCard(e)).toList();
+        deviceCamera.map((e) => deviceCameraCard(e, context)).toList();
 
     if (devices!.isEmpty) return noDeviceAdded();
 
