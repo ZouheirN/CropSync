@@ -4,14 +4,14 @@ import 'package:cropsync/json/device_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
-class DeviceCameraScreen extends StatefulWidget {
-  const DeviceCameraScreen({super.key});
+class DeviceCameraHistoryScreen extends StatefulWidget {
+  const DeviceCameraHistoryScreen({super.key});
 
   @override
-  State<DeviceCameraScreen> createState() => _DeviceCameraScreenState();
+  State<DeviceCameraHistoryScreen> createState() => _DeviceCameraHistoryScreenState();
 }
 
-class _DeviceCameraScreenState extends State<DeviceCameraScreen> {
+class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
   var items = <String>[];
   var isLoading = false;
 

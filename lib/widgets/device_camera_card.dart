@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 Widget deviceCameraCard(DeviceCamera deviceCamera, BuildContext context) {
   return GestureDetector(
     onTap: () {
-      Navigator.of(context).pushNamed('/device-camera', arguments: {
+      Navigator.of(context).pushNamed('/device-camera-history', arguments: {
         'deviceCamera': deviceCamera,
       });
     },
