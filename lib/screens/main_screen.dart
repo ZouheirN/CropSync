@@ -93,6 +93,7 @@ class _MainScreenState extends State<MainScreen> {
           height: 70,
           selectedIndex: index,
           onDestinationSelected: (index) => setState(() => this.index = index),
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           destinations: [
             NavigationDestination(
               icon: const Icon(Icons.home_rounded),
