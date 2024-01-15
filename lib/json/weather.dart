@@ -24,6 +24,8 @@ class Weather {
   int? temperature;
   @HiveField(5)
   int? moisture;
+  @HiveField(6)
+  List<String>? alerts;
 
   Weather({
     this.deviceId,
@@ -32,6 +34,7 @@ class Weather {
     this.humidity,
     this.temperature,
     this.moisture,
+    this.alerts
   });
 
   Weather.fromJson(Map<String, dynamic> json) {
@@ -41,6 +44,7 @@ class Weather {
     humidity = json['humidity'];
     temperature = json['temperature'];
     moisture = json['moisture'];
+    alerts = json['alerts'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +55,7 @@ class Weather {
     data['humidity'] = humidity;
     data['temperature'] = temperature;
     data['moisture'] = moisture;
+    data['alerts'] = alerts;
     return data;
   }
 }

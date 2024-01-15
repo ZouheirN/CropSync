@@ -33,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
     di<WeatherModel>().weather = weather;
     Logger().d('Fetched Weather');
 
-    Timer.periodic(const Duration(seconds: 30), (timer) async {
+    Timer.periodic(const Duration(minutes: 15), (timer) async {
       if (pauseData == true) return;
 
       final weatherData = await ApiRequests.getWeatherData();
@@ -49,7 +49,7 @@ class _MainScreenState extends State<MainScreen> {
     di<DeviceCameraModel>().deviceCamera = deviceCamera;
     Logger().d('Fetched Device Camera');
 
-    Timer.periodic(const Duration(minutes: 2), (timer) async {
+    Timer.periodic(const Duration(minutes: 20), (timer) async {
       if (pauseData == true) return;
 
       final deviceCameraData = await ApiRequests.getDeviceCamera();

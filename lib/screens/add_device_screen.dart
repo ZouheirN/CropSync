@@ -43,64 +43,11 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            const Text(
-              'Device Name',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Gap(10),
-            PrimaryTextField(
-              hintText: 'Enter device name',
-              textController: deviceNameController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a device name';
-                }
-
-                return null;
-              },
-            ),
+            buildDeviceNameField(),
             const Gap(20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Device Location',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                IconButton(
-                    onPressed: () async {
-                      final location = await Navigator.of(context)
-                          .pushNamed('/add-device-map');
-
-                      if (location.toString() != "null") {
-                        setState(() {
-                          deviceLocationController.text = location.toString();
-                        });
-                      }
-                    },
-                    icon: const Icon(Icons.add_location_rounded))
-              ],
-            ),
-            const Gap(10),
-            PrimaryTextField(
-              hintText: 'Choose Location',
-              enabled: false,
-              textController: deviceLocationController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please choose your device\'s location';
-                }
-
-                return null;
-              },
-            ),
+            buildDeviceLocationField(),
             const Gap(20),
+            // buildDeviceWiFiConfigField(),
             CommonButton(
               text: 'Confirm',
               textColor: Colors.white,
@@ -111,6 +58,102 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  // Device Name Field
+  Widget buildDeviceNameField() {
+    return Column(
+      children: [
+        const Text(
+          'Device Name',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Gap(10),
+        PrimaryTextField(
+          hintText: 'Enter device name',
+          textController: deviceNameController,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter a device name';
+            }
+
+            return null;
+          },
+        ),
+      ],
+    );
+  }
+
+  // Device Location Field
+  Widget buildDeviceLocationField() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Device Location',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            IconButton(
+                onPressed: () async {
+                  final location =
+                      await Navigator.of(context).pushNamed('/add-device-map');
+
+                  if (location.toString() != "null") {
+                    setState(() {
+                      deviceLocationController.text = location.toString();
+                    });
+                  }
+                },
+                icon: const Icon(Icons.add_location_rounded))
+          ],
+        ),
+        const Gap(10),
+        PrimaryTextField(
+          hintText: 'Choose Location',
+          enabled: false,
+          textController: deviceLocationController,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please choose your device\'s location';
+            }
+
+            return null;
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget buildDeviceWiFiConfigField() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Device WiFi Config',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            IconButton(
+                onPressed: () async {
+                  Navigator.of(context).pushNamed('/add-device-config');
+                },
+                icon: const Icon(Icons.wifi_rounded))
+          ],
+        ),
+      ],
     );
   }
 }

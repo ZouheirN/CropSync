@@ -5,7 +5,10 @@
     "location": "Saida, Lebanon",
     "humidity": 50,
     "temperature": 25,
-    "moisture": 50
+    "moisture": 50,
+    "alerts": [
+      "Temperature is too high"
+    ]
   },
   {
     "deviceId": 2,
@@ -13,7 +16,11 @@
     "location": "Beirut, Lebanon",
     "humidity": 45,
     "temperature": 20,
-    "moisture": 30
+    "moisture": 30,
+    "alerts": [
+      "Temperature is too high",
+      "Humidity is too low"
+    ]
   },
   {
     "deviceId": 3,
@@ -21,6 +28,9 @@
     "location": "Sour, Lebanon",
     "humidity": 15,
     "temperature": 10,
-    "moisture": 40
+    "moisture": 40,
+    "alerts": [
+      "Humidity is too low"
+    ]
   }
 ]

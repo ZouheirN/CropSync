@@ -110,6 +110,7 @@ class MyApp extends StatelessWidget {
             '/login': (context) => const LoginScreen(),
             '/add-device': (context) => const AddDeviceScreen(),
             '/add-device-map': (context) => const AddDeviceMapScreen(),
+            // '/add-device-config': (context) => const AddDeviceConfigScreen(),
             '/account-information': (context) => const AccountInformationScreen(),
             '/otp': (context) => const OTPScreen(),
             '/change-password': (context) => const ChangePasswordScreen(),

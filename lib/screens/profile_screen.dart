@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   const CircleAvatar(
                     radius: 50,
-                    // backgroundImage: NetworkImage(user.profilePictureUrl),
+                    // backgroundImage: MemoryImage(base64),
                   ),
                   const Gap(20),
                   Text(user.fullName!, style: const TextStyle(fontSize: 24)),

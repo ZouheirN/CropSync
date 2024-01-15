@@ -23,13 +23,14 @@ class WeatherAdapter extends TypeAdapter<Weather> {
       humidity: fields[3] as int?,
       temperature: fields[4] as int?,
       moisture: fields[5] as int?,
+      alerts: (fields[6] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Weather obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.deviceId)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class WeatherAdapter extends TypeAdapter<Weather> {
       ..writeByte(4)
       ..write(obj.temperature)
       ..writeByte(5)
-      ..write(obj.moisture);
+      ..write(obj.moisture)
+      ..writeByte(6)
+      ..write(obj.alerts);
   }
 
   @override

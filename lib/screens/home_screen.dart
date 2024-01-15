@@ -4,6 +4,7 @@ import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/device_camera_card.dart';
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
@@ -36,6 +37,19 @@ class _HomeScreenState extends State<HomeScreen> {
     final deviceCameraPages =
         deviceCamera.map((e) => deviceCameraCard(e, context)).toList();
 
+    final weatherAlerts = weather
+        .map((e) {
+          if (e.alerts == null || e.alerts!.isEmpty) return null;
+          return {
+            'device': e.deviceName,
+            'location': e.location,
+            'alert': e.alerts,
+          };
+        })
+        .toList()
+        .where((element) => element != null)
+        .toList();
+
     if (devices!.isEmpty) return noDeviceAdded();
 
     return SafeArea(
@@ -54,8 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 buildOverview(overviewPages),
                 const Gap(20),
-                // buildAlerts(),
-                // const Gap(20),
+                buildAlerts(weatherAlerts),
+                const Gap(20),
                 buildDeviceCamera(deviceCameraPages),
               ],
             ),
@@ -72,14 +86,23 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         const Padding(
           padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-          child: Text(
-            'Overview',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Overview',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Icon(
+                Icons.wb_cloudy_rounded,
+                color: Colors.white,
+              ),
+            ],
           ),
         ),
         const Gap(16),
         SizedBox(
-          height: 240,
+          height: 230,
           child: PageView.builder(
             controller: overviewPageController,
             itemCount: pages.length,
@@ -113,18 +136,49 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Alerts
-  Widget buildAlerts() {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-          child: Text(
-            'Alerts',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  Widget buildAlerts(List<Map<String, Object?>?> weatherAlerts) {
+    if (weatherAlerts.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Alerts',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Icon(
+                Icons.warning_rounded,
+                color: Colors.red,
+              ),
+            ],
           ),
-        ),
-      ],
+          for (var alert in weatherAlerts)
+            ExpansionTileCard(
+              title: Text(
+                  '${alert!['device']} (${(alert['alert'] as List<String>).length} ${(alert['alert'] as List<String>).length == 1 ? 'Alert' : 'Alerts'})'),
+              children: [
+                ListTile(
+                  title: Text(alert['location'].toString()),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (var a in alert['alert'] as List<String>)
+                        Text(
+                          a,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+        ],
+      ),
     );
   }
 
@@ -135,9 +189,18 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         const Padding(
           padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-          child: Text(
-            'Device Camera',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Device Camera',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Icon(
+                Icons.camera_alt_rounded,
+                color: Colors.green,
+              ),
+            ],
           ),
         ),
         const Gap(16),
