@@ -11,6 +11,7 @@ class PrimaryTextField extends StatefulWidget {
   final Iterable<String>? autofillHints;
   final TextInputAction? textInputAction;
   final Function()? onEditingComplete;
+  final TextInputType? keyboardType;
 
   const PrimaryTextField({
     super.key,
@@ -23,7 +24,7 @@ class PrimaryTextField extends StatefulWidget {
     this.suffixIcon,
     this.autofillHints,
     this.textInputAction,
-    this.onEditingComplete,
+    this.onEditingComplete, this.keyboardType,
   });
 
   @override
@@ -42,6 +43,7 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
     return TextFormField(
       obscureText: widget.obscureText ?? false,
       controller: widget.textController,
+      keyboardType: widget.keyboardType,
       decoration: InputDecoration(
         contentPadding:
             const EdgeInsets.symmetric(vertical: 20, horizontal: 20),

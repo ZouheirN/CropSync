@@ -105,9 +105,11 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
       if (!mounted) return;
       Dialogs.showErrorDialog('Unknown Error', 'Please try again.', context);
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 

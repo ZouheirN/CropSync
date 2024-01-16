@@ -36,4 +36,10 @@ class UserModel extends ChangeNotifier {
     // todo delete images
     notifyListeners();
   }
+
+  void addDevice(int id, String name) {
+    _user.devices?.add(Devices(id: id, crop: Crop(name: null), name: name));
+    userInfoBox.put('user', user);
+    notifyListeners();
+  }
 }

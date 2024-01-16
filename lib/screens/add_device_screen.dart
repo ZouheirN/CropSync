@@ -1,8 +1,11 @@
+import 'package:cropsync/models/user_model.dart';
+import 'package:cropsync/services/api_service.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:logger/logger.dart';
+import 'package:watch_it/watch_it.dart';
 
 class AddDeviceScreen extends StatefulWidget {
   const AddDeviceScreen({super.key});
@@ -16,20 +19,44 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
 
   final deviceNameController = TextEditingController();
   final deviceLocationController = TextEditingController();
+  final deviceCodeController = TextEditingController();
 
   bool isLoading = false;
+  Text status = Text("");
 
-  void confirm() {
+  Future<void> confirm() async {
     if (formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
 
-      Logger().d('Device Name ${deviceNameController.text}');
-      Logger().d('Device Location ${deviceLocationController.text}');
+      final result = await ApiRequests.deviceConfiguration(
+        deviceCodeController.text.trim(),
+      );
+
+      if (result == ReturnTypes.fail) {
+        setState(() {
+          isLoading = false;
+          status = const Text(
+            "Configuration failed, try again",
+            style: TextStyle(color: Colors.red),
+          );
+        });
+      }
+
+      Logger().d('Device Name: ${deviceNameController.text}');
+      Logger().d('Device Location: ${deviceLocationController.text}');
+
+      // todo add device and get id
+      final id = 10;
+      di<UserModel>().addDevice(id, deviceNameController.text);
 
       setState(() {
         isLoading = false;
+        status = const Text(
+          "Configuration was successful, device added",
+          style: TextStyle(color: Colors.green),
+        );
       });
     }
   }
@@ -47,7 +74,8 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
             const Gap(20),
             buildDeviceLocationField(),
             const Gap(20),
-            // buildDeviceWiFiConfigField(),
+            buildDeviceConfigField(),
+            const Gap(20),
             CommonButton(
               text: 'Confirm',
               textColor: Colors.white,
@@ -55,6 +83,8 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
               isLoading: isLoading,
               onPressed: confirm,
             ),
+            const Gap(20),
+            Center(child: status),
           ],
         ),
       ),
@@ -133,25 +163,36 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
     );
   }
 
-  Widget buildDeviceWiFiConfigField() {
+  Widget buildDeviceConfigField() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Device WiFi Config',
+              'Device Configuration',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
             IconButton(
-                onPressed: () async {
-                  Navigator.of(context).pushNamed('/add-device-config');
-                },
-                icon: const Icon(Icons.wifi_rounded))
+                onPressed: () async {}, icon: const Icon(Icons.info_rounded))
           ],
+        ),
+        const Gap(10),
+        PrimaryTextField(
+          hintText: 'Device Code',
+          textController: deviceCodeController,
+          keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your device\'s code';
+            }
+
+            return null;
+          },
         ),
       ],
     );

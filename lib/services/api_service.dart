@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cropsync/models/image_model.dart';
+import 'package:cropsync/models/user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
@@ -61,6 +62,27 @@ class ApiRequests {
     } on DioException catch (e) {
       Logger().e(e);
       di<ImageModel>().setResult(index, 'Upload Failed');
+    }
+  }
+
+  static Future<dynamic> deviceConfiguration(String deviceCode) async {
+    // todo get activation key from api
+
+    final email = di<UserModel>().user.email;
+
+    try {
+      final response = await dio.post(
+        'http://comitup-$deviceCode:3000/',
+        data: {
+          "email": email,
+          "activationKey": "todo",
+        },
+      );
+
+      if (response.statusCode == 200) return ReturnTypes.success;
+    } on DioException catch (e) {
+      Logger().e(e);
+      return ReturnTypes.fail;
     }
   }
 }

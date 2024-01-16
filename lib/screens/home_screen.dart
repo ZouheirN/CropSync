@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final devices = watchPropertyValue((UserModel m) => m.user.devices);
+    final devices = watchPropertyValue((UserModel m) => m.user.devices?.toList());
     final weather = watchPropertyValue((WeatherModel w) => w.weather.toList());
     final deviceCamera =
         watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera.toList());

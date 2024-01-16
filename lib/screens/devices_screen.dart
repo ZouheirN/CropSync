@@ -18,7 +18,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final devices = watchPropertyValue((UserModel m) => m.user.devices);
+    final devices = watchPropertyValue((UserModel m) => m.user.devices?.toList());
 
     return Scaffold(
       appBar: AppBar(
