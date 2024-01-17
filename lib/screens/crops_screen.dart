@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/main.dart';
+import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
@@ -18,10 +19,10 @@ class CropsScreen extends WatchingStatefulWidget {
 class _CropsScreenState extends State<CropsScreen> {
   @override
   Widget build(BuildContext context) {
-    final devices = watchPropertyValue((UserModel m) => m.user.devices);
+    final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
 
     List<String?> cropNames =
-        devices!.map((device) => device.crop!.name).toList();
+        devices.map((device) => device.crop!.name).toList();
 
     // Remove null values
     final cropNamesLength = [

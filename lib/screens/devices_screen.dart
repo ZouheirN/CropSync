@@ -1,4 +1,6 @@
+import 'package:cropsync/json/devices.dart';
 import 'package:cropsync/json/user.dart';
+import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/api_service.dart';
 import 'package:cropsync/widgets/dialogs.dart';
@@ -43,7 +45,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         return;
       }
 
-      di<UserModel>().deleteDevice(device.id!);
+      di<DevicesModel>().deleteDevice(device.id!);
 
       Dialogs.showSuccessDialog(
           'Success', 'Device deleted successfully', context);
@@ -54,11 +56,11 @@ class _DevicesScreenState extends State<DevicesScreen> {
   @override
   Widget build(BuildContext context) {
     final devices =
-        watchPropertyValue((UserModel m) => m.user.devices?.toList());
+        watchPropertyValue((DevicesModel d) => d.devices.toList());
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Total Devices: ${devices!.length}'),
+        title: Text('Total Devices: ${devices.length}'),
         centerTitle: false,
         actions: [
           IconButton(

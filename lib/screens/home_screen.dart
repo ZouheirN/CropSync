@@ -1,5 +1,6 @@
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/device_camera_model.dart';
+import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final devices = watchPropertyValue((UserModel m) => m.user.devices?.toList());
+    final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
     final weather = watchPropertyValue((WeatherModel w) => w.weather.toList());
     final deviceCamera =
         watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera.toList());
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .where((element) => element != null)
         .toList();
 
-    if (devices!.isEmpty) return noDeviceAdded();
+    if (devices.isEmpty) return noDeviceAdded();
 
     return SafeArea(
       child: AnimationLimiter(

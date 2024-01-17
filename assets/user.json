@@ -2,30 +2,5 @@
   "token": "u8wyatgyhujiwog782awfbe",
   "fullName": "Zouheir Nakouzi",
   "email": "zouheir2002@gmail.com",
-  "isVerified": true,
-  "devices": [
-    {
-      "id": 1,
-      "name": "Raspberry Pi 3",
-      "code": "123456789",
-      "crop": {
-        "name": "Tomato"
-      }
-    },
-    {
-      "id": 2,
-      "name": "Raspberry Pi Zero W",
-      "code": "987654321",
-      "crop": {
-        "name": "Potato"
-      }
-    },
-    {
-      "id": 3,
-      "name": "Raspberry Pi 3 Model B+",
-      "code": "123456789",
-      "crop": {
-      }
-    }
-  ]
+  "isVerified": true
 }

@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1,
+    "name": "Raspberry Pi 3",
+    "code": "123456789",
+    "crop": {
+      "name": "Tomato"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Raspberry Pi Zero W",
+    "code": "987654321",
+    "crop": {
+      "name": "Potato"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Raspberry Pi 3 Model B+",
+    "code": "123456789",
+    "crop": {
+    }
+  }
+]

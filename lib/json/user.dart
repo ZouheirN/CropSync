@@ -1,100 +1,41 @@
-import 'dart:convert';
-
 import 'package:hive/hive.dart';
+import 'dart:convert';
 
 part 'user.g.dart';
 
-User userFromJson(Map<String, dynamic> json) => User.fromJson(json);
+User userFromJson(Map<String,dynamic> json) => User.fromJson(json);
 
 String userToJson(User data) => json.encode(data.toJson());
 
 @HiveType(typeId: 1)
 class User {
-  @HiveField(0)
+  @HiveField(1)
   String? token;
-  @HiveField(1)
+  @HiveField(2)
   String? fullName;
-  @HiveField(2)
+  @HiveField(3)
   String? email;
-  @HiveField(3)
-  bool? isVerified;
   @HiveField(4)
-  List<Devices>? devices;
+  bool? isVerified;
 
-  User({this.token, this.fullName, this.email, this.isVerified, this.devices});
+  User({
+    this.token,
+    this.fullName,
+    this.email,
+    this.isVerified,
+  });
 
-  User.fromJson(Map<String, dynamic> json) {
-    token = json['token'];
-    fullName = json['fullName'];
-    email = json['email'];
-    isVerified = json['isVerified'];
-    if (json['devices'] != null) {
-      devices = <Devices>[];
-      json['devices'].forEach((v) {
-        devices!.add(Devices.fromJson(v));
-      });
-    }
-  }
+  factory User.fromJson(Map<String, dynamic> json) => User(
+    token: json["token"],
+    fullName: json["fullName"],
+    email: json["email"],
+    isVerified: json["isVerified"],
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['token'] = token;
-    data['fullName'] = fullName;
-    data['email'] = email;
-    data['isVerified'] = isVerified;
-    if (devices != null) {
-      data['devices'] = devices!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-@HiveType(typeId: 2)
-class Devices {
-  @HiveField(0)
-  int? id;
-  @HiveField(1)
-  String? name;
-  @HiveField(2)
-  String? code;
-  @HiveField(3)
-  Crop? crop;
-
-  Devices({this.id, this.name, this.code, this.crop});
-
-  Devices.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    code = json['code'];
-    crop = json['crop'] != null ? Crop.fromJson(json['crop']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['code'] = code;
-    if (crop != null) {
-      data['crop'] = crop!.toJson();
-    }
-    return data;
-  }
-}
-
-@HiveType(typeId: 3)
-class Crop {
-  @HiveField(0)
-  String? name;
-
-  Crop({this.name});
-
-  Crop.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "token": token,
+    "fullName": fullName,
+    "email": email,
+    "isVerified": isVerified,
+  };
 }

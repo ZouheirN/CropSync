@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:cropsync/json/devices.dart';
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -19,12 +21,24 @@ enum ReturnTypes {
 class ApiRequests {
   static final dio = Dio();
 
-  static Future<dynamic> checkCredentials(
-      String username, String password) async {
-    String jsonString = await rootBundle.loadString('assets/user.json');
-    final data = json.decode(jsonString);
+  static final apiUrl = dotenv.env['API_URL'];
 
-    return data;
+  static Future<dynamic> login(String email, String password) async {
+    try {
+      final response = await dio.post(
+        '$apiUrl/user/login}',
+        data: {
+          'email': email,
+          'password': password,
+        },
+      );
+
+      return response.data;
+    } on DioException catch (e) {
+      Logger().e(e);
+
+      return ReturnTypes.fail;
+    }
   }
 
   static Future<dynamic> getWeatherData() async {

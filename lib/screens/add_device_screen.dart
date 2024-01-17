@@ -1,3 +1,4 @@
+import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/api_service.dart';
 import 'package:cropsync/widgets/buttons.dart';
@@ -77,7 +78,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
 
       // todo add device and get id
       const id = 10;
-      di<UserModel>().addDevice(id, deviceNameController.text.trim(),
+      di<DevicesModel>().addDevice(id, deviceNameController.text.trim(),
           deviceCodeController.text.trim());
 
       if (!mounted) return;

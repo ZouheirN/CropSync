@@ -28,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordTextController = TextEditingController();
 
   bool isLoading = false;
+  Text status = const Text("");
 
   Future<void> _login() async {
     FocusManager.instance.primaryFocus?.unfocus();
@@ -49,16 +50,27 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-      // TODO get user info from api
-      final userData = await ApiRequests.checkCredentials(
+      final userData = await ApiRequests.login(
         emailTextController.text,
         hashedPassword,
       );
+
+      if (userData == ReturnTypes.fail) {
+        setState(() {
+          isLoading = false;
+          status = const Text(
+            "Login failed, try again",
+            style: TextStyle(color: Colors.red),
+          );
+        });
+        return;
+      }
+
       User user = userFromJson(userData);
-      di<UserModel>().user = user;
 
       setState(() {
         isLoading = false;
+        status = const Text("");
       });
 
       if (!user.isVerified!) {
@@ -71,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
           },
         );
       } else {
+        di<UserModel>().user = user;
         if (!context.mounted) return;
         Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       }
@@ -96,9 +109,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 AutofillGroup(
                   child: Column(
                     children: [
-                      _buildEmailTextInputField(),
+                      buildEmailTextInputField(),
                       const Gap(20),
-                      _buildPasswordTextInputField(),
+                      buildPasswordTextInputField(),
                     ],
                   ),
                 ),
@@ -116,7 +129,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const Gap(10),
-                _buildLoginButton(),
+                if (status.data != "")
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: status,
+                  ),
+                buildLoginButton(),
                 const Gap(20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -148,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Email Text Input Field
-  Widget _buildEmailTextInputField() {
+  Widget buildEmailTextInputField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -183,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Password Text Input Field
-  Widget _buildPasswordTextInputField() {
+  Widget buildPasswordTextInputField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -215,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Login Button
-  Widget _buildLoginButton() {
+  Widget buildLoginButton() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.7,
       child: CommonButton(

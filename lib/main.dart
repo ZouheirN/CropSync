@@ -1,8 +1,10 @@
 import 'package:cropsync/json/device_camera.dart';
+import 'package:cropsync/json/devices.dart';
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/json/weather.dart';
 import 'package:cropsync/models/device_camera_model.dart';
+import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
@@ -20,9 +22,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:watch_it/watch_it.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load();
 
   await FlutterMapTileCaching.initialise();
   await FMTC.instance('mapStore').manage.createAsync();
@@ -110,7 +115,6 @@ class MyApp extends StatelessWidget {
             '/login': (context) => const LoginScreen(),
             '/add-device': (context) => const AddDeviceScreen(),
             '/add-device-map': (context) => const AddDeviceMapScreen(),
-            // '/add-device-config': (context) => const AddDeviceConfigScreen(),
             '/account-information': (context) => const AccountInformationScreen(),
             '/otp': (context) => const OTPScreen(),
             '/change-password': (context) => const ChangePasswordScreen(),
@@ -127,4 +131,5 @@ void registerManagers() {
   di.registerSingleton<ImageModel>(ImageModel());
   di.registerSingleton<WeatherModel>(WeatherModel());
   di.registerSingleton<DeviceCameraModel>(DeviceCameraModel());
+  di.registerSingleton<DevicesModel>(DevicesModel());
 }
