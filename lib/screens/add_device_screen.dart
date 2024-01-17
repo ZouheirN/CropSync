@@ -77,7 +77,8 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
 
       // todo add device and get id
       const id = 10;
-      di<UserModel>().addDevice(id, deviceNameController.text.trim(), deviceCodeController.text.trim());
+      di<UserModel>().addDevice(id, deviceNameController.text.trim(),
+          deviceCodeController.text.trim());
 
       if (!mounted) return;
       Navigator.pop(context);
@@ -205,7 +206,29 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
               ),
             ),
             IconButton(
-                onPressed: () async {}, icon: const Icon(Icons.info_rounded))
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Device Configuration'),
+                        content: const Text(
+                            'This is the code that you will find on your device\'s package, or you can check it from the device\'s hotspot name.'),
+                        actions: [
+                          Center(
+                            child: DialogButton(
+                              text: 'Okay',
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(Icons.info_rounded))
           ],
         ),
         const Gap(10),
