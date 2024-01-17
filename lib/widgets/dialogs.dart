@@ -86,6 +86,27 @@ class Dialogs {
     return completer.future;
   }
 
+  static Future<void> showInformationDialog(
+      String title, String text, BuildContext context) async {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.info,
+      animType: QuickAlertAnimType.slideInUp,
+      title: title,
+      text: text,
+      backgroundColor: MyApp.themeNotifier.value == ThemeMode.light
+          ? Colors.white
+          : const Color(0xFF1B2522),
+      textColor: MyApp.themeNotifier.value == ThemeMode.light
+          ? Colors.black
+          : Colors.white,
+      titleColor: MyApp.themeNotifier.value == ThemeMode.light
+          ? Colors.black
+          : Colors.white,
+      confirmBtnColor: Colors.green,
+    );
+  }
+
   static void showForgotPasswordDialog(BuildContext context) {
     final textController = TextEditingController();
     final formKey = GlobalKey<FormState>();

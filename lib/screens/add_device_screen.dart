@@ -1,5 +1,4 @@
 import 'package:cropsync/models/devices_model.dart';
-import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/api_service.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
@@ -208,26 +207,10 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
             ),
             IconButton(
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('Device Configuration'),
-                        content: const Text(
-                            'This is the code that you will find on your device\'s package, or you can check it from the device\'s hotspot name.'),
-                        actions: [
-                          Center(
-                            child: DialogButton(
-                              text: 'Okay',
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  Dialogs.showInformationDialog(
+                      'Device Configuarion',
+                      'This is the code that you will find on your device\'s package, or you can check it from the device\'s hotspot name.\n\nMake sure you are connected to the same network as your device.',
+                      context);
                 },
                 icon: const Icon(Icons.info_rounded))
           ],

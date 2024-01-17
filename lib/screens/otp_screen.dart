@@ -20,6 +20,7 @@ class _OTPScreenState extends State<OTPScreen> {
     final arg = ModalRoute.of(context)!.settings.arguments as Map;
     final isNotVerifiedFromLogin = arg['isNotVerifiedFromLogin'] ?? false;
     final isResettingPassword = arg['isResettingPassword'] ?? false;
+    final token = arg['token'] ?? '';
 
     setState(() {
       status = 'Checking OTP...';
@@ -27,15 +28,17 @@ class _OTPScreenState extends State<OTPScreen> {
 
     await Future.delayed(const Duration(seconds: 2));
 
-    if (isNotVerifiedFromLogin) {
-    } else if (isResettingPassword) {
+    if (isResettingPassword) {
       if (!mounted) return;
       Navigator.of(context).pushNamed('/change-password', arguments: {
         'forgotPassword': true,
         'token': arg['token'],
       });
     } else {
-      final otpResult = await ApiRequests.verifyEmail(pin: pin);
+      final otpResult = await ApiRequests.verifyEmail(
+        pin: pin,
+        token: token
+      );
 
       if (otpResult == ReturnTypes.fail) {
         setState(() {

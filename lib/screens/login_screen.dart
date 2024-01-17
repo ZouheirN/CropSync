@@ -80,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
           '/otp',
           arguments: {
             'email': user.email,
+            'token': user.token,
             'isNotVerifiedFromLogin': true,
           },
         );

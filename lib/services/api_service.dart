@@ -82,10 +82,15 @@ class ApiRequests {
     }
   }
 
-  static Future<dynamic> verifyEmail({required String pin}) async {
+  static Future<dynamic> verifyEmail({required String pin, required String token}) async {
     try {
       final response = await dio.post(
-        '$apiUrl/user/verifyEmail',
+        '$apiUrl/verifyEmail',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
         data: {
           'pin': pin,
         },
@@ -101,7 +106,7 @@ class ApiRequests {
         return ReturnTypes.invalidToken;
       }
 
-      Logger().e(e);
+      Logger().e(e.response?.data);
 
       return ReturnTypes.fail;
     }
@@ -109,6 +114,14 @@ class ApiRequests {
 
   static Future<dynamic> getWeatherData() async {
     String jsonString = await rootBundle.loadString('assets/weather.json');
+    final data = json.decode(jsonString);
+
+    return data;
+  }
+
+  static Future<dynamic> getDeviceData() async {
+    String jsonString =
+    await rootBundle.loadString('assets/devices.json');
     final data = json.decode(jsonString);
 
     return data;
