@@ -37,8 +37,15 @@ class UserModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addDevice(int id, String name) {
-    _user.devices?.add(Devices(id: id, crop: Crop(name: null), name: name));
+  void addDevice(int id, String name, String code) {
+    _user.devices
+        ?.add(Devices(id: id, crop: Crop(name: null), name: name, code: code));
+    userInfoBox.put('user', user);
+    notifyListeners();
+  }
+
+  void deleteDevice(int id) {
+    _user.devices?.removeWhere((element) => element.id == id);
     userInfoBox.put('user', user);
     notifyListeners();
   }

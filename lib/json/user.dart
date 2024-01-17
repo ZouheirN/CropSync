@@ -21,13 +21,7 @@ class User {
   @HiveField(4)
   List<Devices>? devices;
 
-  User({
-    this.token,
-    this.fullName,
-    this.email,
-    this.isVerified,
-    this.devices,
-  });
+  User({this.token, this.fullName, this.email, this.isVerified, this.devices});
 
   User.fromJson(Map<String, dynamic> json) {
     token = json['token'];
@@ -62,17 +56,16 @@ class Devices {
   @HiveField(1)
   String? name;
   @HiveField(2)
+  String? code;
+  @HiveField(3)
   Crop? crop;
 
-  Devices({
-    this.id,
-    this.name,
-    this.crop,
-  });
+  Devices({this.id, this.name, this.code, this.crop});
 
   Devices.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    code = json['code'];
     crop = json['crop'] != null ? Crop.fromJson(json['crop']) : null;
   }
 
@@ -80,6 +73,7 @@ class Devices {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    data['code'] = code;
     if (crop != null) {
       data['crop'] = crop!.toJson();
     }
@@ -92,9 +86,7 @@ class Crop {
   @HiveField(0)
   String? name;
 
-  Crop({
-    this.name,
-  });
+  Crop({this.name});
 
   Crop.fromJson(Map<String, dynamic> json) {
     name = json['name'];

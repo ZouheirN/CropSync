@@ -23,7 +23,8 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
   final deviceCodeController = TextEditingController();
 
   bool isLoading = false;
-  Text status = const Text("");
+
+  // Text status = const Text("");
 
   Future<void> confirm() async {
     if (formKey.currentState!.validate()) {
@@ -31,36 +32,43 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         isLoading = true;
       });
 
-      final result = await ApiRequests.deviceConfiguration(
+      final result = await ApiRequests.addDeviceConfiguration(
         deviceCodeController.text.trim(),
       );
 
+      if (!mounted) return;
       if (result == ReturnTypes.fail) {
         setState(() {
           isLoading = false;
-          status = const Text(
-            "Configuration failed, try again",
-            style: TextStyle(color: Colors.red),
-          );
+          // status = const Text(
+          //   "Configuration failed, try again",
+          //   style: TextStyle(color: Colors.red),
+          // );
         });
+        Dialogs.showErrorDialog(
+            'Error', 'Configuration failed, try again', context);
         return;
       } else if (result == ReturnTypes.error) {
         setState(() {
           isLoading = false;
-          status = const Text(
-            "An error occurred, try again",
-            style: TextStyle(color: Colors.red),
-          );
+          // status = const Text(
+          //   "An error occurred, try again",
+          //   style: TextStyle(color: Colors.red),
+          // );
         });
+        Dialogs.showErrorDialog(
+            'Error', 'An error occurred, try again', context);
         return;
       } else if (result == ReturnTypes.alreadyConfigured) {
         setState(() {
           isLoading = false;
-          status = const Text(
-            "Device is already configured",
-            style: TextStyle(color: Colors.red),
-          );
+          // status = const Text(
+          //   "Device is already configured",
+          //   style: TextStyle(color: Colors.red),
+          // );
         });
+        Dialogs.showErrorDialog(
+            'Error', 'Device is already configured', context);
         return;
       }
 
@@ -69,11 +77,14 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
 
       // todo add device and get id
       const id = 10;
-      di<UserModel>().addDevice(id, deviceNameController.text);
+      di<UserModel>().addDevice(id, deviceNameController.text.trim(), deviceCodeController.text.trim());
 
       if (!mounted) return;
       Navigator.pop(context);
-      Dialogs.showSuccessDialog('Success', '${deviceNameController.text.trim()} was configured and added!', context);
+      Dialogs.showSuccessDialog(
+          'Success',
+          '${deviceNameController.text.trim()} has been configured and added!',
+          context);
     }
   }
 
@@ -100,7 +111,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
               onPressed: confirm,
             ),
             const Gap(20),
-            Center(child: status),
+            // Center(child: status),
           ],
         ),
       ),

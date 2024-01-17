@@ -65,19 +65,22 @@ class DevicesAdapter extends TypeAdapter<Devices> {
     return Devices(
       id: fields[0] as int?,
       name: fields[1] as String?,
-      crop: fields[2] as Crop?,
+      code: fields[2] as String?,
+      crop: fields[3] as Crop?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Devices obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
+      ..write(obj.code)
+      ..writeByte(3)
       ..write(obj.crop);
   }
 
