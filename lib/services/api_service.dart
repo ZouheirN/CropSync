@@ -1,21 +1,30 @@
 import 'dart:convert';
 
 import 'package:cropsync/json/devices.dart';
-import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/user_model.dart';
+import 'package:cropsync/widgets/dialogs.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
+
+void invalidTokenResponse(BuildContext context) {
+  di<UserModel>().logout();
+  Navigator.pushNamedAndRemoveUntil(context, '/welcome', (route) => false);
+  Dialogs.showErrorDialog('Error', 'Your session has expired. Please log in again.', context);
+}
 
 enum ReturnTypes {
   success,
   error,
   fail,
   alreadyConfigured,
-  hasNotBeenConfigured
+  hasNotBeenConfigured,
+  emailTaken,
+  invalidToken
 }
 
 class ApiRequests {
@@ -23,10 +32,13 @@ class ApiRequests {
 
   static final apiUrl = dotenv.env['API_URL'];
 
-  static Future<dynamic> login(String email, String password) async {
+  static Future<dynamic> login({
+    required String email,
+    required String password,
+  }) async {
     try {
       final response = await dio.post(
-        '$apiUrl/user/login}',
+        '$apiUrl/user/login',
         data: {
           'email': email,
           'password': password,
@@ -35,6 +47,60 @@ class ApiRequests {
 
       return response.data;
     } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
+      if (e.response!.data['error'] == 'Email already in-use.') {
+        return ReturnTypes.emailTaken;
+      }
+
+      Logger().e(e);
+
+      return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> signUp({
+    required String fullName,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await dio.post(
+        '$apiUrl/user/signup',
+        data: {
+          'fullName': fullName,
+          'email': email,
+          'password': password,
+        },
+      );
+
+      return response.data;
+    } on DioException catch (e) {
+      Logger().e(e);
+
+      return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> verifyEmail({required String pin}) async {
+    try {
+      final response = await dio.post(
+        '$apiUrl/user/verifyEmail',
+        data: {
+          'pin': pin,
+        },
+      );
+
+      return response.data;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
+      if (e.response?.data['error'] == "UnAuthorized Access!") {
+        return ReturnTypes.fail;
+      } else if (e.response?.data['error'] == "Expired token") {
+        return ReturnTypes.invalidToken;
+      }
+
       Logger().e(e);
 
       return ReturnTypes.fail;
@@ -77,6 +143,8 @@ class ApiRequests {
         },
       );
     } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
       Logger().e(e);
       di<ImageModel>().setResult(index, 'Upload Failed');
     }
@@ -98,6 +166,8 @@ class ApiRequests {
 
       if (response.statusCode == 200) return ReturnTypes.success;
     } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
       if (e.response?.statusCode == 409) {
         return ReturnTypes.alreadyConfigured;
       } else if (e.response?.statusCode == 500) {
@@ -120,6 +190,8 @@ class ApiRequests {
 
       if (response.statusCode == 200) return ReturnTypes.success;
     } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
       if (e.response?.statusCode == 404) {
         return ReturnTypes.hasNotBeenConfigured;
       } else if (e.response?.statusCode == 500) {

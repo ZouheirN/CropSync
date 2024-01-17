@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bcrypt/bcrypt.dart';
+import 'package:cropsync/services/api_service.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:email_validator/email_validator.dart';
@@ -26,6 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final confirmPasswordTextController = TextEditingController();
 
   bool isLoading = false;
+  Text status = const Text("");
 
   @override
   void dispose() {
@@ -41,6 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       setState(() {
         isLoading = true;
+        status = const Text("");
       });
 
       final email = emailTextController.text.trim();
@@ -58,8 +61,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       );
 
-      // TODO register and get token
-      const token = 'testtoken';
+      final signUpData = await ApiRequests.signUp(
+        fullName: fullName!,
+        email: email,
+        password: hashedPassword,
+      );
+
+      if (signUpData == ReturnTypes.fail) {
+        setState(() {
+          isLoading = false;
+          status = const Text(
+            "Registration failed, try again",
+            style: TextStyle(color: Colors.red),
+          );
+        });
+        return;
+      }
+
+      final token = signUpData['token'];
 
       setState(() {
         isLoading = false;
@@ -113,6 +132,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Gap(20),
                 buildConfirmPasswordTextInputField(),
                 const Gap(20),
+                if (status.data != "")
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: status,
+                  ),
                 buildRegisterButton(),
                 const Gap(20),
                 Row(
@@ -162,8 +186,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               return 'Please enter your full name';
             }
 
-            RegExp nameRegex =
-                RegExp(r"(^[A-Za-z]{2,16})( ?)([A-Za-z]{2,16})?( ?)?([A-Za-z]{2,16})?( ?)?([A-Za-z]{2,16})");
+            RegExp nameRegex = RegExp(
+                r"(^[A-Za-z]{2,16})( ?)([A-Za-z]{2,16})?( ?)?([A-Za-z]{2,16})?( ?)?([A-Za-z]{2,16})");
             if (!nameRegex.hasMatch(value.trim())) {
               return 'Please enter a valid name';
             }

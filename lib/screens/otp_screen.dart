@@ -1,6 +1,10 @@
+import 'package:cropsync/json/user.dart';
+import 'package:cropsync/models/user_model.dart';
+import 'package:cropsync/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
+import 'package:watch_it/watch_it.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({super.key});
@@ -24,7 +28,6 @@ class _OTPScreenState extends State<OTPScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     if (isNotVerifiedFromLogin) {
-
     } else if (isResettingPassword) {
       if (!mounted) return;
       Navigator.of(context).pushNamed('/change-password', arguments: {
@@ -32,12 +35,24 @@ class _OTPScreenState extends State<OTPScreen> {
         'token': arg['token'],
       });
     } else {
+      final otpResult = await ApiRequests.verifyEmail(pin: pin);
 
+      if (otpResult == ReturnTypes.fail) {
+        setState(() {
+          status = 'Wrong OTP. Try again.';
+        });
+        return;
+      } else if (otpResult == ReturnTypes.invalidToken) {
+        if (!context.mounted) return;
+        invalidTokenResponse(context);
+        return;
+      }
+
+      final user = User.fromJson(otpResult);
+      di<UserModel>().user = user;
+      if (!context.mounted) return;
+      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
     }
-
-    setState(() {
-      status = 'Wrong OTP. Try again.';
-    });
   }
 
   @override

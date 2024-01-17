@@ -38,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       setState(() {
         isLoading = true;
+        status = const Text("");
       });
 
       // Hash the password
@@ -51,8 +52,8 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       final userData = await ApiRequests.login(
-        emailTextController.text,
-        hashedPassword,
+        email: emailTextController.text,
+        password: hashedPassword,
       );
 
       if (userData == ReturnTypes.fail) {
