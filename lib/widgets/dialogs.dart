@@ -30,6 +30,26 @@ class Dialogs {
     );
   }
 
+  static void showSuccessDialog(String title, String text, BuildContext context) {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      animType: QuickAlertAnimType.slideInUp,
+      title: title,
+      text: text,
+      backgroundColor: MyApp.themeNotifier.value == ThemeMode.light
+          ? Colors.white
+          : const Color(0xFF1B2522),
+      textColor: MyApp.themeNotifier.value == ThemeMode.light
+          ? Colors.black
+          : Colors.white,
+      titleColor: MyApp.themeNotifier.value == ThemeMode.light
+          ? Colors.black
+          : Colors.white,
+      confirmBtnColor: Colors.green,
+    );
+  }
+
   static Future<bool> showConfirmationDialog(
       String title, String text, BuildContext context) async {
     Completer<bool> completer = Completer<bool>();

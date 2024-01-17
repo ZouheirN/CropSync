@@ -1,6 +1,7 @@
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/api_service.dart';
 import 'package:cropsync/widgets/buttons.dart';
+import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -22,7 +23,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
   final deviceCodeController = TextEditingController();
 
   bool isLoading = false;
-  Text status = Text("");
+  Text status = const Text("");
 
   Future<void> confirm() async {
     if (formKey.currentState!.validate()) {
@@ -42,22 +43,37 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
             style: TextStyle(color: Colors.red),
           );
         });
+        return;
+      } else if (result == ReturnTypes.error) {
+        setState(() {
+          isLoading = false;
+          status = const Text(
+            "An error occurred, try again",
+            style: TextStyle(color: Colors.red),
+          );
+        });
+        return;
+      } else if (result == ReturnTypes.alreadyConfigured) {
+        setState(() {
+          isLoading = false;
+          status = const Text(
+            "Device is already configured",
+            style: TextStyle(color: Colors.red),
+          );
+        });
+        return;
       }
 
       Logger().d('Device Name: ${deviceNameController.text}');
       Logger().d('Device Location: ${deviceLocationController.text}');
 
       // todo add device and get id
-      final id = 10;
+      const id = 10;
       di<UserModel>().addDevice(id, deviceNameController.text);
 
-      setState(() {
-        isLoading = false;
-        status = const Text(
-          "Configuration was successful, device added",
-          style: TextStyle(color: Colors.green),
-        );
-      });
+      if (!mounted) return;
+      Navigator.pop(context);
+      Dialogs.showSuccessDialog('Success', '${deviceNameController.text.trim()} was configured and added!', context);
     }
   }
 

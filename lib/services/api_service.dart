@@ -11,6 +11,7 @@ enum ReturnTypes {
   success,
   error,
   fail,
+  alreadyConfigured,
 }
 
 class ApiRequests {
@@ -82,6 +83,11 @@ class ApiRequests {
       if (response.statusCode == 200) return ReturnTypes.success;
     } on DioException catch (e) {
       Logger().e(e);
+
+      if (e.response?.statusCode == 409) {
+        return ReturnTypes.alreadyConfigured;
+      }
+
       return ReturnTypes.fail;
     }
   }
