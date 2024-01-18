@@ -178,6 +178,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           radius: 50,
                           backgroundImage: MemoryImage(profilePicture),
                         ),
+                      if (uploadProgress != 1 && uploadProgress != null)
+                        Positioned.fill(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                                value: uploadProgress),
+                          ),
+                        ),
                       Positioned(
                         bottom: 0,
                         right: 0,
@@ -214,12 +221,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ),
-                      if (uploadProgress != 1)
-                        Positioned.fill(
-                          child: Center(
-                            child: CircularProgressIndicator(value: uploadProgress),
-                          ),
-                        ),
                     ],
                   ),
                   const Gap(20),
