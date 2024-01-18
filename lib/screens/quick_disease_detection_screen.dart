@@ -93,9 +93,9 @@ class _QuickDiseaseDetectionScreenState
         ),
       ),
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.28,
+        initialChildSize: 0.25,
         maxChildSize: 0.4,
-        minChildSize: 0.28,
+        minChildSize: 0.25,
         expand: false,
         builder: (context, scrollController) {
           return SingleChildScrollView(

@@ -151,6 +151,36 @@ class ApiRequests {
     }
   }
 
+  static Future<dynamic> removeProfilePicture() async {
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
+
+    try {
+      await dio.delete(
+        '$apiUrl/user/delete/profile',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      return ReturnTypes.success;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+      Logger().e(e.response?.data);
+
+      if (e.response?.data['error'] == "UnAuthorized Access!") {
+        return ReturnTypes.fail;
+      } else if (e.response?.data['error'] == "Expired token") {
+        return ReturnTypes.invalidToken;
+      }
+
+      return ReturnTypes.fail;
+    }
+  }
+
+
   static Future<dynamic> getWeatherData() async {
     String jsonString = await rootBundle.loadString('assets/weather.json');
     final data = json.decode(jsonString);

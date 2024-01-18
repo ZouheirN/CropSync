@@ -44,4 +44,9 @@ class UserModel extends ChangeNotifier {
     _user.profilePicture = image;
     notifyListeners();
   }
+
+  void removeImage() {
+    _user.profilePicture = null;
+    notifyListeners();
+  }
 }

@@ -93,6 +93,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return File(croppedImage.path);
   }
 
+  Future<void> removeProfilePicture() async {
+    final result = await ApiRequests.removeProfilePicture();
+
+    if (!mounted) return;
+    if (result == ReturnTypes.fail) {
+      Dialogs.showErrorDialog('Error', 'An error occurred, try again', context);
+      return;
+    } else if (result == ReturnTypes.error) {
+      Dialogs.showErrorDialog('Error', 'An error occurred, try again', context);
+      return;
+    } else if (result == ReturnTypes.invalidToken) {
+      invalidTokenResponse(context);
+      return;
+    }
+
+    di<UserModel>().removeImage();
+  }
+
   void showSelectPhotoOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -103,9 +121,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.28,
+        initialChildSize: 0.37,
         maxChildSize: 0.4,
-        minChildSize: 0.28,
+        minChildSize: 0.37,
         expand: false,
         builder: (context, scrollController) {
           return SingleChildScrollView(
@@ -134,6 +152,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () => pickImage(ImageSource.camera),
                     icon: Icons.camera_alt_outlined,
                     text: 'Use a Camera',
+                  ),
+                  const Gap(10),
+                  const Center(
+                    child: Text(
+                      'OR',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  const Gap(10),
+                  SecondaryButton(
+                    onPressed: () => removeProfilePicture(),
+                    icon: Icons.delete_rounded,
+                    text: 'Remove Profile Picture',
                   ),
                 ],
               ),
