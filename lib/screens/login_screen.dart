@@ -60,7 +60,16 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           isLoading = false;
           status = const Text(
-            "Login failed, try again",
+            "Invalid email or password",
+            style: TextStyle(color: Colors.red),
+          );
+        });
+        return;
+      } else if (userData == ReturnTypes.error) {
+        setState(() {
+          isLoading = false;
+          status = const Text(
+            "An error occurred, try again",
             style: TextStyle(color: Colors.red),
           );
         });

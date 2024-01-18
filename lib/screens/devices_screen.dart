@@ -1,7 +1,5 @@
 import 'package:cropsync/json/devices.dart';
-import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/devices_model.dart';
-import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/api_service.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
@@ -28,9 +26,13 @@ class _DevicesScreenState extends State<DevicesScreen> {
         context);
 
     if (confirmDelete) {
+      if (!mounted) return;
+      Dialogs.showLoadingDialog('Deleting Device', context);
       final result = await ApiRequests.deleteDeviceConfiguration(device);
 
       if (!mounted) return;
+      Navigator.pop(context);
+
       if (result == ReturnTypes.fail) {
         Dialogs.showErrorDialog(
             'Error', 'An error occurred, try again', context);
@@ -55,8 +57,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final devices =
-        watchPropertyValue((DevicesModel d) => d.devices.toList());
+    final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
 
     return Scaffold(
       appBar: AppBar(

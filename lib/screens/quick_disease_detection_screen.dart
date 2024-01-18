@@ -59,6 +59,7 @@ class _QuickDiseaseDetectionScreenState
         CropAspectRatioPreset.ratio4x3,
         CropAspectRatioPreset.ratio16x9,
       ],
+      compressQuality: 100,
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'Crop Image',

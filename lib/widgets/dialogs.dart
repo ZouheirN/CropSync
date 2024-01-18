@@ -30,6 +30,26 @@ class Dialogs {
     );
   }
 
+  static void showLoadingDialog(String text, BuildContext context) {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.loading,
+      animType: QuickAlertAnimType.slideInUp,
+      text: text,
+      barrierDismissible: false,
+      backgroundColor: MyApp.themeNotifier.value == ThemeMode.light
+          ? Colors.white
+          : const Color(0xFF1B2522),
+      textColor: MyApp.themeNotifier.value == ThemeMode.light
+          ? Colors.black
+          : Colors.white,
+      titleColor: MyApp.themeNotifier.value == ThemeMode.light
+          ? Colors.black
+          : Colors.white,
+      disableBackBtn: true,
+    );
+  }
+
   static void showSuccessDialog(String title, String text, BuildContext context) {
     QuickAlert.show(
       context: context,

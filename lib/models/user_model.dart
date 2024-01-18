@@ -1,6 +1,7 @@
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
 class UserModel extends ChangeNotifier {
@@ -31,9 +32,16 @@ class UserModel extends ChangeNotifier {
     );
     userInfoBox.delete('user');
     UserToken.deleteToken();
-    // todo delete images
     notifyListeners();
   }
 
+  void setProgress(double progress) {
+    _user.uploadProgress = progress;
+    notifyListeners();
+  }
 
+  void setImage(Uint8List image) {
+    _user.profilePicture = image;
+    notifyListeners();
+  }
 }

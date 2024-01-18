@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'dart:convert';
 
@@ -12,14 +13,20 @@ class User {
   @HiveField(1)
   String? token;
   @HiveField(2)
-  String? fullName;
+  Uint8List? profilePicture;
   @HiveField(3)
-  String? email;
+  double? uploadProgress;
   @HiveField(4)
+  String? fullName;
+  @HiveField(5)
+  String? email;
+  @HiveField(6)
   bool? isVerified;
 
   User({
     this.token,
+    this.profilePicture,
+    this.uploadProgress,
     this.fullName,
     this.email,
     this.isVerified,
@@ -27,6 +34,8 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     token: json["token"],
+    profilePicture: json["profilePicture"] != null ? base64Decode(json["profilePicture"]) : null,
+    uploadProgress: json["profilePicture"] != null ? 1 : null,
     fullName: json["fullName"],
     email: json["email"],
     isVerified: json["isVerified"],
@@ -34,6 +43,7 @@ class User {
 
   Map<String, dynamic> toJson() => {
     "token": token,
+    "profilePicture": profilePicture,
     "fullName": fullName,
     "email": email,
     "isVerified": isVerified,
