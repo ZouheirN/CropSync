@@ -5,6 +5,7 @@ import 'package:cropsync/widgets/dialogs.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
 class DevicesScreen extends WatchingStatefulWidget {
@@ -26,28 +27,57 @@ class _DevicesScreenState extends State<DevicesScreen> {
         context);
 
     if (confirmDelete) {
+      // delete from local device
       if (!mounted) return;
       Dialogs.showLoadingDialog('Deleting Device', context);
-      final result = await ApiRequests.deleteDeviceConfiguration(device);
+      final result =
+      await ApiRequests.deleteDeviceConfiguration(deviceCode: device.code!);
 
       if (!mounted) return;
-      Navigator.pop(context);
-
       if (result == ReturnTypes.fail) {
+        Navigator.pop(context);
         Dialogs.showErrorDialog(
             'Error', 'An error occurred, try again', context);
         return;
       } else if (result == ReturnTypes.error) {
+        Navigator.pop(context);
         Dialogs.showErrorDialog(
             'Error', 'An error occurred, try again', context);
         return;
       } else if (result == ReturnTypes.hasNotBeenConfigured) {
+        Navigator.pop(context);
         Dialogs.showErrorDialog(
             'Error', 'Device has not been configured', context);
         return;
       }
 
+      Logger().d('Local configuration deleted');
+
+      // delete from server
+      final globalResult = await ApiRequests.deleteDevice(deviceId: device.id!);
+
+      if (!mounted) return;
+      if (globalResult == ReturnTypes.fail) {
+        Navigator.pop(context);
+        Dialogs.showErrorDialog(
+            'Error', 'An error occurred, try again', context);
+        return;
+      } else if (globalResult == ReturnTypes.error) {
+        Navigator.pop(context);
+        Dialogs.showErrorDialog(
+            'Error', 'An error occurred, try again', context);
+        return;
+      } else if (globalResult == ReturnTypes.invalidToken) {
+        Navigator.pop(context);
+        invalidTokenResponse(context);
+        return;
+      }
+
+      Logger().d('Device deleted from server');
+
       di<DevicesModel>().deleteDevice(device.id!);
+
+      Navigator.pop(context);
 
       Dialogs.showSuccessDialog(
           'Success', 'Device deleted successfully', context);
@@ -94,7 +124,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                   Icon(Icons.edit_rounded),
                                   Padding(
                                     padding:
-                                        EdgeInsets.symmetric(vertical: 2.0),
+                                    EdgeInsets.symmetric(vertical: 2.0),
                                   ),
                                   Text('Edit'),
                                 ],
@@ -107,7 +137,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                   Icon(Icons.recommend_rounded),
                                   Padding(
                                     padding:
-                                        EdgeInsets.symmetric(vertical: 2.0),
+                                    EdgeInsets.symmetric(vertical: 2.0),
                                   ),
                                   Text('Recommend Best Crop'),
                                 ],
@@ -124,7 +154,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                   ),
                                   Padding(
                                     padding:
-                                        EdgeInsets.symmetric(vertical: 2.0),
+                                    EdgeInsets.symmetric(vertical: 2.0),
                                   ),
                                   Text(
                                     'Delete',

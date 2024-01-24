@@ -17,7 +17,7 @@ class DevicesAdapter extends TypeAdapter<Devices> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Devices(
-      id: fields[1] as int?,
+      id: fields[1] as String?,
       name: fields[2] as String?,
       code: fields[3] as String?,
       crop: fields[4] as Crop?,

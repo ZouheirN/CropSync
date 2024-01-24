@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cropsync/json/devices.dart';
 import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/user_token.dart';
@@ -139,7 +138,6 @@ class ApiRequests {
       return ReturnTypes.success;
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
-      Logger().e(e.response?.data);
 
       if (e.response?.data['error'] == "UnAuthorized Access!") {
         return ReturnTypes.fail;
@@ -147,6 +145,7 @@ class ApiRequests {
         return ReturnTypes.invalidToken;
       }
 
+      Logger().e(e.response?.data);
       return ReturnTypes.fail;
     }
   }
@@ -168,6 +167,44 @@ class ApiRequests {
       return ReturnTypes.success;
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
+
+      if (e.response?.data['error'] == "UnAuthorized Access!") {
+        return ReturnTypes.fail;
+      } else if (e.response?.data['error'] == "Expired token") {
+        return ReturnTypes.invalidToken;
+      }
+
+      Logger().e(e.response?.data);
+      return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> addDevice({
+    required String name,
+    required String location,
+    required String code,
+  }) async {
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
+
+    try {
+      final response = await dio.post(
+        '$apiUrl/user/add/device',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+        data: {
+          'name': name,
+          'location': location,
+          'code': code,
+        },
+      );
+
+      return response.data;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
       Logger().e(e.response?.data);
 
       if (e.response?.data['error'] == "UnAuthorized Access!") {
@@ -179,7 +216,6 @@ class ApiRequests {
       return ReturnTypes.fail;
     }
   }
-
 
   static Future<dynamic> getWeatherData() async {
     String jsonString = await rootBundle.loadString('assets/weather.json');
@@ -231,17 +267,16 @@ class ApiRequests {
     }
   }
 
-  static Future<dynamic> addDeviceConfiguration(String deviceCode) async {
-    // todo get activation key from api
-
+  static Future<dynamic> addDeviceConfiguration(
+      {required String deviceCode, required String activationKey}) async {
     final email = di<UserModel>().user.email;
 
     try {
       final response = await dio.post(
-        'http://comitup-$deviceCode:3000/',
+        'http://comitup-$deviceCode:3000/set',
         data: {
           "email": email,
-          "activationKey": "todo",
+          "activationKey": activationKey,
         },
       );
 
@@ -249,24 +284,20 @@ class ApiRequests {
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
 
-      if (e.response?.statusCode == 409) {
-        return ReturnTypes.alreadyConfigured;
-      } else if (e.response?.statusCode == 500) {
+      if (e.response?.statusCode == 500) {
         return ReturnTypes.error;
       }
 
       Logger().e(e.response?.data);
-
       return ReturnTypes.fail;
     }
   }
 
-  static Future<dynamic> deleteDeviceConfiguration(Devices device) async {
-    // todo delete from api
-
+  static Future<dynamic> deleteDeviceConfiguration(
+      {required String deviceCode}) async {
     try {
       final response = await dio.delete(
-        'http://comitup-${device.code}:3000/',
+        'http://comitup-$deviceCode:3000/delete',
       );
 
       if (response.statusCode == 200) return ReturnTypes.success;
@@ -278,6 +309,54 @@ class ApiRequests {
       } else if (e.response?.statusCode == 500) {
         return ReturnTypes.error;
       }
+
+      Logger().e(e.response?.data);
+
+      return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> deleteDevice({required String deviceId}) async {
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
+
+    try {
+      final response = await dio.delete(
+        '$apiUrl/user/device',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+        data: {
+          'deviceId': deviceId,
+        },
+      );
+
+      return response.data;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+      Logger().e(e.response?.data);
+
+      if (e.response?.data['error'] == "UnAuthorized Access!") {
+        return ReturnTypes.fail;
+      } else if (e.response?.data['error'] == "Expired token") {
+        return ReturnTypes.invalidToken;
+      }
+
+      return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> isDeviceAlreadyConfigured(String deviceCode) async {
+    try {
+      final response = await dio.get(
+        'http://comitup-$deviceCode:3000/check',
+      );
+
+      return response.data['exists'];
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
 
       Logger().e(e.response?.data);
 

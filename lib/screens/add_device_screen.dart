@@ -24,61 +24,98 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
 
   bool isLoading = false;
 
-  // Text status = const Text("");
-
   Future<void> confirm() async {
     if (formKey.currentState!.validate()) {
+      if (isLoading) return;
+
       setState(() {
         isLoading = true;
       });
 
-      final result = await ApiRequests.addDeviceConfiguration(
-        deviceCodeController.text.trim(),
-      );
+      // check if device is already configured
+      final isDeviceAlreadyConfigured =
+          await ApiRequests.isDeviceAlreadyConfigured(
+              deviceCodeController.text.trim());
 
       if (!mounted) return;
-      if (result == ReturnTypes.fail) {
+      if (isDeviceAlreadyConfigured == ReturnTypes.fail) {
         setState(() {
           isLoading = false;
-          // status = const Text(
-          //   "Configuration failed, try again",
-          //   style: TextStyle(color: Colors.red),
-          // );
         });
         Dialogs.showErrorDialog(
             'Error', 'Configuration failed, try again', context);
         return;
-      } else if (result == ReturnTypes.error) {
+      } else if (isDeviceAlreadyConfigured == ReturnTypes.error) {
         setState(() {
           isLoading = false;
-          // status = const Text(
-          //   "An error occurred, try again",
-          //   style: TextStyle(color: Colors.red),
-          // );
         });
         Dialogs.showErrorDialog(
             'Error', 'An error occurred, try again', context);
         return;
-      } else if (result == ReturnTypes.alreadyConfigured) {
+      } else if (isDeviceAlreadyConfigured) {
         setState(() {
           isLoading = false;
-          // status = const Text(
-          //   "Device is already configured",
-          //   style: TextStyle(color: Colors.red),
-          // );
         });
         Dialogs.showErrorDialog(
             'Error', 'Device is already configured', context);
         return;
       }
 
-      Logger().d('Device Name: ${deviceNameController.text}');
-      Logger().d('Device Location: ${deviceLocationController.text}');
+      Logger().d('Device is not configured');
 
-      // todo add device and get id
-      const id = 10;
-      di<DevicesModel>().addDevice(id, deviceNameController.text.trim(),
-          deviceCodeController.text.trim());
+      // add device to server and get activation key
+      final globalResult = await ApiRequests.addDevice(
+        name: deviceNameController.text.trim(),
+        location: deviceLocationController.text.trim(),
+        code: deviceCodeController.text.trim(),
+      );
+
+      if (!mounted) return;
+      if (globalResult == ReturnTypes.fail) {
+        setState(() {
+          isLoading = false;
+        });
+        Dialogs.showErrorDialog(
+            'Error', 'Adding device failed, try again', context);
+        return;
+      } else if (globalResult == ReturnTypes.error) {
+        setState(() {
+          isLoading = false;
+        });
+        Dialogs.showErrorDialog(
+            'Error', 'An error occurred, try again', context);
+        return;
+      }
+
+      Logger().d('Device added to server');
+
+      // configure local device using activation key
+      final localResult = await ApiRequests.addDeviceConfiguration(
+        deviceCode: deviceCodeController.text.trim(),
+        activationKey: globalResult["deviceId"],
+      );
+
+      if (!mounted) return;
+      if (localResult == ReturnTypes.fail) {
+        setState(() {
+          isLoading = false;
+        });
+        Dialogs.showErrorDialog(
+            'Error', 'Configuration failed, try again', context);
+        return;
+      } else if (localResult == ReturnTypes.error) {
+        setState(() {
+          isLoading = false;
+        });
+        Dialogs.showErrorDialog(
+            'Error', 'An error occurred, try again', context);
+        return;
+      }
+
+      Logger().d('Device configured locally');
+
+      di<DevicesModel>().addDevice(globalResult["deviceId"],
+          deviceNameController.text.trim(), deviceCodeController.text.trim());
 
       if (!mounted) return;
       Navigator.pop(context);
@@ -112,7 +149,6 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
               onPressed: confirm,
             ),
             const Gap(20),
-            // Center(child: status),
           ],
         ),
       ),

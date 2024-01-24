@@ -12,6 +12,7 @@ import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
 class ProfileScreen extends WatchingStatefulWidget {
@@ -162,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const Gap(10),
                   SecondaryButton(
-                    onPressed: () => removeProfilePicture(),
+                    onPressed: removeProfilePicture,
                     icon: Icons.delete_rounded,
                     text: 'Remove Profile Picture',
                   ),
@@ -177,11 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = watchPropertyValue((UserModel m) => m.user);
-    final profilePicture =
-        watchPropertyValue((UserModel m) => m.user.profilePicture);
-    final uploadProgress =
-        watchPropertyValue((UserModel m) => m.user.uploadProgress);
+    final user = watch(di<UserModel>()).user;
 
     return SafeArea(
       child: Padding(
@@ -200,58 +197,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Stack(
                     children: [
-                      if (profilePicture == null)
-                        const CircleAvatar(
-                          radius: 50,
+                      if (user.profilePicture == null)
+                        GestureDetector(
+                          onTap: () => showSelectPhotoOptions(context),
+                          child: const CircleAvatar(
+                            radius: 50,
+                          ),
                         )
                       else
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage: MemoryImage(profilePicture),
+                        GestureDetector(
+                          onTap: () => showSelectPhotoOptions(context),
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundImage: MemoryImage(user.profilePicture!),
+                          ),
                         ),
-                      if (uploadProgress != 1 && uploadProgress != null)
+                      if (user.uploadProgress != 1 && user.uploadProgress != null)
                         Positioned.fill(
                           child: Center(
                             child: CircularProgressIndicator(
-                                value: uploadProgress),
+                                value: user.uploadProgress),
                           ),
                         ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: () => showSelectPhotoOptions(context),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 3,
-                                  color: Colors.white,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50,
-                                  ),
-                                ),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: const Offset(1, 3),
-                                    color: Colors.black.withOpacity(
-                                      0.1,
-                                    ),
-                                    blurRadius: 3,
-                                  ),
-                                ]),
-                            child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Icon(
-                                Icons.edit,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                   const Gap(20),

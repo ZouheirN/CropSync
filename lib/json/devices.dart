@@ -17,7 +17,7 @@ String devicesToJson(List<Devices> data) =>
 @HiveType(typeId: 2)
 class Devices {
   @HiveField(1)
-  int? id;
+  String? id;
   @HiveField(2)
   String? name;
   @HiveField(3)

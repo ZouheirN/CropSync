@@ -37,16 +37,42 @@ class UserModel extends ChangeNotifier {
 
   void setProgress(double progress) {
     _user.uploadProgress = progress;
+    // _user = User(
+    //   token: _user.token,
+    //   uploadProgress: progress,
+    //   isVerified: _user.isVerified,
+    //   email: _user.email,
+    //   fullName: _user.fullName,
+    //   profilePicture: _user.profilePicture,
+    // );
     notifyListeners();
   }
 
   void setImage(Uint8List image) {
     _user.profilePicture = image;
+    // _user = User(
+    //   token: _user.token,
+    //   uploadProgress: _user.uploadProgress,
+    //   isVerified: _user.isVerified,
+    //   email: _user.email,
+    //   fullName: _user.fullName,
+    //   profilePicture: image,
+    // );
+    userInfoBox.put('user', _user);
     notifyListeners();
   }
 
   void removeImage() {
     _user.profilePicture = null;
+    // _user = User(
+    //   token: _user.token,
+    //   uploadProgress: _user.uploadProgress,
+    //   isVerified: _user.isVerified,
+    //   email: _user.email,
+    //   fullName: _user.fullName,
+    //   profilePicture: null,
+    // );
+    userInfoBox.put('user', _user);
     notifyListeners();
   }
 }

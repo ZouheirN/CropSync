@@ -6,13 +6,13 @@ class DevicesModel extends ChangeNotifier {
 
   final List<Devices> _devices = [];
 
-  void addDevice(int id, String name, String code) {
+  void addDevice(String id, String name, String code) {
     _devices
         .add(Devices(id: id, crop: Crop(name: null), name: name, code: code));
     notifyListeners();
   }
 
-  void deleteDevice(int id) {
+  void deleteDevice(String id) {
     _devices.removeWhere((element) => element.id == id);
     notifyListeners();
   }

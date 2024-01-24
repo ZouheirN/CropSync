@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:badges/badges.dart' as badges;
 import 'package:cropsync/json/device_camera.dart';
 import 'package:cropsync/json/weather.dart';
 import 'package:cropsync/models/device_camera_model.dart';
@@ -77,6 +78,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const showBadge = false;
+
     return FGBGNotifier(
       onEvent: (event) {
         if (event == FGBGType.background) {
@@ -96,11 +99,21 @@ class _MainScreenState extends State<MainScreen> {
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           destinations: [
             NavigationDestination(
-              icon: const Icon(Icons.home_rounded),
+              icon: badges.Badge(
+                showBadge: showBadge,
+                position: badges.BadgePosition.topEnd(top: -3, end: -3),
+                badgeAnimation: const badges.BadgeAnimation.scale(),
+                child: const Icon(Icons.home_rounded),
+              ),
               label: 'Home',
-              selectedIcon: Icon(
-                Icons.home_rounded,
-                color: Theme.of(context).primaryColor,
+              selectedIcon: badges.Badge(
+                showBadge: showBadge,
+                position: badges.BadgePosition.topEnd(top: -3, end: -3),
+                badgeAnimation: const badges.BadgeAnimation.scale(),
+                child: Icon(
+                  Icons.home_rounded,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
             ),
             NavigationDestination(
