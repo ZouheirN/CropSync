@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/user_model.dart';
+import 'package:cropsync/services/api_service.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
@@ -168,7 +169,7 @@ class _CropsScreenState extends State<CropsScreen> {
               onPressed: () {
                 Navigator.of(context).pushNamed('/add-device');
               },
-            )
+            ),
           ],
         ),
       ),

@@ -158,6 +158,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
   // Device Name Field
   Widget buildDeviceNameField() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           'Device Name',

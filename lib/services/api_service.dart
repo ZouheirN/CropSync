@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/user_model.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
+import 'package:nsd/nsd.dart';
 import 'package:watch_it/watch_it.dart';
 
 void invalidTokenResponse(BuildContext context) {
@@ -272,8 +274,10 @@ class ApiRequests {
     final email = di<UserModel>().user.email;
 
     try {
+      final ip = await getDeviceIp(deviceCode);
+
       final response = await dio.post(
-        'http://comitup-$deviceCode:3000/set',
+        'http://$ip:3000/set',
         data: {
           "email": email,
           "activationKey": activationKey,
@@ -296,8 +300,10 @@ class ApiRequests {
   static Future<dynamic> deleteDeviceConfiguration(
       {required String deviceCode}) async {
     try {
+      final ip = await getDeviceIp(deviceCode);
+
       final response = await dio.delete(
-        'http://comitup-$deviceCode:3000/delete',
+        'http://$ip:3000/delete',
       );
 
       if (response.statusCode == 200) return ReturnTypes.success;
@@ -350,8 +356,10 @@ class ApiRequests {
 
   static Future<dynamic> isDeviceAlreadyConfigured(String deviceCode) async {
     try {
+      final ip = await getDeviceIp(deviceCode);
+
       final response = await dio.get(
-        'http://comitup-$deviceCode:3000/check',
+        'http://$ip:3000/check',
       );
 
       return response.data['exists'];
@@ -362,5 +370,10 @@ class ApiRequests {
 
       return ReturnTypes.fail;
     }
+  }
+
+  static Future<String> getDeviceIp(String deviceCode) async {
+    final addresses = await InternetAddress.lookup('comitup-$deviceCode');
+    return addresses[0].address ?? '';
   }
 }
