@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/user_model.dart';
-import 'package:cropsync/services/api_service.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
@@ -31,29 +30,33 @@ class _CropsScreenState extends State<CropsScreen> {
         if (i != null) i
     ].length;
 
-    if (devices.isEmpty) return noDeviceAdded();
+    // if (devices.isEmpty) return noDeviceAdded();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Total Crops: $cropNamesLength'),
-        centerTitle: false,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-        child: AnimationLimiter(
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              return AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 375),
-                child: SlideAnimation(
-                  child: FadeInAnimation(
-                    child: _buildListTile(devices, cropNames, index),
+    return Visibility(
+      visible: devices.isNotEmpty,
+      replacement: noDeviceAdded(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Total Crops: $cropNamesLength'),
+          centerTitle: false,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+          child: AnimationLimiter(
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: const Duration(milliseconds: 375),
+                  child: SlideAnimation(
+                    child: FadeInAnimation(
+                      child: _buildListTile(devices, cropNames, index),
+                    ),
                   ),
-                ),
-              );
-            },
-            itemCount: cropNames.length,
+                );
+              },
+              itemCount: cropNames.length,
+            ),
           ),
         ),
       ),
@@ -166,7 +169,7 @@ class _CropsScreenState extends State<CropsScreen> {
               text: 'Add a Device',
               backgroundColor: Theme.of(context).primaryColor,
               textColor: Colors.white,
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pushNamed('/add-device');
               },
             ),

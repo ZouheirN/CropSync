@@ -1,6 +1,7 @@
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/user_model.dart';
-import 'package:cropsync/services/api_service.dart';
+import 'package:cropsync/services/user_api.dart';
+import 'package:cropsync/utils/api_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
@@ -18,7 +19,6 @@ class _OTPScreenState extends State<OTPScreen> {
 
   Future<void> checkOTP(pin) async {
     final arg = ModalRoute.of(context)!.settings.arguments as Map;
-    final isNotVerifiedFromLogin = arg['isNotVerifiedFromLogin'] ?? false;
     final isResettingPassword = arg['isResettingPassword'] ?? false;
     final token = arg['token'] ?? '';
 
@@ -35,7 +35,7 @@ class _OTPScreenState extends State<OTPScreen> {
         'token': arg['token'],
       });
     } else {
-      final otpResult = await ApiRequests.verifyEmail(
+      final otpResult = await UserApi.verifyEmail(
         pin: pin,
         token: token
       );
@@ -56,14 +56,6 @@ class _OTPScreenState extends State<OTPScreen> {
       if (!context.mounted) return;
       Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
     }
-  }
-
-  @override
-  void didChangeDependencies() {
-    final arg = ModalRoute.of(context)!.settings.arguments as Map;
-    final token = arg['token'];
-    final email = arg['email'];
-    super.didChangeDependencies();
   }
 
   @override

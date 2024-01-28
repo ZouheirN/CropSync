@@ -51,28 +51,32 @@ class _HomeScreenState extends State<HomeScreen> {
         .where((element) => element != null)
         .toList();
 
-    if (devices.isEmpty) return noDeviceAdded();
+    // if (devices.isEmpty) return noDeviceAdded();
 
-    return SafeArea(
-      child: AnimationLimiter(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: AnimationConfiguration.toStaggeredList(
-              duration: const Duration(milliseconds: 375),
-              childAnimationBuilder: (widget) => SlideAnimation(
-                horizontalOffset: 50.0,
-                child: FadeInAnimation(
-                  child: widget,
+    return Visibility(
+      visible: devices.isNotEmpty,
+      replacement: noDeviceAdded(),
+      child: SafeArea(
+        child: AnimationLimiter(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: AnimationConfiguration.toStaggeredList(
+                duration: const Duration(milliseconds: 375),
+                childAnimationBuilder: (widget) => SlideAnimation(
+                  horizontalOffset: 50.0,
+                  child: FadeInAnimation(
+                    child: widget,
+                  ),
                 ),
+                children: [
+                  buildOverview(overviewPages),
+                  const Gap(20),
+                  buildAlerts(weatherAlerts),
+                  const Gap(20),
+                  buildDeviceCamera(deviceCameraPages),
+                ],
               ),
-              children: [
-                buildOverview(overviewPages),
-                const Gap(20),
-                buildAlerts(weatherAlerts),
-                const Gap(20),
-                buildDeviceCamera(deviceCameraPages),
-              ],
             ),
           ),
         ),

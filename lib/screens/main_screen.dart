@@ -7,7 +7,8 @@ import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/profile_screen.dart';
 import 'package:cropsync/screens/quick_disease_detection_screen.dart';
-import 'package:cropsync/services/api_service.dart';
+import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/services/weather_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
 import 'package:logger/logger.dart';
@@ -29,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   bool pauseData = false;
 
   void weather() async {
-    final weatherData = await ApiRequests.getWeatherData();
+    final weatherData = await WeatherApi.getWeatherData();
     final weather = weatherFromJson(weatherData);
     di<WeatherModel>().weather = weather;
     Logger().d('Fetched Weather');
@@ -37,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
     Timer.periodic(const Duration(minutes: 15), (timer) async {
       if (pauseData == true) return;
 
-      final weatherData = await ApiRequests.getWeatherData();
+      final weatherData = await WeatherApi.getWeatherData();
       final weather = weatherFromJson(weatherData);
       di<WeatherModel>().weather = weather;
       Logger().d('Fetched Weather');
@@ -45,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void deviceCamera() async {
-    final deviceCameraData = await ApiRequests.getDeviceCamera();
+    final deviceCameraData = await DeviceApi.getDeviceCamera();
     final deviceCamera = deviceCameraFromJson(deviceCameraData);
     di<DeviceCameraModel>().deviceCamera = deviceCamera;
     Logger().d('Fetched Device Camera');
@@ -53,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
     Timer.periodic(const Duration(minutes: 20), (timer) async {
       if (pauseData == true) return;
 
-      final deviceCameraData = await ApiRequests.getDeviceCamera();
+      final deviceCameraData = await DeviceApi.getDeviceCamera();
       final deviceCamera = deviceCameraFromJson(deviceCameraData);
       di<DeviceCameraModel>().deviceCamera = deviceCamera;
       Logger().d('Fetched Device Camera');

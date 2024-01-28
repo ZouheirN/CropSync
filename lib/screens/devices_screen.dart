@@ -1,11 +1,16 @@
+import 'dart:convert';
+
 import 'package:cropsync/json/devices.dart';
 import 'package:cropsync/models/devices_model.dart';
-import 'package:cropsync/services/api_service.dart';
+import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/services/local_device_api.dart';
+import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:logger/logger.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:watch_it/watch_it.dart';
 
 class DevicesScreen extends WatchingStatefulWidget {
@@ -31,7 +36,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
       if (!mounted) return;
       Dialogs.showLoadingDialog('Deleting Device', context);
       final result =
-      await ApiRequests.deleteDeviceConfiguration(deviceCode: device.code!);
+          await LocalDeviceApi.deleteDeviceConfiguration(deviceCode: device.code!);
 
       if (!mounted) return;
       if (result == ReturnTypes.fail) {
@@ -54,7 +59,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
       Logger().d('Local configuration deleted');
 
       // delete from server
-      final globalResult = await ApiRequests.deleteDevice(deviceId: device.id!);
+      final globalResult = await DeviceApi.deleteDevice(deviceId: device.id!);
 
       if (!mounted) return;
       if (globalResult == ReturnTypes.fail) {
@@ -114,6 +119,37 @@ class _DevicesScreenState extends State<DevicesScreen> {
                       title: Text(devices[index].name!),
                       subtitle: Text("ID: ${devices[index].id}"),
                       children: [
+                        ListTile(
+                          leading: const Icon(Icons.image_rounded),
+                          title: const Text('View Latest Camera Image'),
+                          onTap: () async {
+                            try {
+                              final image =
+                                  await LocalDeviceApi.getLatestLocalCamera(
+                                      deviceCode: devices[index].code!);
+
+                              if (!mounted) return;
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    constraints: BoxConstraints.expand(
+                                      height:
+                                          MediaQuery.of(context).size.height,
+                                    ),
+                                    child: PhotoView(
+                                      imageProvider: MemoryImage(
+                                        base64Decode(image),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            } catch (e) {
+                              return;
+                            }
+                          },
+                        ),
                         ButtonBar(
                           alignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
@@ -124,7 +160,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                   Icon(Icons.edit_rounded),
                                   Padding(
                                     padding:
-                                    EdgeInsets.symmetric(vertical: 2.0),
+                                        EdgeInsets.symmetric(vertical: 2.0),
                                   ),
                                   Text('Edit'),
                                 ],
@@ -137,7 +173,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                   Icon(Icons.recommend_rounded),
                                   Padding(
                                     padding:
-                                    EdgeInsets.symmetric(vertical: 2.0),
+                                        EdgeInsets.symmetric(vertical: 2.0),
                                   ),
                                   Text('Recommend Best Crop'),
                                 ],
@@ -154,7 +190,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                   ),
                                   Padding(
                                     padding:
-                                    EdgeInsets.symmetric(vertical: 2.0),
+                                        EdgeInsets.symmetric(vertical: 2.0),
                                   ),
                                   Text(
                                     'Delete',

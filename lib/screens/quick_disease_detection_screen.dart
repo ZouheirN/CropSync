@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/image_model.dart';
-import 'package:cropsync/services/api_service.dart';
+import 'package:cropsync/services/disease_api.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/disease_picture.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +44,7 @@ class _QuickDiseaseDetectionScreenState
     // });
 
     //todo send to server
-    final response = ApiRequests.uploadDiseaseImage(
+    final response = DiseaseApi.uploadDiseaseImage(
       image: base64Encode(img.readAsBytesSync()),
       index: di<ImageModel>().images.length - 1,
     );
@@ -188,7 +188,7 @@ class _QuickDiseaseDetectionScreenState
                               style: const TextStyle(color: Colors.black),
                             ),
                             onPressed: () {
-                              ApiRequests.uploadDiseaseImage(
+                              DiseaseApi.uploadDiseaseImage(
                                 image: base64Encode(images[index].image),
                                 index: index,
                               );

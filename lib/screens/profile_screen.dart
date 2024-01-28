@@ -3,7 +3,8 @@ import 'dart:io';
 
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/user_model.dart';
-import 'package:cropsync/services/api_service.dart';
+import 'package:cropsync/services/user_api.dart';
+import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
 class ProfileScreen extends WatchingStatefulWidget {
@@ -48,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     di<UserModel>().setImage(img.readAsBytesSync());
 
     final result =
-        await ApiRequests.updateProfilePicture(base64Image: base64Image);
+        await UserApi.updateProfilePicture(base64Image: base64Image);
 
     if (!mounted) return;
     if (result == ReturnTypes.fail) {
@@ -95,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> removeProfilePicture() async {
-    final result = await ApiRequests.removeProfilePicture();
+    final result = await UserApi.removeProfilePicture();
 
     if (!mounted) return;
     if (result == ReturnTypes.fail) {

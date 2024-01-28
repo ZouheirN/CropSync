@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:bcrypt/bcrypt.dart';
-import 'package:cropsync/services/api_service.dart';
+import 'package:cropsync/services/user_api.dart';
+import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:email_validator/email_validator.dart';
@@ -61,7 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       );
 
-      final signUpData = await ApiRequests.signUp(
+      final signUpData = await UserApi.signUp(
         fullName: fullName!,
         email: email,
         password: hashedPassword,

@@ -1,5 +1,7 @@
 import 'package:cropsync/models/devices_model.dart';
-import 'package:cropsync/services/api_service.dart';
+import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/services/local_device_api.dart';
+import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
@@ -34,7 +36,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
 
       // check if device is already configured
       final isDeviceAlreadyConfigured =
-          await ApiRequests.isDeviceAlreadyConfigured(
+          await LocalDeviceApi.isDeviceAlreadyConfigured(
               deviceCodeController.text.trim());
 
       if (!mounted) return;
@@ -64,7 +66,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
       Logger().d('Device is not configured');
 
       // add device to server and get activation key
-      final globalResult = await ApiRequests.addDevice(
+      final globalResult = await DeviceApi.addDevice(
         name: deviceNameController.text.trim(),
         location: deviceLocationController.text.trim(),
         code: deviceCodeController.text.trim(),
@@ -90,7 +92,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
       Logger().d('Device added to server');
 
       // configure local device using activation key
-      final localResult = await ApiRequests.addDeviceConfiguration(
+      final localResult = await LocalDeviceApi.addDeviceConfiguration(
         deviceCode: deviceCodeController.text.trim(),
         activationKey: globalResult["deviceId"],
       );

@@ -4,7 +4,8 @@ import 'package:bcrypt/bcrypt.dart';
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/screens/register_screen.dart';
-import 'package:cropsync/services/api_service.dart';
+import 'package:cropsync/services/user_api.dart';
+import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
@@ -51,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-      final userData = await ApiRequests.login(
+      final userData = await UserApi.login(
         email: emailTextController.text,
         password: hashedPassword,
       );
