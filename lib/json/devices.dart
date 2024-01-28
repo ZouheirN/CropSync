@@ -4,25 +4,16 @@
 
 import 'dart:convert';
 
-import 'package:hive/hive.dart';
-
-part 'devices.g.dart';
-
 List<Devices> devicesFromJson(List<dynamic> json) =>
     List<Devices>.from(json.map((x) => Devices.fromJson(x)));
 
 String devicesToJson(List<Devices> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-@HiveType(typeId: 2)
 class Devices {
-  @HiveField(1)
   String? id;
-  @HiveField(2)
   String? name;
-  @HiveField(3)
   String? code;
-  @HiveField(4)
   Crop? crop;
 
   Devices({
@@ -47,9 +38,7 @@ class Devices {
       };
 }
 
-@HiveType(typeId: 3)
 class Crop {
-  @HiveField(1)
   String? name;
 
   Crop({

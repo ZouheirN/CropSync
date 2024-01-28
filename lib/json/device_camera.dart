@@ -1,7 +1,6 @@
-import 'package:hive/hive.dart';
+
 import 'dart:convert';
 
-part 'device_camera.g.dart';
 
 List<DeviceCamera> deviceCameraFromJson(List<dynamic> json) =>
     List<DeviceCamera>.from(json.map((x) => DeviceCamera.fromJson(x)));
@@ -10,17 +9,11 @@ List<DeviceCamera> deviceCameraFromJson(List<dynamic> json) =>
 String deviceCameraToJson(List<DeviceCamera> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-@HiveType(typeId: 5)
 class DeviceCamera {
-  @HiveField(0)
   int? deviceId;
-  @HiveField(1)
   String? deviceName;
-  @HiveField(2)
   String? location;
-  @HiveField(3)
   String? cropName;
-  @HiveField(4)
   String? image;
 
   DeviceCamera({

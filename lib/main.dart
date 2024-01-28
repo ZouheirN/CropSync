@@ -1,8 +1,5 @@
-import 'package:cropsync/json/device_camera.dart';
-import 'package:cropsync/json/devices.dart';
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/json/user.dart';
-import 'package:cropsync/json/weather.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/image_model.dart';
@@ -36,11 +33,7 @@ Future<void> main() async {
 
   // Register Adapters
   Hive.registerAdapter<User>(UserAdapter());
-  Hive.registerAdapter<Devices>(DevicesAdapter());
-  Hive.registerAdapter<Crop>(CropAdapter());
-  Hive.registerAdapter<Weather>(WeatherAdapter());
   Hive.registerAdapter<ImageObject>(ImageObjectAdapter());
-  Hive.registerAdapter<DeviceCamera>(DeviceCameraAdapter());
 
   var userInfoBox = await Hive.openBox('userInfo');
   var userPrefsBox = await Hive.openBox('userPrefs');
