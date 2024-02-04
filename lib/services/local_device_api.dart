@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cropsync/models/user_model.dart';
@@ -86,7 +85,8 @@ class LocalDeviceApi {
     }
   }
 
-  static Future<dynamic> getLatestLocalCamera({required String deviceCode}) async {
+  static Future<dynamic> getLatestLocalCamera(
+      {required String deviceCode}) async {
     try {
       final ip = await getDeviceIp(deviceCode);
 

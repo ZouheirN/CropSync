@@ -50,16 +50,40 @@ class DeviceApi {
     }
   }
 
-  static Future<dynamic> getDeviceData() async {
-    String jsonString = await rootBundle.loadString('assets/devices.json');
-    final data = json.decode(jsonString);
+  static Future<dynamic> getDevices() async {
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
 
-    return data;
+    try {
+      final response = await dio.get(
+        '$apiUrl/user/get/devices',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      return response.data;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+      Logger().e(e.response?.data);
+
+      if (e.response?.data['error'] == "UnAuthorized Access!") {
+        return ReturnTypes.fail;
+      } else if (e.response?.data['error'] == "Expired token") {
+        return ReturnTypes.invalidToken;
+      } else if (e.response?.data['error'] == "Devices not found") {
+        return ReturnTypes.noDevices;
+      }
+
+      return ReturnTypes.fail;
+    }
   }
 
   static Future<dynamic> getDeviceCamera() async {
     String jsonString =
-    await rootBundle.loadString('assets/device_camera.json');
+        await rootBundle.loadString('assets/device_camera.json');
     final data = json.decode(jsonString);
 
     return data;
@@ -96,5 +120,4 @@ class DeviceApi {
       return ReturnTypes.fail;
     }
   }
-
 }

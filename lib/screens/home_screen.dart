@@ -1,14 +1,15 @@
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
-import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
+import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/device_camera_card.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
+import 'package:logger/logger.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -50,8 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
         .toList()
         .where((element) => element != null)
         .toList();
-
-    // if (devices.isEmpty) return noDeviceAdded();
 
     return Visibility(
       visible: devices.isNotEmpty,
@@ -265,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 Navigator.of(context).pushNamed('/add-device');
               },
-            )
+            ),
           ],
         ),
       ),

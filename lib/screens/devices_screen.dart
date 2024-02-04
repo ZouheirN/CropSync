@@ -35,8 +35,8 @@ class _DevicesScreenState extends State<DevicesScreen> {
       // delete from local device
       if (!mounted) return;
       Dialogs.showLoadingDialog('Deleting Device', context);
-      final result =
-          await LocalDeviceApi.deleteDeviceConfiguration(deviceCode: device.code!);
+      final result = await LocalDeviceApi.deleteDeviceConfiguration(
+          deviceCode: device.code!);
 
       if (!mounted) return;
       if (result == ReturnTypes.fail) {

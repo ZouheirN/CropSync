@@ -17,5 +17,6 @@ enum ReturnTypes {
   alreadyConfigured,
   hasNotBeenConfigured,
   emailTaken,
-  invalidToken
+  invalidToken,
+  noDevices,
 }

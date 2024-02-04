@@ -61,6 +61,18 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  void devices() async {
+    Timer.periodic(const Duration(seconds: 20), (timer) async {
+      if (pauseData == true) return;
+
+      final devices = await DeviceApi.getDevices();
+      // final deviceCamera = deviceCameraFromJson(deviceCameraData);
+      // di<DeviceCameraModel>().deviceCamera = deviceCamera;
+      Logger().d('Fetched Device Camera');
+      Logger().i(devices);
+    });
+  }
+
   @override
   void initState() {
     // Initialize Periodic Timers

@@ -85,7 +85,7 @@ class WelcomeScreen extends StatelessWidget {
               TextSpan(
                 text: ' Crop',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 0, 65, 54),
+                  color: Color.fromARGB(255, 77, 55, 39),
                   // color: Colors.green,
                   fontWeight: FontWeight.bold,
                   fontSize: 50,
@@ -94,7 +94,7 @@ class WelcomeScreen extends StatelessWidget {
               TextSpan(
                 text: 'Sync',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 22, 149, 72),
                   fontWeight: FontWeight.bold,
                   fontSize: 50,
                 ),

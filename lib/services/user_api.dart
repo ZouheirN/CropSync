@@ -156,5 +156,4 @@ class UserApi {
       return ReturnTypes.fail;
     }
   }
-
 }

@@ -30,8 +30,6 @@ class _CropsScreenState extends State<CropsScreen> {
         if (i != null) i
     ].length;
 
-    // if (devices.isEmpty) return noDeviceAdded();
-
     return Visibility(
       visible: devices.isNotEmpty,
       replacement: noDeviceAdded(),
