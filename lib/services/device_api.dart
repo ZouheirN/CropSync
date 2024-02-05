@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cropsync/json/device.dart';
 import 'package:cropsync/json/device_camera.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/api_utils.dart';
@@ -57,7 +58,7 @@ class DeviceApi {
 
     try {
       final response = await dio.get(
-        '$apiUrl/user/get/devices',
+        '$apiUrl/user/devices',
         options: Options(
           headers: {
             "Authorization": "Bearer $token",
@@ -65,20 +66,18 @@ class DeviceApi {
         ),
       );
 
-      return response.data;
-    } on DioException catch (e) {
-      if (e.response == null) return ReturnTypes.error;
-      Logger().e(e.response?.data);
+      final devices = response.data['devices'];
+      final List<Device> deviceList = [];
 
-      if (e.response?.data['error'] == "UnAuthorized Access!") {
-        return ReturnTypes.fail;
-      } else if (e.response?.data['error'] == "Expired token") {
-        return ReturnTypes.invalidToken;
-      } else if (e.response?.data['error'] == "Devices not found") {
-        return ReturnTypes.noDevices;
+      for (final device in devices) {
+        deviceList.add(Device.fromJson(device));
       }
 
-      return ReturnTypes.fail;
+      return deviceList;
+    } on DioException catch (e) {
+      Logger().e(e.response?.data);
+
+      return null;
     }
   }
 

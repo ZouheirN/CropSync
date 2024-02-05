@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:badges/badges.dart' as badges;
-import 'package:cropsync/json/device_camera.dart';
-import 'package:cropsync/json/weather.dart';
+import 'package:cropsync/json/device.dart';
 import 'package:cropsync/models/device_camera_model.dart';
+import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/profile_screen.dart';
 import 'package:cropsync/screens/quick_disease_detection_screen.dart';
@@ -31,7 +31,6 @@ class _MainScreenState extends State<MainScreen> {
 
   void weather() async {
     final weatherData = await WeatherApi.getWeatherData();
-    // final weather = weatherFromJson(weatherData);
     di<WeatherModel>().weather = weatherData;
     Logger().d('Fetched Weather');
 
@@ -39,7 +38,6 @@ class _MainScreenState extends State<MainScreen> {
       if (pauseData == true) return;
 
       final weatherData = await WeatherApi.getWeatherData();
-      // final weather = weatherFromJson(weatherData);
       di<WeatherModel>().weather = weatherData;
       Logger().d('Fetched Weather');
     });
@@ -47,7 +45,6 @@ class _MainScreenState extends State<MainScreen> {
 
   void deviceCamera() async {
     final deviceCameraData = await DeviceApi.getDeviceCamera();
-    // final deviceCamera = deviceCameraFromJson(deviceCameraData);
     di<DeviceCameraModel>().deviceCamera = deviceCameraData;
     Logger().d('Fetched Device Camera');
 
@@ -55,21 +52,26 @@ class _MainScreenState extends State<MainScreen> {
       if (pauseData == true) return;
 
       final deviceCameraData = await DeviceApi.getDeviceCamera();
-      // final deviceCamera = deviceCameraFromJson(deviceCameraData);
       di<DeviceCameraModel>().deviceCamera = deviceCameraData;
       Logger().d('Fetched Device Camera');
     });
   }
 
   void devices() async {
+    final devices = await DeviceApi.getDevices();
+    if (devices != null) {
+      di<DevicesModel>().devices = devices;
+      Logger().d('Fetched Devices');
+    }
+
     Timer.periodic(const Duration(seconds: 20), (timer) async {
       if (pauseData == true) return;
 
       final devices = await DeviceApi.getDevices();
-      // final deviceCamera = deviceCameraFromJson(deviceCameraData);
-      // di<DeviceCameraModel>().deviceCamera = deviceCamera;
-      Logger().d('Fetched Device Camera');
-      Logger().i(devices);
+      if (devices != null) {
+        di<DevicesModel>().devices = devices;
+        Logger().d('Fetched Devices');
+      }
     });
   }
 
@@ -78,6 +80,7 @@ class _MainScreenState extends State<MainScreen> {
     // Initialize Periodic Timers
     weather();
     deviceCamera();
+    devices();
     super.initState();
   }
 

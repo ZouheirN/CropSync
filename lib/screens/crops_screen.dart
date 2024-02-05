@@ -22,7 +22,7 @@ class _CropsScreenState extends State<CropsScreen> {
     final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
 
     List<String?> cropNames =
-        devices.map((device) => device.crop!.name).toList();
+        devices.map((device) => device.crop?.name).toList();
 
     // Remove null values
     final cropNamesLength = [

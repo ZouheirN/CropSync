@@ -1,19 +1,40 @@
-import 'package:cropsync/json/devices.dart';
+import 'package:cropsync/json/crop.dart';
+import 'package:cropsync/json/device.dart';
 import 'package:flutter/material.dart';
 
 class DevicesModel extends ChangeNotifier {
-  List<Devices> get devices => _devices;
+  List<Device> get devices => _devices;
 
-  final List<Devices> _devices = [];
+  final List<Device> _devices = [];
 
-  void addDevice(String id, String name, String code) {
-    _devices
-        .add(Devices(id: id, crop: Crop(name: null), name: name, code: code));
+  set devices(List<Device> devices) {
+    _devices.clear();
+    _devices.addAll(devices);
+    notifyListeners();
+  }
+
+  void addDevice({
+    required String id,
+    required String name,
+    required bool isConnected,
+    required String location,
+    required String code,
+  }) {
+    _devices.add(
+      Device(
+        deviceId: id,
+        crop: Crop(name: null),
+        name: name,
+        isConnected: isConnected,
+        location: location,
+        code: code,
+      ),
+    );
     notifyListeners();
   }
 
   void deleteDevice(String id) {
-    _devices.removeWhere((element) => element.id == id);
+    _devices.removeWhere((element) => element.deviceId == id);
     notifyListeners();
   }
 }

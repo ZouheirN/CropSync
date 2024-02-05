@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cropsync/json/devices.dart';
+import 'package:cropsync/json/device.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/local_device_api.dart';
@@ -25,7 +25,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
     Navigator.of(context).pushNamed('/add-device');
   }
 
-  Future<void> deleteDevice(Devices device, BuildContext context) async {
+  Future<void> deleteDevice(Device device, BuildContext context) async {
     final confirmDelete = await Dialogs.showConfirmationDialog(
         'Confirm Deletion',
         'Are you sure you want to delete ${device.name}',
@@ -59,7 +59,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
       Logger().d('Local configuration deleted');
 
       // delete from server
-      final globalResult = await DeviceApi.deleteDevice(deviceId: device.id!);
+      final globalResult = await DeviceApi.deleteDevice(deviceId: device.deviceId!);
 
       if (!mounted) return;
       if (globalResult == ReturnTypes.fail) {
@@ -80,7 +80,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
       Logger().d('Device deleted from server');
 
-      di<DevicesModel>().deleteDevice(device.id!);
+      di<DevicesModel>().deleteDevice(device.deviceId!);
 
       Navigator.pop(context);
 
@@ -117,7 +117,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                   child: FadeInAnimation(
                     child: ExpansionTileCard(
                       title: Text(devices[index].name!),
-                      subtitle: Text("ID: ${devices[index].id}"),
+                      subtitle: Text("ID: ${devices[index].deviceId}"),
                       children: [
                         ListTile(
                           leading: const Icon(Icons.image_rounded),

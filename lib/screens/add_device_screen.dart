@@ -116,8 +116,13 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
 
       Logger().d('Device configured locally');
 
-      di<DevicesModel>().addDevice(globalResult["deviceId"],
-          deviceNameController.text.trim(), deviceCodeController.text.trim());
+      di<DevicesModel>().addDevice(
+        id: globalResult["deviceId"],
+        name: deviceNameController.text.trim(),
+        isConnected: globalResult["isConnected"],
+        location: deviceLocationController.text.trim(),
+        code: deviceCodeController.text.trim(),
+      );
 
       if (!mounted) return;
       Navigator.pop(context);
