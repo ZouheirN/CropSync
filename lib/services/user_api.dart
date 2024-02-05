@@ -157,4 +157,83 @@ class UserApi {
       return ReturnTypes.fail;
     }
   }
+
+  static Future<dynamic> sendResetPasswordOtp({
+    required String email,
+  }) async {
+    try {
+      await dio.post(
+        '$apiUrl/user/Request/ResetPassword',
+        data: {
+          'email': email,
+        },
+      );
+
+      return ReturnTypes.success;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
+      Logger().e(e.response?.data);
+
+      return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> verifyResetPasswordOtp(
+      {required String pin, required String email}) async {
+    try {
+     final response =  await dio.post(
+        '$apiUrl/ResetPassword',
+        data: {
+          'pin': pin,
+          'email': email,
+        },
+      );
+
+      return response.data;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
+      if (e.response?.data['error'] == "UnAuthorized Access!") {
+        return ReturnTypes.fail;
+      } else if (e.response?.data['error'] == "Expired token") {
+        return ReturnTypes.invalidToken;
+      }
+
+      Logger().e(e.response?.data);
+
+      return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> resetPassword(
+      {required String password, required String token}) async {
+    try {
+      final response = await dio.post(
+        '$apiUrl/user/ResetPassword',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+        data: {
+          'password': password,
+        },
+      );
+
+      return userFromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
+      if (e.response?.data['error'] == "UnAuthorized Access!") {
+        return ReturnTypes.fail;
+      } else if (e.response?.data['error'] == "Expired token") {
+        return ReturnTypes.invalidToken;
+      }
+
+      Logger().e(e.response?.data);
+
+      return ReturnTypes.fail;
+    }
+  }
 }

@@ -59,7 +59,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void devices() async {
     final devices = await DeviceApi.getDevices();
-    if (devices != null) {
+    if (devices.runtimeType == List<Device>) {
       di<DevicesModel>().devices = devices;
       Logger().d('Fetched Devices');
     }
@@ -68,7 +68,7 @@ class _MainScreenState extends State<MainScreen> {
       if (pauseData == true) return;
 
       final devices = await DeviceApi.getDevices();
-      if (devices != null) {
+      if (devices.runtimeType == List<Device>) {
         di<DevicesModel>().devices = devices;
         Logger().d('Fetched Devices');
       }

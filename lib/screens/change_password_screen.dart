@@ -1,8 +1,17 @@
+import 'dart:math';
+
+import 'package:bcrypt/bcrypt.dart';
+import 'package:cropsync/models/user_model.dart';
+import 'package:cropsync/services/user_api.dart';
+import 'package:cropsync/services/user_token.dart';
+import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:fancy_password_field/fancy_password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:logger/logger.dart';
+import 'package:watch_it/watch_it.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -35,7 +44,39 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       });
 
       if (forgotPassword) {
-        final token = arg['token'];
+        final newPassword = newPasswordController.text;
+        final String hashedNewPassword = BCrypt.hashpw(newPassword,
+            BCrypt.gensalt(secureRandom: Random(newPassword.length)));
+
+        final result = await UserApi.resetPassword(
+            password: hashedNewPassword, token: arg['token']);
+
+        if (result == ReturnTypes.fail) {
+          setState(() {
+            status = 'An error occurred. Please try again.';
+            isLoading = false;
+          });
+        } else if (result == ReturnTypes.error) {
+          setState(() {
+            status = 'An error occurred. Please try again.';
+            isLoading = false;
+          });
+        } else if (result == ReturnTypes.invalidToken) {
+          if (!mounted) return;
+          invalidTokenResponse(context);
+        }
+
+        Logger().d(result);
+
+        UserToken.setToken(result.token);
+        di<UserModel>().user = result;
+
+        setState(() {
+          isLoading = false;
+        });
+
+        if (!mounted) return;
+        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       } else {}
     }
   }
@@ -65,13 +106,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (forgotPassword)
+                if (!forgotPassword)
                   const Text(
                     'Old Password',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                if (forgotPassword) const Gap(10),
-                if (forgotPassword)
+                if (!forgotPassword) const Gap(10),
+                if (!forgotPassword)
                   PrimaryTextField(
                     textController: oldPasswordController,
                     hintText: 'Enter your old password',
@@ -83,7 +124,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       return null;
                     },
                   ),
-                if (forgotPassword) const Gap(20),
+                if (!forgotPassword) const Gap(20),
                 const Text(
                   'New Password',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

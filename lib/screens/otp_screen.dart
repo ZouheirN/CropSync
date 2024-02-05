@@ -1,9 +1,9 @@
-import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/user_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:logger/logger.dart';
 import 'package:pinput/pinput.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -29,15 +29,9 @@ class _OTPScreenState extends State<OTPScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     if (isResettingPassword) {
-      if (!mounted) return;
-      Navigator.of(context).pushNamed('/change-password', arguments: {
-        'forgotPassword': true,
-        'token': arg['token'],
-      });
-    } else {
-      final otpResult = await UserApi.verifyEmail(
+      final otpResult = await UserApi.verifyResetPasswordOtp(
         pin: pin,
-        token: token
+        email: arg['email'],
       );
 
       if (otpResult == ReturnTypes.fail) {
@@ -49,9 +43,38 @@ class _OTPScreenState extends State<OTPScreen> {
         if (!context.mounted) return;
         invalidTokenResponse(context);
         return;
+      } else if (otpResult == ReturnTypes.error) {
+        if (!context.mounted) return;
+        setState(() {
+          status = 'An error occurred. Please try again.';
+        });
+        return;
       }
 
-      // final user = User.fromJson(otpResult);
+      if (!mounted) return;
+      Navigator.of(context).pushNamed('/change-password', arguments: {
+        'forgotPassword': true,
+        'token': otpResult['token'],
+      });
+    } else {
+      final otpResult = await UserApi.verifyEmail(pin: pin, token: token);
+
+      if (otpResult == ReturnTypes.fail) {
+        setState(() {
+          status = 'Wrong OTP. Try again.';
+        });
+        return;
+      } else if (otpResult == ReturnTypes.invalidToken) {
+        if (!context.mounted) return;
+        invalidTokenResponse(context);
+        return;
+      } else if (otpResult == ReturnTypes.error) {
+        if (!context.mounted) return;
+        setState(() {
+          status = 'An error occurred. Please try again.';
+        });
+        return;
+      }
 
       di<UserModel>().user = otpResult;
       if (!context.mounted) return;
@@ -142,7 +165,8 @@ class _OTPScreenState extends State<OTPScreen> {
               Text(
                 status,
                 style: TextStyle(
-                  color: status == 'Wrong OTP. Try again.'
+                  color: status == 'Wrong OTP. Try again.' ||
+                          status == 'An error occurred. Please try again.'
                       ? Colors.red
                       : Colors.green,
                   fontSize: 18,

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cropsync/main.dart';
+import 'package:cropsync/services/user_api.dart';
+import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:email_validator/email_validator.dart';
@@ -50,7 +52,8 @@ class Dialogs {
     );
   }
 
-  static void showSuccessDialog(String title, String text, BuildContext context) {
+  static void showSuccessDialog(
+      String title, String text, BuildContext context) {
     QuickAlert.show(
       context: context,
       type: QuickAlertType.success,
@@ -171,8 +174,25 @@ class Dialogs {
                   DialogButton(
                     text: 'Submit',
                     color: Colors.green,
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState!.validate()) {
+                        // send otp
+                        final response = await UserApi.sendResetPasswordOtp(
+                            email: textController.text.trim());
+
+                        if (response == ReturnTypes.fail) {
+                          if (!context.mounted) return;
+                          showErrorDialog(
+                              'Error', 'Failed to send OTP', context);
+                          return;
+                        } else if (response == ReturnTypes.error) {
+                          if (!context.mounted) return;
+                          showErrorDialog(
+                              'Error', 'An error occurred', context);
+                          return;
+                        }
+
+                        if (!context.mounted) return;
                         Navigator.of(context)
                             .pushReplacementNamed('/otp', arguments: {
                           'email': textController.text.trim(),
