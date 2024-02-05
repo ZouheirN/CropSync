@@ -51,8 +51,9 @@ class _OTPScreenState extends State<OTPScreen> {
         return;
       }
 
-      final user = User.fromJson(otpResult);
-      di<UserModel>().user = user;
+      // final user = User.fromJson(otpResult);
+
+      di<UserModel>().user = otpResult;
       if (!context.mounted) return;
       Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
     }

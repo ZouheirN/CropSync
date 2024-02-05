@@ -52,12 +52,12 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-      final userData = await UserApi.login(
+      final user = await UserApi.login(
         email: emailTextController.text,
         password: hashedPassword,
       );
 
-      if (userData == ReturnTypes.fail) {
+      if (user == ReturnTypes.fail) {
         setState(() {
           isLoading = false;
           status = const Text(
@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         });
         return;
-      } else if (userData == ReturnTypes.error) {
+      } else if (user == ReturnTypes.error) {
         setState(() {
           isLoading = false;
           status = const Text(
@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
 
-      User user = userFromJson(userData);
+      // User user = userFromJson(userData);
 
       setState(() {
         isLoading = false;

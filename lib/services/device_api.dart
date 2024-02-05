@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cropsync/json/device_camera.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:dio/dio.dart';
@@ -86,7 +87,7 @@ class DeviceApi {
         await rootBundle.loadString('assets/device_camera.json');
     final data = json.decode(jsonString);
 
-    return data;
+    return deviceCameraFromJson(data);
   }
 
   static Future<dynamic> deleteDevice({required String deviceId}) async {

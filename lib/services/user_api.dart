@@ -1,3 +1,4 @@
+import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/api_utils.dart';
@@ -24,7 +25,7 @@ class UserApi {
         },
       );
 
-      return response.data;
+      return userFromJson(response.data);
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
 
@@ -76,7 +77,7 @@ class UserApi {
         },
       );
 
-      return response.data;
+      return userFromJson(response.data);
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
 

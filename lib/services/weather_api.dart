@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cropsync/json/weather.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,6 +14,6 @@ class WeatherApi {
     String jsonString = await rootBundle.loadString('assets/weather.json');
     final data = json.decode(jsonString);
 
-    return data;
+    return weatherFromJson(data);
   }
 }

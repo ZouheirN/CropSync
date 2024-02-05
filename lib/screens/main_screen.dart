@@ -31,32 +31,32 @@ class _MainScreenState extends State<MainScreen> {
 
   void weather() async {
     final weatherData = await WeatherApi.getWeatherData();
-    final weather = weatherFromJson(weatherData);
-    di<WeatherModel>().weather = weather;
+    // final weather = weatherFromJson(weatherData);
+    di<WeatherModel>().weather = weatherData;
     Logger().d('Fetched Weather');
 
     Timer.periodic(const Duration(minutes: 15), (timer) async {
       if (pauseData == true) return;
 
       final weatherData = await WeatherApi.getWeatherData();
-      final weather = weatherFromJson(weatherData);
-      di<WeatherModel>().weather = weather;
+      // final weather = weatherFromJson(weatherData);
+      di<WeatherModel>().weather = weatherData;
       Logger().d('Fetched Weather');
     });
   }
 
   void deviceCamera() async {
     final deviceCameraData = await DeviceApi.getDeviceCamera();
-    final deviceCamera = deviceCameraFromJson(deviceCameraData);
-    di<DeviceCameraModel>().deviceCamera = deviceCamera;
+    // final deviceCamera = deviceCameraFromJson(deviceCameraData);
+    di<DeviceCameraModel>().deviceCamera = deviceCameraData;
     Logger().d('Fetched Device Camera');
 
     Timer.periodic(const Duration(minutes: 20), (timer) async {
       if (pauseData == true) return;
 
       final deviceCameraData = await DeviceApi.getDeviceCamera();
-      final deviceCamera = deviceCameraFromJson(deviceCameraData);
-      di<DeviceCameraModel>().deviceCamera = deviceCamera;
+      // final deviceCamera = deviceCameraFromJson(deviceCameraData);
+      di<DeviceCameraModel>().deviceCamera = deviceCameraData;
       Logger().d('Fetched Device Camera');
     });
   }
