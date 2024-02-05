@@ -33,6 +33,25 @@ class DevicesModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void editDevice({
+    required String id,
+    required String name,
+    required bool isConnected,
+    required String location,
+    required String code,
+  }) {
+    final index = _devices.indexWhere((element) => element.deviceId == id);
+    _devices[index] = Device(
+      deviceId: id,
+      crop: Crop(name: null),
+      name: name,
+      isConnected: isConnected,
+      location: location,
+      code: code,
+    );
+    notifyListeners();
+  }
+
   void deleteDevice(String id) {
     _devices.removeWhere((element) => element.deviceId == id);
     notifyListeners();

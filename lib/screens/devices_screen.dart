@@ -25,6 +25,12 @@ class _DevicesScreenState extends State<DevicesScreen> {
     Navigator.of(context).pushNamed('/add-device');
   }
 
+  void editDevice(BuildContext context, Device device) {
+    Navigator.of(context).pushNamed('/edit-device', arguments: {
+      'device': device,
+    });
+  }
+
   Future<void> deleteDevice(Device device, BuildContext context) async {
     final confirmDelete = await Dialogs.showConfirmationDialog(
         'Confirm Deletion',
@@ -154,7 +160,9 @@ class _DevicesScreenState extends State<DevicesScreen> {
                           alignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                editDevice(context, devices[index]);
+                              },
                               child: const Column(
                                 children: <Widget>[
                                   Icon(Icons.edit_rounded),
