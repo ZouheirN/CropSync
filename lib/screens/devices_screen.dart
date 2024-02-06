@@ -172,6 +172,10 @@ class _DevicesScreenState extends State<DevicesScreen> {
                         //       : 'Not Connected to Server'),
                         // ),
                         ListTile(
+                          leading: const Icon(Icons.code_rounded),
+                          title: Text('Code: ${devices[index].code!}'),
+                        ),
+                        ListTile(
                           leading: const Icon(Icons.location_on_rounded),
                           title: Text(devices[index].location!),
                         ),
