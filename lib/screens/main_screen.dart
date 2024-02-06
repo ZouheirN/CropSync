@@ -29,10 +29,15 @@ class _MainScreenState extends State<MainScreen> {
   int index = 0;
   bool pauseData = false;
 
+  bool isWeatherTimerRunning = false;
+  bool isDeviceCameraTimerRunning = false;
+  bool isDevicesTimerRunning = false;
+
   void weather() async {
     final weatherData = await WeatherApi.getWeatherData();
     di<WeatherModel>().weather = weatherData;
     Logger().d('Fetched Weather');
+    isWeatherTimerRunning = true;
 
     Timer.periodic(const Duration(minutes: 15), (timer) async {
       if (pauseData == true) return;
@@ -47,6 +52,7 @@ class _MainScreenState extends State<MainScreen> {
     final deviceCameraData = await DeviceApi.getDeviceCamera();
     di<DeviceCameraModel>().deviceCamera = deviceCameraData;
     Logger().d('Fetched Device Camera');
+    isDeviceCameraTimerRunning = true;
 
     Timer.periodic(const Duration(minutes: 20), (timer) async {
       if (pauseData == true) return;
@@ -62,6 +68,7 @@ class _MainScreenState extends State<MainScreen> {
     if (devices.runtimeType == List<Device>) {
       di<DevicesModel>().devices = devices;
       Logger().d('Fetched Devices');
+      isDevicesTimerRunning = true;
     }
 
     Timer.periodic(const Duration(seconds: 20), (timer) async {
@@ -77,10 +84,11 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    // Initialize Periodic Timers
-    weather();
-    deviceCamera();
-    devices();
+    // If timers are not running, initialize them
+    if (!isWeatherTimerRunning) weather();
+    if (!isDeviceCameraTimerRunning) deviceCamera();
+    if (!isDevicesTimerRunning) devices();
+
     super.initState();
   }
 

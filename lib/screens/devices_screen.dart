@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/services/device_api.dart';
@@ -10,7 +8,6 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:logger/logger.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:watch_it/watch_it.dart';
 
 class DevicesScreen extends WatchingStatefulWidget {
@@ -65,7 +62,8 @@ class _DevicesScreenState extends State<DevicesScreen> {
       Logger().d('Local configuration deleted');
 
       // delete from server
-      final globalResult = await DeviceApi.deleteDevice(deviceId: device.deviceId!);
+      final globalResult =
+          await DeviceApi.deleteDevice(deviceId: device.deviceId!);
 
       if (!mounted) return;
       if (globalResult == ReturnTypes.fail) {
@@ -122,6 +120,15 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 child: SlideAnimation(
                   child: FadeInAnimation(
                     child: ExpansionTileCard(
+                      leading: devices[index].isConnected == true
+                          ? const Icon(
+                              Icons.wifi_rounded,
+                              color: Colors.green,
+                            )
+                          : const Icon(
+                              Icons.wifi_off_rounded,
+                              color: Colors.red,
+                            ),
                       title: Text(devices[index].name!),
                       subtitle: Text("ID: ${devices[index].deviceId}"),
                       children: [
@@ -156,6 +163,18 @@ class _DevicesScreenState extends State<DevicesScreen> {
                         //     }
                         //   },
                         // ),
+                        // ListTile(
+                        //   leading: devices[index].isConnected == true
+                        //       ? const Icon(Icons.check_circle_rounded)
+                        //       : const Icon(Icons.cancel_rounded),
+                        //   title: Text(devices[index].isConnected == true
+                        //       ? 'Connected to Server'
+                        //       : 'Not Connected to Server'),
+                        // ),
+                        ListTile(
+                          leading: const Icon(Icons.location_on_rounded),
+                          title: Text(devices[index].location!),
+                        ),
                         ButtonBar(
                           alignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
