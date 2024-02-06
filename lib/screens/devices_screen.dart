@@ -125,37 +125,37 @@ class _DevicesScreenState extends State<DevicesScreen> {
                       title: Text(devices[index].name!),
                       subtitle: Text("ID: ${devices[index].deviceId}"),
                       children: [
-                        ListTile(
-                          leading: const Icon(Icons.image_rounded),
-                          title: const Text('View Latest Camera Image'),
-                          onTap: () async {
-                            try {
-                              final image =
-                                  await LocalDeviceApi.getLatestLocalCamera(
-                                      deviceCode: devices[index].code!);
-
-                              if (!mounted) return;
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Container(
-                                    constraints: BoxConstraints.expand(
-                                      height:
-                                          MediaQuery.of(context).size.height,
-                                    ),
-                                    child: PhotoView(
-                                      imageProvider: MemoryImage(
-                                        base64Decode(image),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            } catch (e) {
-                              return;
-                            }
-                          },
-                        ),
+                        // ListTile(
+                        //   leading: const Icon(Icons.image_rounded),
+                        //   title: const Text('View Latest Camera Image'),
+                        //   onTap: () async {
+                        //     try {
+                        //       final image =
+                        //           await LocalDeviceApi.getLatestLocalCamera(
+                        //               deviceCode: devices[index].code!);
+                        //
+                        //       if (!mounted) return;
+                        //       showDialog(
+                        //         context: context,
+                        //         builder: (context) {
+                        //           return Container(
+                        //             constraints: BoxConstraints.expand(
+                        //               height:
+                        //                   MediaQuery.of(context).size.height,
+                        //             ),
+                        //             child: PhotoView(
+                        //               imageProvider: MemoryImage(
+                        //                 base64Decode(image),
+                        //               ),
+                        //             ),
+                        //           );
+                        //         },
+                        //       );
+                        //     } catch (e) {
+                        //       return;
+                        //     }
+                        //   },
+                        // ),
                         ButtonBar(
                           alignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[

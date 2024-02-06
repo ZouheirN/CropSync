@@ -6,6 +6,8 @@ import 'package:hive/hive.dart';
 
 class UserModel extends ChangeNotifier {
   final userInfoBox = Hive.box('userInfo');
+  final devicesBox = Hive.box('devices');
+
 
   User get user => _user;
 
@@ -31,6 +33,7 @@ class UserModel extends ChangeNotifier {
       isVerified: false,
     );
     userInfoBox.delete('user');
+    devicesBox.delete('devices');
     UserToken.deleteToken();
     notifyListeners();
   }

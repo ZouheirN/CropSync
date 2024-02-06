@@ -84,23 +84,4 @@ class LocalDeviceApi {
       return ReturnTypes.fail;
     }
   }
-
-  static Future<dynamic> getLatestLocalCamera(
-      {required String deviceCode}) async {
-    try {
-      final ip = await getDeviceIp(deviceCode);
-
-      final response = await dio.get(
-        'http://$ip:3000/latest-image',
-      );
-
-      return response.data['base64Image'];
-    } on DioException catch (e) {
-      if (e.response == null) return ReturnTypes.error;
-
-      Logger().e(e.response?.data);
-
-      return ReturnTypes.fail;
-    }
-  }
 }

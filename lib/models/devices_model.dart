@@ -1,8 +1,11 @@
 import 'package:cropsync/json/crop.dart';
 import 'package:cropsync/json/device.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class DevicesModel extends ChangeNotifier {
+  final devicesBox = Hive.box('devices');
+
   List<Device> get devices => _devices;
 
   final List<Device> _devices = [];
@@ -10,6 +13,7 @@ class DevicesModel extends ChangeNotifier {
   set devices(List<Device> devices) {
     _devices.clear();
     _devices.addAll(devices);
+    devicesBox.put('devices', _devices);
     notifyListeners();
   }
 
@@ -30,6 +34,7 @@ class DevicesModel extends ChangeNotifier {
         code: code,
       ),
     );
+    devicesBox.put('devices', _devices);
     notifyListeners();
   }
 
@@ -49,11 +54,13 @@ class DevicesModel extends ChangeNotifier {
       location: location,
       code: code,
     );
+    devicesBox.put('devices', _devices);
     notifyListeners();
   }
 
   void deleteDevice(String id) {
     _devices.removeWhere((element) => element.deviceId == id);
+    devicesBox.put('devices', _devices);
     notifyListeners();
   }
 }

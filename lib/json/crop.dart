@@ -1,4 +1,11 @@
+
+import 'package:hive/hive.dart';
+
+part 'crop.g.dart';
+
+@HiveType(typeId: 3)
 class Crop {
+  @HiveField(0)
   String? name;
 
   Crop({

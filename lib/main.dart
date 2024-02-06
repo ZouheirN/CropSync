@@ -1,3 +1,5 @@
+import 'package:cropsync/json/crop.dart';
+import 'package:cropsync/json/device.dart';
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/device_camera_model.dart';
@@ -19,6 +21,7 @@ import 'package:cropsync/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -35,24 +38,43 @@ Future<void> main() async {
   // Register Adapters
   Hive.registerAdapter<User>(UserAdapter());
   Hive.registerAdapter<ImageObject>(ImageObjectAdapter());
+  Hive.registerAdapter<Device>(DeviceAdapter());
+  Hive.registerAdapter<Crop>(CropAdapter());
 
   var userInfoBox = await Hive.openBox('userInfo');
   var userPrefsBox = await Hive.openBox('userPrefs');
   var imagesBox = await Hive.openBox('images');
+  var devicesBox = await Hive.openBox('devices');
 
   registerManagers();
 
   bool isUserLoggedIn = false;
 
+  // put user to state management
   if (userInfoBox.get('user') != null) {
     final user = userInfoBox.get('user') as User;
     di<UserModel>().user = user;
     isUserLoggedIn = true;
   }
 
+  // put images to state management
   if (imagesBox.isNotEmpty) {
     final images = imagesBox.values.toList().cast<ImageObject>();
     di<ImageModel>().images.addAll(images);
+  }
+
+  // put devices to state management
+  if (devicesBox.isNotEmpty) {
+    final devices = devicesBox.get('devices');
+    for (Device device in devices) {
+      di<DevicesModel>().addDevice(
+        id: device.deviceId!,
+        name: device.name!,
+        isConnected: device.isConnected!,
+        location: device.location!,
+        code: device.code!,
+      );
+    }
   }
 
   runApp(

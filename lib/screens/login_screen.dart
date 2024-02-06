@@ -77,8 +77,6 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
 
-      // User user = userFromJson(userData);
-
       setState(() {
         isLoading = false;
         status = const Text("");
