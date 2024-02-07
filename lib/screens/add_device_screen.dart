@@ -1,3 +1,4 @@
+import 'package:cropsync/json/crop.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/local_device_api.dart';
@@ -122,6 +123,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         isConnected: globalResult["isConnected"],
         location: deviceLocationController.text.trim(),
         code: deviceCodeController.text.trim(),
+        crop: Crop(),
       );
 
       if (!mounted) return;
@@ -176,7 +178,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         ),
         const Gap(10),
         PrimaryTextField(
-          hintText: 'Enter device name',
+          hintText: 'Enter Device Name',
           textController: deviceNameController,
           validator: (value) {
             if (value == null || value.isEmpty) {

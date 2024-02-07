@@ -23,11 +23,12 @@ class DevicesModel extends ChangeNotifier {
     required bool isConnected,
     required String location,
     required String code,
+    required Crop crop,
   }) {
     _devices.add(
       Device(
         deviceId: id,
-        crop: Crop(name: null),
+        crop: crop,
         name: name,
         isConnected: isConnected,
         location: location,
@@ -41,14 +42,15 @@ class DevicesModel extends ChangeNotifier {
   void editDevice({
     required String id,
     required String name,
-    required bool isConnected,
     required String location,
-    required String code,
   }) {
     final index = _devices.indexWhere((element) => element.deviceId == id);
+    final isConnected = _devices[index].isConnected;
+    final code = _devices[index].code;
+    final crop = _devices[index].crop;
     _devices[index] = Device(
       deviceId: id,
-      crop: Crop(name: null),
+      crop: crop,
       name: name,
       isConnected: isConnected,
       location: location,

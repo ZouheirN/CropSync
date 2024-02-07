@@ -65,9 +65,7 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
       di<DevicesModel>().editDevice(
         id: device.deviceId,
         name: deviceNameController.text.trim(),
-        isConnected: device.isConnected,
         location: deviceLocationController.text.trim(),
-        code: device.code,
       );
 
       if (!mounted) return;
@@ -132,7 +130,7 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
         ),
         const Gap(10),
         PrimaryTextField(
-          hintText: 'Enter device name',
+          hintText: 'Enter Device Name',
           textController: deviceNameController,
           validator: (value) {
             if (value == null || value.isEmpty) {

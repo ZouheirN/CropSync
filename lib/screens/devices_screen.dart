@@ -130,50 +130,27 @@ class _DevicesScreenState extends State<DevicesScreen> {
                               color: Colors.red,
                             ),
                       title: Text(devices[index].name!),
-                      subtitle: Text("ID: ${devices[index].deviceId}"),
                       children: [
-                        // ListTile(
-                        //   leading: const Icon(Icons.image_rounded),
-                        //   title: const Text('View Latest Camera Image'),
-                        //   onTap: () async {
-                        //     try {
-                        //       final image =
-                        //           await LocalDeviceApi.getLatestLocalCamera(
-                        //               deviceCode: devices[index].code!);
-                        //
-                        //       if (!mounted) return;
-                        //       showDialog(
-                        //         context: context,
-                        //         builder: (context) {
-                        //           return Container(
-                        //             constraints: BoxConstraints.expand(
-                        //               height:
-                        //                   MediaQuery.of(context).size.height,
-                        //             ),
-                        //             child: PhotoView(
-                        //               imageProvider: MemoryImage(
-                        //                 base64Decode(image),
-                        //               ),
-                        //             ),
-                        //           );
-                        //         },
-                        //       );
-                        //     } catch (e) {
-                        //       return;
-                        //     }
-                        //   },
-                        // ),
-                        // ListTile(
-                        //   leading: devices[index].isConnected == true
-                        //       ? const Icon(Icons.check_circle_rounded)
-                        //       : const Icon(Icons.cancel_rounded),
-                        //   title: Text(devices[index].isConnected == true
-                        //       ? 'Connected to Server'
-                        //       : 'Not Connected to Server'),
-                        // ),
                         ListTile(
-                          leading: const Icon(Icons.code_rounded),
-                          title: Text('Code: ${devices[index].code!}'),
+                          leading: Icon(
+                            Icons.grass_rounded,
+                            color: devices[index].crop?.name == null
+                                ? Colors.red
+                                : null,
+                          ),
+                          title: Text(
+                            devices[index].crop?.name ?? 'No Crop Assigned',
+                            style: TextStyle(
+                                color: devices[index].crop?.name == null
+                                    ? Colors.red
+                                    : null),
+                          ),
+                          trailing: devices[index].crop?.name == null
+                              ? IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.add_rounded),
+                                )
+                              : null,
                         ),
                         ListTile(
                           leading: const Icon(Icons.location_on_rounded),
@@ -232,27 +209,6 @@ class _DevicesScreenState extends State<DevicesScreen> {
                             ),
                           ],
                         )
-                        // const ListTile(
-                        //   leading: Icon(Icons.edit),
-                        //   title: Text('Edit Device'),
-                        // ),
-                        // const ListTile(
-                        //   leading: Icon(Icons.recommend_rounded),
-                        //   title: Text('Recommend Best Crop'),
-                        // ),
-                        // // ListTile(
-                        // //   leading: const Icon(Icons.location_on),
-                        // //   title: Text(devices[index].location),
-                        // // ),
-                        // // ListTile(
-                        // //   leading: const Icon(Icons.calendar_today),
-                        // //   title: Text(devices[index].dateAdded),
-                        // // ),
-                        // ListTile(
-                        //   leading: const Icon(Icons.delete),
-                        //   title: const Text('Delete'),
-                        //   onTap: () {},
-                        // ),
                       ],
                     ),
                   ),

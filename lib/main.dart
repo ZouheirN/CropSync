@@ -19,11 +19,10 @@ import 'package:cropsync/screens/otp_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +72,7 @@ Future<void> main() async {
         isConnected: device.isConnected!,
         location: device.location!,
         code: device.code!,
+        crop: device.crop ?? Crop(),
       );
     }
   }
@@ -106,38 +106,38 @@ class MyApp extends StatelessWidget {
       valueListenable: themeNotifier,
       builder: (context, currentMode, child) {
         return MaterialApp(
-          theme: ThemeData(
-            brightness: Brightness.light,
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xFF57CC99),
+            theme: ThemeData(
+              brightness: Brightness.light,
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF57CC99),
+              ),
             ),
-          ),
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            colorScheme: ColorScheme.fromSeed(
+            darkTheme: ThemeData(
               brightness: Brightness.dark,
-              seedColor: const Color(0xFF57CC99),
+              colorScheme: ColorScheme.fromSeed(
+                brightness: Brightness.dark,
+                seedColor: const Color(0xFF57CC99),
+              ),
             ),
-          ),
-          themeMode: currentMode,
-          debugShowCheckedModeBanner: false,
-          routes: {
-            '/': (context) => isUserLoggedIn
-                ? const MainScreen()
-                : const WelcomeScreen(),
-            '/main': (context) => const MainScreen(),
-            '/welcome': (context) => const WelcomeScreen(),
-            '/register': (context) => const RegisterScreen(),
-            '/login': (context) => const LoginScreen(),
-            '/add-device': (context) => const AddDeviceScreen(),
-            '/edit-device': (context) => const EditDeviceScreen(),
-            '/add-device-map': (context) => const AddDeviceMapScreen(),
-            '/account-information': (context) => const AccountInformationScreen(),
-            '/otp': (context) => const OTPScreen(),
-            '/change-password': (context) => const ChangePasswordScreen(),
-            '/device-camera-history': (context) => const DeviceCameraHistoryScreen(),
-          }
-        );
+            themeMode: currentMode,
+            debugShowCheckedModeBanner: false,
+            routes: {
+              '/': (context) =>
+                  isUserLoggedIn ? const MainScreen() : const WelcomeScreen(),
+              '/main': (context) => const MainScreen(),
+              '/welcome': (context) => const WelcomeScreen(),
+              '/register': (context) => const RegisterScreen(),
+              '/login': (context) => const LoginScreen(),
+              '/add-device': (context) => const AddDeviceScreen(),
+              '/edit-device': (context) => const EditDeviceScreen(),
+              '/add-device-map': (context) => const AddDeviceMapScreen(),
+              '/account-information': (context) =>
+                  const AccountInformationScreen(),
+              '/otp': (context) => const OTPScreen(),
+              '/change-password': (context) => const ChangePasswordScreen(),
+              '/device-camera-history': (context) =>
+                  const DeviceCameraHistoryScreen(),
+            });
       },
     );
   }
