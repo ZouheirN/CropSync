@@ -19,4 +19,5 @@ enum ReturnTypes {
   emailTaken,
   invalidToken,
   noDevices,
+  invalidPassword,
 }

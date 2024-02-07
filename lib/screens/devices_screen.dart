@@ -130,6 +130,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                               color: Colors.red,
                             ),
                       title: Text(devices[index].name!),
+                      subtitle: Text(devices[index].location!),
                       children: [
                         ListTile(
                           leading: Icon(
@@ -151,10 +152,6 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                   icon: const Icon(Icons.add_rounded),
                                 )
                               : null,
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.location_on_rounded),
-                          title: Text(devices[index].location!),
                         ),
                         ButtonBar(
                           alignment: MainAxisAlignment.spaceAround,

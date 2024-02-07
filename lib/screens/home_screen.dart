@@ -72,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   buildAlerts(weatherAlerts),
                   const Gap(20),
                   buildDeviceCamera(deviceCameraPages),
+                  const Gap(20),
                 ],
               ),
             ),
@@ -104,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const Gap(16),
         SizedBox(
-          height: 230,
+          height: 224,
           child: PageView.builder(
             controller: overviewPageController,
             itemCount: pages.length,

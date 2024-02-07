@@ -53,12 +53,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
         if (result == ReturnTypes.fail) {
           setState(() {
-            status = 'An error occurred. Please try again.';
+            status = 'An error occurred. Please try again';
             isLoading = false;
           });
         } else if (result == ReturnTypes.error) {
           setState(() {
-            status = 'An error occurred. Please try again.';
+            status = 'An error occurred. Please try again';
             isLoading = false;
           });
         } else if (result == ReturnTypes.invalidToken) {
@@ -77,7 +77,56 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
         if (!mounted) return;
         Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
-      } else {}
+      } else {
+        final oldPassword = oldPasswordController.text;
+        final newPassword = newPasswordController.text;
+
+        // Hash the passwords
+        final String hashedOldPassword = BCrypt.hashpw(oldPassword,
+            BCrypt.gensalt(secureRandom: Random(oldPassword.length)));
+
+        final String hashedNewPassword = BCrypt.hashpw(newPassword,
+            BCrypt.gensalt(secureRandom: Random(newPassword.length)));
+
+        final result = await UserApi.changePassword(
+          oldPassword: hashedOldPassword,
+          newPassword: hashedNewPassword,
+        );
+
+        if (result == ReturnTypes.fail) {
+          setState(() {
+            status = 'An error occurred. Please try again';
+            isLoading = false;
+          });
+          return;
+        } else if (result == ReturnTypes.error) {
+          setState(() {
+            status = 'An error occurred. Please try again';
+            isLoading = false;
+          });
+          return;
+        } else if (result == ReturnTypes.invalidPassword) {
+          setState(() {
+            status = 'Invalid Password';
+            isLoading = false;
+          });
+          return;
+        } else if (result == ReturnTypes.invalidToken) {
+          if (!mounted) return;
+          invalidTokenResponse(context);
+          return;
+        }
+
+        Logger().d(result);
+
+        UserToken.setToken(result.token);
+        di<UserModel>().user = result;
+
+        setState(() {
+          status = 'Password Changed Successfully!';
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -245,10 +294,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   child: Text(
                     status,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: status == "Password Changed Successfully!"
+                          ? Colors.green
+                          : Colors.red,
+                    ),
                   ),
                 ),
               ],

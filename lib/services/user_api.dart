@@ -182,7 +182,7 @@ class UserApi {
   static Future<dynamic> verifyResetPasswordOtp(
       {required String pin, required String email}) async {
     try {
-     final response =  await dio.post(
+      final response = await dio.post(
         '$apiUrl/ResetPassword',
         data: {
           'pin': pin,
@@ -232,6 +232,42 @@ class UserApi {
       }
 
       Logger().e(e.response?.data);
+
+      return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> changePassword(
+      {required String oldPassword, required String newPassword}) async {
+    final String token = await UserToken.getToken();
+    if (token == '') {
+      return ReturnTypes.invalidToken;
+    }
+
+    try {
+      Response response;
+      response = await dio.post(
+        '$apiUrl/user/ChangePassword',
+        data: {
+          "oldPassword": oldPassword,
+          "newPassword": newPassword,
+        },
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      return userFromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
+      if (e.response!.data['error'] == 'Invalid Password!') {
+        return ReturnTypes.invalidPassword;
+      } else if (e.response!.data['error'] == 'Expired token') {
+        return ReturnTypes.invalidToken;
+      }
 
       return ReturnTypes.fail;
     }
