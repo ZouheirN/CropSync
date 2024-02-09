@@ -1,5 +1,6 @@
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/services/user_token.dart';
+import 'package:cropsync/utils/other_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
@@ -34,6 +35,7 @@ class UserModel extends ChangeNotifier {
     );
     userInfoBox.delete('user');
     devicesBox.delete('devices');
+    OtherVars().autoRefresh = false;
     UserToken.deleteToken();
     notifyListeners();
   }

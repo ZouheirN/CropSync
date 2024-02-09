@@ -18,6 +18,7 @@ import 'package:cropsync/screens/main_screen.dart';
 import 'package:cropsync/screens/otp_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/screens/welcome_screen.dart';
+import 'package:cropsync/utils/other_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
@@ -44,15 +45,18 @@ Future<void> main() async {
   var userPrefsBox = await Hive.openBox('userPrefs');
   var imagesBox = await Hive.openBox('images');
   var devicesBox = await Hive.openBox('devices');
+  await Hive.openBox('otherVars');
 
   registerManagers();
 
   bool isUserLoggedIn = false;
+  OtherVars().autoRefresh = false;
 
   // put user to state management
   if (userInfoBox.get('user') != null) {
     final user = userInfoBox.get('user') as User;
     di<UserModel>().user = user;
+    OtherVars().autoRefresh = true;
     isUserLoggedIn = true;
   }
 
@@ -149,4 +153,5 @@ void registerManagers() {
   di.registerSingleton<WeatherModel>(WeatherModel());
   di.registerSingleton<DeviceCameraModel>(DeviceCameraModel());
   di.registerSingleton<DevicesModel>(DevicesModel());
+  di.registerSingleton<OtherVars>(OtherVars());
 }

@@ -9,6 +9,7 @@ import 'package:cropsync/screens/profile_screen.dart';
 import 'package:cropsync/screens/quick_disease_detection_screen.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/weather_api.dart';
+import 'package:cropsync/utils/other_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
 import 'package:logger/logger.dart';
@@ -18,7 +19,7 @@ import 'crops_screen.dart';
 import 'devices_screen.dart';
 import 'home_screen.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends WatchingStatefulWidget {
   const MainScreen({super.key});
 
   @override
@@ -27,20 +28,14 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int index = 0;
-  bool pauseData = false;
-
-  bool isWeatherTimerRunning = false;
-  bool isDeviceCameraTimerRunning = false;
-  bool isDevicesTimerRunning = false;
 
   void weather() async {
     final weatherData = await WeatherApi.getWeatherData();
     di<WeatherModel>().weather = weatherData;
     Logger().d('Fetched Weather');
-    isWeatherTimerRunning = true;
 
     Timer.periodic(const Duration(minutes: 15), (timer) async {
-      if (pauseData == true) return;
+      if (!OtherVars().autoRefresh) return;
 
       final weatherData = await WeatherApi.getWeatherData();
       di<WeatherModel>().weather = weatherData;
@@ -52,10 +47,9 @@ class _MainScreenState extends State<MainScreen> {
     final deviceCameraData = await DeviceApi.getDeviceCamera();
     di<DeviceCameraModel>().deviceCamera = deviceCameraData;
     Logger().d('Fetched Device Camera');
-    isDeviceCameraTimerRunning = true;
 
     Timer.periodic(const Duration(minutes: 20), (timer) async {
-      if (pauseData == true) return;
+      if (!OtherVars().autoRefresh) return;
 
       final deviceCameraData = await DeviceApi.getDeviceCamera();
       di<DeviceCameraModel>().deviceCamera = deviceCameraData;
@@ -68,11 +62,10 @@ class _MainScreenState extends State<MainScreen> {
     if (devices.runtimeType == List<Device>) {
       di<DevicesModel>().devices = devices;
       Logger().d('Fetched Devices');
-      isDevicesTimerRunning = true;
     }
 
     Timer.periodic(const Duration(seconds: 20), (timer) async {
-      if (pauseData == true) return;
+      if (!OtherVars().autoRefresh) return;
 
       final devices = await DeviceApi.getDevices();
       if (devices.runtimeType == List<Device>) {
@@ -85,9 +78,11 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     // If timers are not running, initialize them
-    if (!isWeatherTimerRunning) weather();
-    if (!isDeviceCameraTimerRunning) deviceCamera();
-    if (!isDevicesTimerRunning) devices();
+    if (OtherVars().autoRefresh == true) {
+      weather();
+      deviceCamera();
+      devices();
+    }
 
     super.initState();
   }
@@ -102,16 +97,16 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const showBadge = false;
+    final showBadge = watchPropertyValue((OtherVars o) => o.showBadge);
 
     return FGBGNotifier(
       onEvent: (event) {
         if (event == FGBGType.background) {
           Logger().d('Paused Fetching');
-          pauseData = true;
+          OtherVars().autoRefresh = false;
         } else {
           Logger().d('Resumed Fetching');
-          pauseData = false;
+          OtherVars().autoRefresh = true;
         }
       },
       child: Scaffold(

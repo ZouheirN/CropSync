@@ -6,6 +6,7 @@ import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/services/user_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
+import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
@@ -31,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
   Text status = const Text("");
 
-  Future<void> _login() async {
+  Future<void> login() async {
     FocusManager.instance.primaryFocus?.unfocus();
 
     if (formKey.currentState!.validate()) {
@@ -95,6 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         di<UserModel>().user = user;
         if (!context.mounted) return;
+        OtherVars().autoRefresh = true;
         Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       }
     }
@@ -250,7 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
         text: 'Login',
         backgroundColor: Theme.of(context).primaryColor,
         textColor: Colors.white,
-        onPressed: _login,
+        onPressed: login,
         isLoading: isLoading,
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/user_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
+import 'package:cropsync/utils/other_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:logger/logger.dart';
@@ -78,6 +79,7 @@ class _OTPScreenState extends State<OTPScreen> {
 
       di<UserModel>().user = otpResult;
       if (!context.mounted) return;
+      OtherVars().autoRefresh = true;
       Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
     }
   }
