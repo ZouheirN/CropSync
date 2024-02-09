@@ -2,7 +2,10 @@
 
 <p id="description" align="center">Monitor Your Crops and Get Real-Time Updates!</p>
 
-<p align="center"><img src="https://img.shields.io/badge/Backend%20Repository-Click%20Here-darkgreen?style=for-the-badge&amp;logo=node.js&amp;link=https%3A%2F%2Fgithub.com%2FIbrahim-Mneimneh%2FCropSync" alt="shields"></p>
+
+[![Backend Repository](https://img.shields.io/badge/Backend%20Repository-Click%20Here-blue?style=for-the-badge&logo=node.js)](https://github.com/Ibrahim-Mneimneh/CropSync)
+
+
 
 <h2>🛠️ Installation Steps:</h2>
 
