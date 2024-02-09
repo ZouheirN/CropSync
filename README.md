@@ -5,7 +5,16 @@
 
 [![Backend Repository](https://img.shields.io/badge/Backend%20Repository-Click%20Here-blue?style=for-the-badge&logo=node.js)](https://github.com/Ibrahim-Mneimneh/CropSync)
 
+<h2>🧐 Features</h2>
 
+Here're some of the project's best features:
+
+*   An overview that displays relevant information about your device
+*   Alerts for your devices
+*   Check the camera of the device and check its history
+*   Assign crops to devices
+*   Add devices and configure them
+*   Quickly check for a disease on a plant's leaf by taking a photo of it
 
 <h2>🛠️ Installation Steps:</h2>
 
