@@ -1,35 +1,32 @@
-<p align="center"><img src="https://socialify.git.ci/ZouheirN/CropSync/image?description=1&amp;font=Inter&amp;language=1&amp;logo=https%3A%2F%2Fi.ibb.co%2FpXH7Jw0%2Fwejak.png&amp;name=1&amp;pattern=Solid&amp;stargazers=1&amp;theme=Auto" alt="project-image"></p>
+<div align="center">
+  <img src="https://socialify.git.ci/ZouheirN/CropSync/image?description=1&amp;font=Inter&amp;language=1&amp;logo=https%3A%2F%2Fi.ibb.co%2FpXH7Jw0%2Fwejak.png&amp;name=1&amp;pattern=Solid&amp;stargazers=1&amp;theme=Auto" alt="CropSync Project Image">
+  <p id="description">Monitor Your Crops and Receive Real-Time Updates!</p>
+</div>
 
-<p id="description" align="center">Monitor Your Crops and Get Real-Time Updates!</p>
+<div align="center">
+  <a href="https://github.com/Ibrahim-Mneimneh/CropSync">
+    <img src="https://img.shields.io/badge/Backend%20Repository-Click%20Here-blue?style=for-the-badge&logo=node.js" alt="Backend Repository">
+  </a>
+</div>
 
+<h2 align="center">🧐 Key Features</h2>
 
-[![Backend Repository](https://img.shields.io/badge/Backend%20Repository-Click%20Here-blue?style=for-the-badge&logo=node.js)](https://github.com/Ibrahim-Mneimneh/CropSync)
+<ul>
+  <li>Comprehensive overview providing relevant device information</li>
+  <li>Receive alerts for your devices</li>
+  <li>Access device camera and history</li>
+  <li>Effortlessly assign crops to devices</li>
+  <li>Simple addition and configuration of devices</li>
+  <li>Quickly diagnose plant diseases via photo analysis</li>
+</ul>
 
-<h2>🧐 Features</h2>
+<h2 align="center">🛠️ Installation Steps</h2>
 
-Here're some of the project's best features:
-
-*   An overview that displays relevant information about your device
-*   Alerts for your devices
-*   Check the camera of the device and check its history
-*   Assign crops to devices
-*   Add devices and configure them
-*   Quickly check for a disease on a plant's leaf by taking a photo of it
-
-<h2>🛠️ Installation Steps:</h2>
-
-<p>1. If you haven't already, make sure to have the backend code running. You can find the repository here</p>
-
-```
-https://github.com/Ibrahim-Mneimneh/CropSync
-```
-
-<p>2. Clone this repository</p>
-
-<p>3. Create a .env file in the root folder and add your API URL like this</p>
-
-```
-API_URL=(your api url, make sure it ends with /api)
-```
-
-<p>4. Build and run the application</p>
+<ol>
+  <li>Ensure the backend code is running. Check the repository <a href="https://github.com/Ibrahim-Mneimneh/CropSync">here</a>.</li>
+  <li>Clone this repository.</li>
+  <li>Create a <code>.env</code> file in the root folder. Add your API URL in the format:
+    <pre><code>API_URL=(your API URL, ensuring it ends with /api)</code></pre>
+  </li>
+  <li>Build and launch the application.</li>
+</ol>
