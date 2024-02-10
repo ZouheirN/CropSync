@@ -1,16 +1,32 @@
-# cropsync
+<div align="center">
+  <img src="https://socialify.git.ci/ZouheirN/CropSync/image?description=1&amp;font=Inter&amp;language=1&amp;logo=https%3A%2F%2Fi.ibb.co%2FpXH7Jw0%2Fwejak.png&amp;name=1&amp;pattern=Solid&amp;stargazers=1&amp;theme=Auto" alt="CropSync Project Image">
+  <p id="description">Monitor Your Crops and Receive Real-Time Updates!</p>
+</div>
 
-A new Flutter project.
+<div align="center">
+  <a href="https://github.com/Ibrahim-Mneimneh/CropSync">
+    <img src="https://img.shields.io/badge/Backend%20Repository-Click%20Here-blue?style=for-the-badge&logo=node.js" alt="Backend Repository">
+  </a>
+</div>
 
-## Getting Started
+<h2 align="center">🧐 Key Features</h2>
 
-This project is a starting point for a Flutter application.
+<ul>
+  <li>Comprehensive overview providing relevant device information</li>
+  <li>Receive alerts for your devices</li>
+  <li>Access device camera and history</li>
+  <li>Effortlessly assign crops to devices</li>
+  <li>Simple addition and configuration of devices</li>
+  <li>Quickly diagnose plant diseases via photo analysis</li>
+</ul>
 
-A few resources to get you started if this is your first Flutter project:
+<h2 align="center">🛠️ Installation Steps</h2>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<ol>
+  <li>Ensure the backend code is running. Check the repository <a href="https://github.com/Ibrahim-Mneimneh/CropSync">here</a>.</li>
+  <li>Clone this repository.</li>
+  <li>Create a <code>.env</code> file in the root folder. Add your API URL in the format:
+    <pre><code>API_URL=(your API URL, ensuring it ends with /api)</code></pre>
+  </li>
+  <li>Build and launch the application.</li>
+</ol>
