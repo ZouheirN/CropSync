@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cropsync/json/device.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/user_model.dart';
+import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
+import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
 class CropsScreen extends WatchingStatefulWidget {
@@ -17,6 +20,14 @@ class CropsScreen extends WatchingStatefulWidget {
 }
 
 class _CropsScreenState extends State<CropsScreen> {
+  Future refresh() async {
+    final devices = await DeviceApi.getDevices();
+    if (devices.runtimeType == List<Device>) {
+      di<DevicesModel>().devices = devices;
+      Logger().d('Fetched Devices by Refresh');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
@@ -41,19 +52,22 @@ class _CropsScreenState extends State<CropsScreen> {
         body: Padding(
           padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
           child: AnimationLimiter(
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: SlideAnimation(
-                    child: FadeInAnimation(
-                      child: _buildListTile(devices, cropNames, index),
+            child: RefreshIndicator(
+              onRefresh: refresh,
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 375),
+                    child: SlideAnimation(
+                      child: FadeInAnimation(
+                        child: _buildListTile(devices, cropNames, index),
+                      ),
                     ),
-                  ),
-                );
-              },
-              itemCount: cropNames.length,
+                  );
+                },
+                itemCount: cropNames.length,
+              ),
             ),
           ),
         ),

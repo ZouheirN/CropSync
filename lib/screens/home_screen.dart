@@ -215,18 +215,26 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const Gap(16),
-        SizedBox(
-          width: double.infinity,
-          height: 280,
-          child: PageView.builder(
-            controller: deviceCameraPageController,
-            itemCount: pages.length,
-            itemBuilder: (_, index) {
-              return pages[index % pages.length];
-            },
+        if (pages.isEmpty)
+          const SizedBox(
+            height: 280,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        else
+          SizedBox(
+            width: double.infinity,
+            height: 280,
+            child: PageView.builder(
+              controller: deviceCameraPageController,
+              itemCount: pages.length,
+              itemBuilder: (_, index) {
+                return pages[index % pages.length];
+              },
+            ),
           ),
-        ),
-        if (pages.isNotEmpty)
+        if (pages.isNotEmpty && pages.length > 1)
           Column(
             children: [
               const Gap(16),

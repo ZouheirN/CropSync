@@ -64,7 +64,7 @@ class _MainScreenState extends State<MainScreen> {
       Logger().d('Fetched Devices');
     }
 
-    Timer.periodic(const Duration(seconds: 20), (timer) async {
+    Timer.periodic(const Duration(minutes: 1), (timer) async {
       if (!OtherVars().autoRefresh) return;
 
       final devices = await DeviceApi.getDevices();

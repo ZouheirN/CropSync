@@ -94,6 +94,14 @@ class _DevicesScreenState extends State<DevicesScreen> {
     }
   }
 
+  Future refresh() async {
+    final devices = await DeviceApi.getDevices();
+    if (devices.runtimeType == List<Device>) {
+      di<DevicesModel>().devices = devices;
+      Logger().d('Fetched Devices by Refresh');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
@@ -112,107 +120,110 @@ class _DevicesScreenState extends State<DevicesScreen> {
       body: Padding(
         padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
         child: AnimationLimiter(
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              return AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 375),
-                child: SlideAnimation(
-                  child: FadeInAnimation(
-                    child: ExpansionTileCard(
-                      leading: devices[index].isConnected == true
-                          ? const Icon(
-                              Icons.wifi_rounded,
-                              color: Colors.green,
-                            )
-                          : const Icon(
-                              Icons.wifi_off_rounded,
-                              color: Colors.red,
+          child: RefreshIndicator(
+            onRefresh: refresh,
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: const Duration(milliseconds: 375),
+                  child: SlideAnimation(
+                    child: FadeInAnimation(
+                      child: ExpansionTileCard(
+                        leading: devices[index].isConnected == true
+                            ? const Icon(
+                                Icons.wifi_rounded,
+                                color: Colors.green,
+                              )
+                            : const Icon(
+                                Icons.wifi_off_rounded,
+                                color: Colors.red,
+                              ),
+                        title: Text(devices[index].name!),
+                        subtitle: Text(devices[index].location!),
+                        children: [
+                          ListTile(
+                            leading: Icon(
+                              Icons.grass_rounded,
+                              color: devices[index].crop?.name == null
+                                  ? Colors.red
+                                  : null,
                             ),
-                      title: Text(devices[index].name!),
-                      subtitle: Text(devices[index].location!),
-                      children: [
-                        ListTile(
-                          leading: Icon(
-                            Icons.grass_rounded,
-                            color: devices[index].crop?.name == null
-                                ? Colors.red
+                            title: Text(
+                              devices[index].crop?.name ?? 'No Crop Assigned',
+                              style: TextStyle(
+                                  color: devices[index].crop?.name == null
+                                      ? Colors.red
+                                      : null),
+                            ),
+                            trailing: devices[index].crop?.name == null
+                                ? IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.add_rounded),
+                                  )
                                 : null,
                           ),
-                          title: Text(
-                            devices[index].crop?.name ?? 'No Crop Assigned',
-                            style: TextStyle(
-                                color: devices[index].crop?.name == null
-                                    ? Colors.red
-                                    : null),
-                          ),
-                          trailing: devices[index].crop?.name == null
-                              ? IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.add_rounded),
-                                )
-                              : null,
-                        ),
-                        ButtonBar(
-                          alignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                editDevice(context, devices[index]);
-                              },
-                              child: const Column(
-                                children: <Widget>[
-                                  Icon(Icons.edit_rounded),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 2.0),
-                                  ),
-                                  Text('Edit'),
-                                ],
+                          ButtonBar(
+                            alignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  editDevice(context, devices[index]);
+                                },
+                                child: const Column(
+                                  children: <Widget>[
+                                    Icon(Icons.edit_rounded),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 2.0),
+                                    ),
+                                    Text('Edit'),
+                                  ],
+                                ),
                               ),
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: const Column(
-                                children: <Widget>[
-                                  Icon(Icons.recommend_rounded),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 2.0),
-                                  ),
-                                  Text('Recommend Best Crop'),
-                                ],
+                              TextButton(
+                                onPressed: () {},
+                                child: const Column(
+                                  children: <Widget>[
+                                    Icon(Icons.recommend_rounded),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 2.0),
+                                    ),
+                                    Text('Recommend Best Crop'),
+                                  ],
+                                ),
                               ),
-                            ),
-                            TextButton(
-                              onPressed: () =>
-                                  deleteDevice(devices[index], context),
-                              child: const Column(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.delete_rounded,
-                                    color: Colors.red,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 2.0),
-                                  ),
-                                  Text(
-                                    'Delete',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ],
+                              TextButton(
+                                onPressed: () =>
+                                    deleteDevice(devices[index], context),
+                                child: const Column(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.delete_rounded,
+                                      color: Colors.red,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 2.0),
+                                    ),
+                                    Text(
+                                      'Delete',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        )
-                      ],
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-            itemCount: devices.length,
+                );
+              },
+              itemCount: devices.length,
+            ),
           ),
         ),
       ),
