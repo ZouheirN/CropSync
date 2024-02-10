@@ -37,18 +37,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final deviceCameraPages =
         deviceCamera.map((e) => deviceCameraCard(e, context)).toList();
 
-    final weatherAlerts = weather
-        .map((e) {
-          if (e.alerts == null || e.alerts!.isEmpty) return null;
-          return {
-            'device': e.deviceName,
-            'location': e.location,
-            'alert': e.alerts,
-          };
-        })
-        .toList()
-        .where((element) => element != null)
-        .toList();
+    // final weatherAlerts = weather
+    //     .map((e) {
+    //       if (e.alerts == null || e.alerts!.isEmpty) return null;
+    //       return {
+    //         'device': e.deviceName,
+    //         'location': e.location,
+    //         'alert': e.alerts,
+    //       };
+    //     })
+    //     .toList()
+    //     .where((element) => element != null)
+    //     .toList();
 
     return Visibility(
       visible: devices.isNotEmpty,
@@ -69,8 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   buildOverview(overviewPages),
                   const Gap(20),
-                  buildAlerts(weatherAlerts),
-                  const Gap(20),
+                  // buildAlerts(weatherAlerts),
+                  // const Gap(20),
                   buildDeviceCamera(deviceCameraPages),
                   const Gap(20),
                 ],
@@ -104,17 +104,25 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const Gap(16),
-        SizedBox(
-          height: 224,
-          child: PageView.builder(
-            controller: overviewPageController,
-            itemCount: pages.length,
-            itemBuilder: (_, index) {
-              return pages[index % pages.length];
-            },
+        if (pages.isEmpty)
+          const SizedBox(
+            height: 264,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        else
+          SizedBox(
+            height: 264,
+            child: PageView.builder(
+              controller: overviewPageController,
+              itemCount: pages.length,
+              itemBuilder: (_, index) {
+                return pages[index % pages.length];
+              },
+            ),
           ),
-        ),
-        if (pages.isNotEmpty)
+        if (pages.isNotEmpty && pages.length > 1)
           Column(
             children: [
               const Gap(16),

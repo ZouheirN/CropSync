@@ -16,7 +16,7 @@ Widget overviewCard(Weather weather) {
             children: [
               const Icon(Icons.phone_android_rounded),
               const Gap(8),
-              Text(weather.deviceName!),
+              Text(weather.name!),
             ],
           ),
           const Gap(16),
@@ -30,27 +30,43 @@ Widget overviewCard(Weather weather) {
           const Gap(16),
           Row(
             children: [
-              const Icon(Icons.wb_sunny),
+              const Icon(Icons.thermostat_rounded),
               const Gap(8),
-              Text("Temperature: ${weather.temperature!} °C"),
+              Text("Temperature: ${weather.tempC} °C"),
             ],
           ),
           const Gap(16),
-           Row(
+          Row(
             children: [
-              const Icon(Icons.opacity),
+              const Icon(Icons.cloud_rounded),
               const Gap(8),
-              Text("Humidity: ${weather.humidity!}"),
+              Text("Feels Like ${weather.feelslikeC} °C"),
             ],
           ),
           const Gap(16),
-           Row(
+          Row(
             children: [
-              const Icon(Icons.waves),
+              const Icon(Icons.wb_cloudy_rounded),
               const Gap(8),
-              Text("Moisture: ${weather.moisture!}"),
+              Text("Condition ${weather.condition?.text}"),
             ],
           ),
+          const Gap(16),
+          Row(
+            children: [
+              const Icon(Icons.opacity_rounded),
+              const Gap(8),
+              Text("Humidity: ${weather.humidity}"),
+            ],
+          ),
+          // const Gap(16),
+          //  Row(
+          //   children: [
+          //     const Icon(Icons.waves),
+          //     const Gap(8),
+          //     Text("Moisture: ${weather.moisture!}"),
+          //   ],
+          // ),
         ],
       ),
     ),

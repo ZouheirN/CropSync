@@ -100,11 +100,12 @@ class _MainScreenState extends State<MainScreen> {
     final showBadge = watchPropertyValue((OtherVars o) => o.showBadge);
 
     return FGBGNotifier(
-      onEvent: (event) {
+      onEvent: (event) async {
         if (event == FGBGType.background) {
           Logger().d('Paused Fetching');
           OtherVars().autoRefresh = false;
         } else {
+          await Future.delayed(const Duration(seconds: 2));
           Logger().d('Resumed Fetching');
           OtherVars().autoRefresh = true;
         }
