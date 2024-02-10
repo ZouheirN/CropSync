@@ -12,6 +12,7 @@
 <h2 align="center">🧐 Key Features</h2>
 
 <ul>
+  <li>Light/Dark mode support</li>
   <li>Comprehensive overview providing relevant device information</li>
   <li>Receive alerts for your devices</li>
   <li>Access device camera and history</li>
@@ -24,7 +25,8 @@
 
 <ol>
   <li>Ensure the backend code is running. Check the repository <a href="https://github.com/Ibrahim-Mneimneh/CropSync">here</a>.</li>
-  <li>Clone this repository.</li>
+  <li>Clone this repository.
+    <pre><code>git clone https://github.com/ZouheirN/CropSync.git</code></pre>
   <li>Create a <code>.env</code> file in the root folder. Add your API URL in the format:
     <pre><code>API_URL=(your API URL, ensuring it ends with /api)</code></pre>
   </li>
