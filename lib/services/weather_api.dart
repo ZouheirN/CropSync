@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cropsync/json/weather.dart';
+import 'package:cropsync/json/weather_forecast.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:dio/dio.dart';
@@ -49,7 +50,7 @@ class WeatherApi {
         ),
       );
 
-      return response.data;
+      return weatherForecastFromJson(response.data);
     } on DioException catch (e) {
       Logger().e(e.response?.data);
 

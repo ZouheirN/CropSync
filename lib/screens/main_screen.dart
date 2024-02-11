@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:badges/badges.dart' as badges;
 import 'package:cropsync/json/device.dart';
+import 'package:cropsync/json/weather.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/weather_model.dart';
@@ -31,15 +32,19 @@ class _MainScreenState extends State<MainScreen> {
 
   void weather() async {
     final weatherData = await WeatherApi.getWeatherData();
-    di<WeatherModel>().weather = weatherData;
-    Logger().d('Fetched Weather');
+    if (weatherData.runtimeType == List<Weather>) {
+      di<WeatherModel>().weather = weatherData;
+      Logger().d('Fetched Weather');
+    }
 
     Timer.periodic(const Duration(minutes: 15), (timer) async {
       if (!OtherVars().autoRefresh) return;
 
       final weatherData = await WeatherApi.getWeatherData();
-      di<WeatherModel>().weather = weatherData;
-      Logger().d('Fetched Weather');
+      if (weatherData.runtimeType == List<Weather>) {
+        di<WeatherModel>().weather = weatherData;
+        Logger().d('Fetched Weather');
+      }
     });
   }
 

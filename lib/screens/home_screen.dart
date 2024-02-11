@@ -11,7 +11,7 @@ import 'package:gap/gap.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:watch_it/watch_it.dart';
 
-import '../widgets/overview_card.dart';
+import '../widgets/cards.dart';
 
 class HomeScreen extends WatchingStatefulWidget {
   const HomeScreen({super.key});
@@ -33,10 +33,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final deviceCamera =
         watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera.toList());
 
-    final overviewPages = weather.map((e) => overviewCard(
+    final overviewPages = weather.map((e) => weatherCard(
       context: context,
+      isTappable: true,
       weather: e,
     )).toList();
+
     final deviceCameraPages =
         deviceCamera.map((e) => deviceCameraCard(e, context)).toList();
 
