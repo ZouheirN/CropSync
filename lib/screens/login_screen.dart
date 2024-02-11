@@ -1,11 +1,12 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:bcrypt/bcrypt.dart';
-import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/services/user_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
+import 'package:cropsync/utils/curve.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
@@ -104,75 +105,146 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                AutofillGroup(
-                  child: Column(
-                    children: [
-                      buildEmailTextInputField(),
-                      const Gap(20),
-                      buildPasswordTextInputField(),
-                    ],
-                  ),
-                ),
-                const Gap(10),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Dialogs.showForgotPasswordDialog(context);
-                    },
-                    child: const Text(
-                      'Forgot Password?',
-                      style: TextStyle(color: Colors.green),
-                    ),
-                  ),
-                ),
-                const Gap(10),
-                if (status.data != "")
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: status,
-                  ),
-                buildLoginButton(),
-                const Gap(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Don\'t have an account? '),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterScreen(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'Register',
-                        style: TextStyle(
-                            color: Colors.green, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+    return Material(
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        fit: StackFit.expand,
+        children: [
+          ClipPath(
+            clipper: ImageClipper(),
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+              child: Image.asset(
+                'assets/images/leaves.jpg',
+                alignment: Alignment.topCenter,
+                fit: BoxFit.fitWidth,
+              ),
             ),
           ),
-        ),
+          Positioned(
+            top: 40.0,
+            left: 20.0,
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 20.0,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.arrow_back_rounded,
+                  color: Colors.black,
+                  size: 24.0,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            height: MediaQuery.of(context).size.height * 0.67,
+            width: MediaQuery.of(context).size.width,
+            child: Scaffold(
+              body: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.67,
+                      maxWidth: MediaQuery.of(context).size.width,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(bottom: 20.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Welcome Back',
+                                    style: TextStyle(
+                                      fontSize: 32.0,
+                                      fontWeight: FontWeight.w600,
+                                    )
+                                  ),
+                                  Text(
+                                    'Login to your account',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 15.0,
+                                    )
+                                  )
+                                ],
+                              ),
+                            ),
+                            AutofillGroup(
+                              child: Column(
+                                children: [
+                                  buildEmailTextInputField(),
+                                  const Gap(20),
+                                  buildPasswordTextInputField(),
+                                ],
+                              ),
+                            ),
+                            const Gap(10),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                onPressed: () {
+                                  Dialogs.showForgotPasswordDialog(context);
+                                },
+                                child: const Text(
+                                  'Forgot Password?',
+                                  style: TextStyle(color: Colors.green),
+                                ),
+                              ),
+                            ),
+                            const Gap(10),
+                            if (status.data != "")
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: status,
+                              ),
+                            buildLoginButton(),
+                            const Gap(20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Don\'t have an account? '),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RegisterScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Register',
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

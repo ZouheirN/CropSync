@@ -105,6 +105,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/background.jpg
+    - assets/images/leaves.jpg
     - assets/lottie/onboarding1.json
     - assets/lottie/onboarding2.json
     - assets/weather.json

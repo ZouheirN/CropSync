@@ -111,56 +111,104 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                buildFullNameTextInputField(),
-                const Gap(20),
-                buildEmailTextInputField(),
-                const Gap(20),
-                buildPasswordTextInputField(),
-                const Gap(20),
-                buildConfirmPasswordTextInputField(),
-                const Gap(20),
-                if (status.data != "")
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: status,
-                  ),
-                buildRegisterButton(),
-                const Gap(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Already have an account? '),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushReplacementNamed('/login');
-                      },
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                            color: Colors.green, fontWeight: FontWeight.bold),
-                      ),
+    return Material(
+      child: Stack(
+        children: [
+          Scaffold(
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
                     ),
-                  ],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Register',
+                              style: TextStyle(
+                                fontSize: 32.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const Gap(10),
+                            const Text(
+                              'Create a new account',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15.0,
+                              ),
+                            ),
+                            const Gap(40),
+                            buildFullNameTextInputField(),
+                            const Gap(20),
+                            buildEmailTextInputField(),
+                            const Gap(20),
+                            buildPasswordTextInputField(),
+                            const Gap(20),
+                            buildConfirmPasswordTextInputField(),
+                            const Gap(20),
+                            if (status.data != "")
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: status,
+                              ),
+                            buildRegisterButton(),
+                            const Gap(20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Already have an account? '),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pushReplacementNamed('/login');
+                                  },
+                                  child: const Text(
+                                    'Login',
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+          Positioned(
+            top: 40.0,
+            left: 20.0,
+            child: CircleAvatar(
+              backgroundColor: Colors.grey.shade300,
+              radius: 20.0,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.arrow_back_rounded,
+                  color: Colors.black,
+                  size: 24.0,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
