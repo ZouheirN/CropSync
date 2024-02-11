@@ -15,6 +15,7 @@ import 'package:cropsync/screens/device_camera_history_screen.dart';
 import 'package:cropsync/screens/edit_device_screen.dart';
 import 'package:cropsync/screens/login_screen.dart';
 import 'package:cropsync/screens/main_screen.dart';
+import 'package:cropsync/screens/onboarding_screen.dart';
 import 'package:cropsync/screens/otp_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/screens/weather_forecast_screen.dart';
@@ -86,6 +87,7 @@ Future<void> main() async {
     MyApp(
       isUserLoggedIn: isUserLoggedIn,
       darkModeEnabled: userPrefsBox.get('darkModeEnabled') ?? false,
+      showOnboarding: userPrefsBox.get('showOnboarding') ?? true,
     ),
   );
 }
@@ -93,6 +95,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   final bool isUserLoggedIn;
   final bool darkModeEnabled;
+  final bool showOnboarding;
 
   static late ValueNotifier<ThemeMode> themeNotifier;
 
@@ -100,6 +103,7 @@ class MyApp extends StatelessWidget {
     super.key,
     required this.isUserLoggedIn,
     required this.darkModeEnabled,
+    required this.showOnboarding,
   });
 
   @override
@@ -127,8 +131,11 @@ class MyApp extends StatelessWidget {
             themeMode: currentMode,
             debugShowCheckedModeBanner: false,
             routes: {
-              '/': (context) =>
-                  isUserLoggedIn ? const MainScreen() : const WelcomeScreen(),
+              '/': (context) => showOnboarding
+                  ? const OnboardingScreen()
+                  : isUserLoggedIn
+                      ? const MainScreen()
+                      : const WelcomeScreen(),
               '/main': (context) => const MainScreen(),
               '/welcome': (context) => const WelcomeScreen(),
               '/register': (context) => const RegisterScreen(),
