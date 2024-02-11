@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/json/weather.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 
 Widget overviewCard({required Weather weather, required BuildContext context}) {
@@ -16,64 +18,122 @@ Widget overviewCard({required Weather weather, required BuildContext context}) {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.phone_android_rounded),
+                const FaIcon(FontAwesomeIcons.raspberryPi),
                 const Gap(8),
-                Text(weather.name!),
+                Text(
+                  weather.name!,
+                  style: Theme.of(context).textTheme.titleMedium!,
+                ),
               ],
             ),
-            const Gap(16),
+            const Gap(2),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.location_on_rounded),
+                const FaIcon(FontAwesomeIcons.locationDot),
                 const Gap(8),
-                Text(weather.location!),
+                Text(
+                  weather.location!,
+                  style: Theme.of(context).textTheme.titleMedium!,
+                ),
               ],
             ),
-            const Gap(16),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Icon(Icons.thermostat_rounded),
-                const Gap(8),
-                Text("Temperature: ${weather.tempC} °C"),
+                Column(
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: 'https:${weather.condition!.icon!}',
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => Center(
+                        child: CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                        ),
+                      ),
+                      imageBuilder: (context, imageProvider) {
+                        return Container(
+                          width: 100.0,
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    Text(weather.condition!.text!,
+                        style: Theme.of(context).textTheme.titleLarge),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${weather.tempC?.toStringAsFixed(0)}°',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 70,
+                          ),
+                    ),
+                    Text(
+                      'Feels like ${weather.feelslikeC?.toStringAsFixed(0)}°',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontSize: 18,
+                          ),
+                    ),
+                  ],
+                ),
               ],
             ),
-            const Gap(16),
+            const Divider(),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Icon(Icons.cloud_rounded),
-                const Gap(8),
-                Text("Feels Like ${weather.feelslikeC} °C"),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const FaIcon(
+                      FontAwesomeIcons.wind,
+                      // size: 20,
+                    ),
+                    const Gap(2),
+                    Text('${weather.windKph} km/h'),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const FaIcon(
+                      FontAwesomeIcons.droplet,
+                      // size: 20,
+                    ),
+                    const Gap(2),
+                    Text('${weather.humidity}%'),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const FaIcon(
+                      FontAwesomeIcons.cloudShowersHeavy,
+                      // size: 20,
+                    ),
+                    const Gap(2),
+                    Text('${weather.cloud}'),
+                  ],
+                ),
               ],
             ),
-            const Gap(16),
-            Row(
-              children: [
-                const Icon(Icons.wb_cloudy_rounded),
-                const Gap(8),
-                Text("Condition ${weather.condition?.text}"),
-              ],
-            ),
-            const Gap(16),
-            Row(
-              children: [
-                const Icon(Icons.opacity_rounded),
-                const Gap(8),
-                Text("Humidity: ${weather.humidity}"),
-              ],
-            ),
-            // const Gap(16),
-            //  Row(
-            //   children: [
-            //     const Icon(Icons.waves),
-            //     const Gap(8),
-            //     Text("Moisture: ${weather.moisture!}"),
-            //   ],
-            // ),
           ],
         ),
       ),

@@ -67,6 +67,7 @@ dependencies:
   very_good_infinite_list: ^0.7.1
   flutter_dotenv: ^5.1.0
   badges: ^3.1.2
+  font_awesome_flutter: ^10.7.0
 
 dev_dependencies:
   flutter_test:

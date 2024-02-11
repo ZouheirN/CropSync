@@ -14,15 +14,15 @@ class Weather {
   String? name;
   String? deviceId;
   String? location;
-  int? tempC;
+  double? tempC;
   Condition? condition;
-  int? windKph;
-  int? windDegree;
+  double? windKph;
+  double? windDegree;
   String? windDr;
   double? precipMm;
-  int? humidity;
-  int? cloud;
-  int? feelslikeC;
+  double? humidity;
+  double? cloud;
+  double? feelslikeC;
 
   Weather({
     this.name,
@@ -43,17 +43,17 @@ class Weather {
         name: json["name"],
         deviceId: json["deviceId"],
         location: json["location"],
-        tempC: json["temp_c"],
+        tempC: json["temp_c"].toDouble(),
         condition: json["condition"] == null
             ? null
             : Condition.fromJson(json["condition"]),
-        windKph: json["wind_kph"],
-        windDegree: json["wind_degree"],
+        windKph: json["wind_kph"].toDouble(),
+        windDegree: json["wind_degree"].toDouble(),
         windDr: json["wind_dr"],
         precipMm: json["precip_mm"]?.toDouble(),
-        humidity: json["humidity"],
-        cloud: json["cloud"],
-        feelslikeC: json["feelslike_c"],
+        humidity: json["humidity"].toDouble(),
+        cloud: json["cloud"].toDouble(),
+        feelslikeC: json["feelslike_c"].toDouble(),
       );
 
   Map<String, dynamic> toJson() => {

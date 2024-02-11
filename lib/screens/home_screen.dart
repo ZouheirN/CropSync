@@ -109,14 +109,14 @@ class _HomeScreenState extends State<HomeScreen> {
         const Gap(16),
         if (pages.isEmpty)
           const SizedBox(
-            height: 264,
+            height: 300,
             child: Center(
               child: CircularProgressIndicator(),
             ),
           )
         else
           SizedBox(
-            height: 264,
+            height: 300,
             child: PageView.builder(
               controller: overviewPageController,
               itemCount: pages.length,
