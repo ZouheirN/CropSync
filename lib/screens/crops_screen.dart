@@ -61,7 +61,7 @@ class _CropsScreenState extends State<CropsScreen> {
                     duration: const Duration(milliseconds: 375),
                     child: SlideAnimation(
                       child: FadeInAnimation(
-                        child: _buildListTile(devices, cropNames, index),
+                        child: buildListTile(devices, cropNames, index),
                       ),
                     ),
                   );
@@ -75,7 +75,7 @@ class _CropsScreenState extends State<CropsScreen> {
     );
   }
 
-  Widget _buildListTile(devices, cropNames, index) {
+  Widget buildListTile(devices, cropNames, index) {
     return Column(
       children: [
         ExpansionTileCard(
@@ -127,6 +127,18 @@ class _CropsScreenState extends State<CropsScreen> {
                           padding: EdgeInsets.symmetric(vertical: 2.0),
                         ),
                         Text('Assign Crop'),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Column(
+                      children: <Widget>[
+                        Icon(Icons.recommend_rounded),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 2.0),
+                        ),
+                        Text('Recommend Crop'),
                       ],
                     ),
                   ),

@@ -17,6 +17,7 @@ import 'package:cropsync/screens/login_screen.dart';
 import 'package:cropsync/screens/main_screen.dart';
 import 'package:cropsync/screens/otp_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
+import 'package:cropsync/screens/weather_forecast_screen.dart';
 import 'package:cropsync/screens/welcome_screen.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:flutter/material.dart';
@@ -141,6 +142,7 @@ class MyApp extends StatelessWidget {
               '/change-password': (context) => const ChangePasswordScreen(),
               '/device-camera-history': (context) =>
                   const DeviceCameraHistoryScreen(),
+              '/weather-forecast': (context) => const WeatherForecastScreen(),
             });
       },
     );

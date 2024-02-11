@@ -42,6 +42,7 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
       body: InfiniteList(
         itemCount: items.length,
         isLoading: isLoading,
+        centerLoading: true,
         onFetchData: fetchData,
         separatorBuilder: (context, index) => const Divider(),
         padding: const EdgeInsets.all(16),

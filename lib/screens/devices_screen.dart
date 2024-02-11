@@ -190,7 +190,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                       padding:
                                           EdgeInsets.symmetric(vertical: 2.0),
                                     ),
-                                    Text('Recommend Best Crop'),
+                                    Text('Recommend Crop'),
                                   ],
                                 ),
                               ),

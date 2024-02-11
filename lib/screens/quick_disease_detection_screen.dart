@@ -35,13 +35,11 @@ class _QuickDiseaseDetectionScreenState
 
     if (img == null) return;
 
-    // setState(() {
     di<ImageModel>().addImage(ImageObject(
       image: img.readAsBytesSync(),
       result: '',
       uploadProgress: 0,
     ));
-    // });
 
     //todo send to server
     final response = DiseaseApi.uploadDiseaseImage(
@@ -181,24 +179,26 @@ class _QuickDiseaseDetectionScreenState
                   child: FadeInAnimation(
                     child: FocusedMenuHolder(
                       menuItems: [
-                          FocusedMenuItem(
-                            title: Text(
-                              images[index].result == 'Upload Failed' ||
-                                  images[index].result == 'Uploading...' ? 'Retry Upload' : 'Re-Upload',
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                            onPressed: () {
-                              DiseaseApi.uploadDiseaseImage(
-                                image: base64Encode(images[index].image),
-                                index: index,
-                              );
-                            },
-                            backgroundColor: Colors.white,
-                            trailingIcon: const Icon(
-                              Icons.file_upload_rounded,
-                              color: Colors.black,
-                            ),
+                        FocusedMenuItem(
+                          title: Text(
+                            images[index].result == 'Upload Failed' ||
+                                    images[index].result == 'Uploading...'
+                                ? 'Retry Upload'
+                                : 'Re-Upload',
+                            style: const TextStyle(color: Colors.black),
                           ),
+                          onPressed: () {
+                            DiseaseApi.uploadDiseaseImage(
+                              image: base64Encode(images[index].image),
+                              index: index,
+                            );
+                          },
+                          backgroundColor: Colors.white,
+                          trailingIcon: const Icon(
+                            Icons.file_upload_rounded,
+                            color: Colors.black,
+                          ),
+                        ),
                         FocusedMenuItem(
                           title: const Text(
                             'Delete',

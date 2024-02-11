@@ -12,6 +12,7 @@ String weatherToJson(List<Weather> data) =>
 
 class Weather {
   String? name;
+  String? deviceId;
   String? location;
   int? tempC;
   Condition? condition;
@@ -25,6 +26,7 @@ class Weather {
 
   Weather({
     this.name,
+    this.deviceId,
     this.location,
     this.tempC,
     this.condition,
@@ -39,6 +41,7 @@ class Weather {
 
   factory Weather.fromJson(Map<String, dynamic> json) => Weather(
         name: json["name"],
+        deviceId: json["deviceId"],
         location: json["location"],
         tempC: json["temp_c"],
         condition: json["condition"] == null
@@ -55,6 +58,7 @@ class Weather {
 
   Map<String, dynamic> toJson() => {
         "name": name,
+        "deviceId": deviceId,
         "location": location,
         "temp_c": tempC,
         "condition": condition?.toJson(),
