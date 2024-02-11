@@ -97,27 +97,36 @@ Widget weatherCard({
                         );
                       },
                     ),
-                    Text(weather.condition!.text!,
-                        style: Theme.of(context).textTheme.titleLarge),
+                    Text(
+                      weather.condition!.text!,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
                   ],
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '${weather.tempC?.toStringAsFixed(0)}°',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 70,
-                          ),
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '${formatFloat(weather.tempC!)}°',
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 70,
+                                  ),
+                        ),
+                        Text(
+                          'Feels like ${formatFloat(weather.feelslikeC!)}°',
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontSize: 18,
+                                  ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      'Feels like ${weather.feelslikeC?.toStringAsFixed(0)}°',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontSize: 18,
-                          ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -133,7 +142,7 @@ Widget weatherCard({
                         // size: 20,
                       ),
                       const Gap(2),
-                      Text('${weather.windKph} km/h'),
+                      Text('${formatFloat(weather.windKph!)} km/h'),
                     ],
                   ),
                 ),
@@ -146,7 +155,7 @@ Widget weatherCard({
                         // size: 20,
                       ),
                       const Gap(2),
-                      Text('${weather.humidity}%'),
+                      Text('${formatFloat(weather.humidity!)}%'),
                     ],
                   ),
                 ),
@@ -159,7 +168,7 @@ Widget weatherCard({
                         // size: 20,
                       ),
                       const Gap(2),
-                      Text('${weather.cloud}'),
+                      Text("${formatFloat(weather.cloud!)}%"),
                     ],
                   ),
                 ),
@@ -224,21 +233,28 @@ Widget weatherForecastCard({
                       );
                     },
                   ),
-                  Text(weather.condition!.text!,
-                      style: Theme.of(context).textTheme.titleLarge),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
                   Text(
-                    '${weather.avgtempC?.toStringAsFixed(0)}°',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 70,
-                        ),
+                    weather.condition!.text!,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
+              ),
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Column(
+                    children: [
+                      Text(
+                        '${formatFloat(weather.avgtempC!)}°',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 70,
+                            ),
+                        textAlign: TextAlign.right,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -254,7 +270,7 @@ Widget weatherForecastCard({
                       // size: 20,
                     ),
                     const Gap(2),
-                    Text('${weather.maxwindKph} km/h'),
+                    Text('${formatFloat(weather.maxwindKph!)} km/h'),
                   ],
                 ),
               ),
@@ -267,7 +283,7 @@ Widget weatherForecastCard({
                       // size: 20,
                     ),
                     const Gap(2),
-                    Text('${weather.avghumidity}%'),
+                    Text('${formatFloat(weather.avghumidity!)}%'),
                   ],
                 ),
               ),
@@ -280,7 +296,7 @@ Widget weatherForecastCard({
                       // size: 20,
                     ),
                     const Gap(2),
-                    Text('${weather.dailyChanceOfRain}%'),
+                    Text('${formatFloat(weather.dailyChanceOfRain!)}%'),
                   ],
                 ),
               ),
@@ -305,4 +321,19 @@ String convertDateFormat(String dateString) {
   String formattedDate = '$day/$month/$year';
 
   return formattedDate;
+}
+
+String formatFloat(double number) {
+  // Check if the number is an integer
+  if (number % 1 == 0) {
+    return number.toInt().toString(); // Return integer part as string
+  } else {
+    String formatted =
+        number.toStringAsFixed(2); // Return number with 2 decimal places
+    if (formatted.contains('.')) {
+      formatted = formatted.replaceAll(RegExp(r"([.]*0)(?!.*\d)"),
+          ""); // Remove trailing zeros after decimal point
+    }
+    return formatted;
+  }
 }

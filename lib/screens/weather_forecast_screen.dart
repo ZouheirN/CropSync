@@ -105,13 +105,18 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
                                 child: SlideAnimation(
                                   verticalOffset: 50.0,
                                   child: FadeInAnimation(
-                                    child: SizedBox(
-                                      height: 300,
-                                      child: weatherForecastCard(
-                                        weather:
-                                            filteredData.first.weatherData[index],
-                                        context: context,
-                                      ),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 300,
+                                          child: weatherForecastCard(
+                                            weather: filteredData
+                                                .first.weatherData[index],
+                                            context: context,
+                                          ),
+                                        ),
+                                        const Gap(20)
+                                      ],
                                     ),
                                   ),
                                 ),

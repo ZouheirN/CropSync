@@ -43,12 +43,12 @@ class WeatherDatum {
   double? avgtempC;
   double? maxwindKph;
   double? totalprecipIn;
-  int? totalsnowCm;
-  int? avghumidity;
-  int? dailyWillItRain;
-  int? dailyChanceOfRain;
-  int? dailyWillItSnow;
-  int? dailyChanceOfSnow;
+  double? totalsnowCm;
+  double? avghumidity;
+  double? dailyWillItRain;
+  double? dailyChanceOfRain;
+  double? dailyWillItSnow;
+  double? dailyChanceOfSnow;
   Condition? condition;
 
   WeatherDatum({
@@ -74,12 +74,12 @@ class WeatherDatum {
     avgtempC: json["avgtemp_c"]?.toDouble(),
     maxwindKph: json["maxwind_kph"]?.toDouble(),
     totalprecipIn: json["totalprecip_in"]?.toDouble(),
-    totalsnowCm: json["totalsnow_cm"],
-    avghumidity: json["avghumidity"],
-    dailyWillItRain: json["daily_will_it_rain"],
-    dailyChanceOfRain: json["daily_chance_of_rain"],
-    dailyWillItSnow: json["daily_will_it_snow"],
-    dailyChanceOfSnow: json["daily_chance_of_snow"],
+    totalsnowCm: json["totalsnow_cm"]?.toDouble(),
+    avghumidity: json["avghumidity"]?.toDouble(),
+    dailyWillItRain: json["daily_will_it_rain"]?.toDouble(),
+    dailyChanceOfRain: json["daily_chance_of_rain"]?.toDouble(),
+    dailyWillItSnow: json["daily_will_it_snow"]?.toDouble(),
+    dailyChanceOfSnow: json["daily_chance_of_snow"]?.toDouble(),
     condition: json["condition"] == null ? null : Condition.fromJson(json["condition"]),
   );
 
