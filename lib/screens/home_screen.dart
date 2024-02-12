@@ -33,11 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final deviceCamera =
         watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera.toList());
 
-    final overviewPages = weather.map((e) => weatherCard(
-      context: context,
-      isTappable: true,
-      weather: e,
-    )).toList();
+    final overviewPages = weather
+        .map((e) => WeatherCard(
+              context: context,
+              isTappable: true,
+              weather: e,
+            ))
+        .toList();
 
     final deviceCameraPages =
         deviceCamera.map((e) => deviceCameraCard(e, context)).toList();

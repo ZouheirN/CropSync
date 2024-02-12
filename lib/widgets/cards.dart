@@ -6,23 +6,227 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 
-Widget weatherCard({
-  required Weather weather,
-  bool isTappable = false,
-  required BuildContext context,
-}) {
-  return InkWell(
-    onTap: isTappable
-        ? () {
-            Navigator.pushNamed(context, '/weather-forecast', arguments: {
-              'deviceId': weather.deviceId,
-              'deviceName': weather.name,
-              'deviceLocation': weather.location,
-            });
-          }
-        : null,
-    borderRadius: BorderRadius.circular(16),
-    child: Card(
+class WeatherCard extends StatelessWidget {
+  final Weather weather;
+  final bool isTappable;
+  final BuildContext context;
+
+  const WeatherCard({
+    super.key,
+    required this.weather,
+    required this.context,
+    this.isTappable = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: isTappable
+          ? () {
+              Navigator.pushNamed(
+                context,
+                '/weather-forecast',
+                arguments: {
+                  'deviceId': weather.deviceId,
+                  'deviceName': weather.name,
+                  'deviceLocation': weather.location,
+                },
+              );
+            }
+          : null,
+      borderRadius: BorderRadius.circular(16),
+      child: Card(
+        margin: const EdgeInsets.all(0),
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const FaIcon(FontAwesomeIcons.raspberryPi),
+                  const Gap(8),
+                  Flexible(
+                    child: AutoSizeText(
+                      textAlign: TextAlign.center,
+                      weather.name!,
+                      maxLines: 1,
+                      style: Theme.of(context).textTheme.titleMedium!,
+                    ),
+                  ),
+                ],
+              ),
+              const Gap(2),
+              Row(
+                children: [
+                  Flexible(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const FaIcon(FontAwesomeIcons.locationDot),
+                        const Gap(8),
+                        Flexible(
+                          child: AutoSizeText(
+                            textAlign: TextAlign.left,
+                            weather.location!,
+                            maxLines: 1,
+                            style: Theme.of(context).textTheme.titleMedium!,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const FaIcon(FontAwesomeIcons.calendar),
+                        const Gap(8),
+                        Flexible(
+                          child: AutoSizeText(
+                            textAlign: TextAlign.left,
+                            maxLines: 1,
+                            '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+                            style: Theme.of(context).textTheme.titleMedium!,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: 'https:${weather.condition!.icon!}',
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) =>
+                                CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                        ),
+                        imageBuilder: (context, imageProvider) {
+                          return Container(
+                            width: 100.0,
+                            height: 100.0,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      Text(
+                        weather.condition!.text!,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ],
+                  ),
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${formatFloat(weather.tempC!)}°',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 70,
+                                ),
+                          ),
+                          Text(
+                            'Feels like ${formatFloat(weather.feelslikeC!)}°',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontSize: 18,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const FaIcon(
+                          FontAwesomeIcons.wind,
+                          // size: 20,
+                        ),
+                        const Gap(2),
+                        Text('${formatFloat(weather.windKph!)} km/h'),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const FaIcon(
+                          FontAwesomeIcons.droplet,
+                          // size: 20,
+                        ),
+                        const Gap(2),
+                        Text('${formatFloat(weather.humidity!)}%'),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const FaIcon(
+                          FontAwesomeIcons.cloudShowersHeavy,
+                          // size: 20,
+                        ),
+                        const Gap(2),
+                        Text("${formatFloat(weather.cloud!)}%"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class WeatherForecastCard extends StatelessWidget {
+  final WeatherDatum weather;
+  final BuildContext context;
+
+  const WeatherForecastCard(
+      {super.key, required this.weather, required this.context});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -35,54 +239,11 @@ Widget weatherCard({
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const FaIcon(FontAwesomeIcons.raspberryPi),
+                const FaIcon(FontAwesomeIcons.calendar),
                 const Gap(8),
-                Flexible(
-                  child: AutoSizeText(
-                    textAlign: TextAlign.center,
-                    weather.name!,
-                    maxLines: 1,
-                    style: Theme.of(context).textTheme.titleMedium!,
-                  ),
-                ),
-              ],
-            ),
-            const Gap(2),
-            Row(
-              children: [
-                Flexible(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const FaIcon(FontAwesomeIcons.locationDot),
-                      const Gap(8),
-                      Flexible(
-                        child: AutoSizeText(
-                          textAlign: TextAlign.left,
-                          weather.location!,
-                          maxLines: 1,
-                          style: Theme.of(context).textTheme.titleMedium!,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Flexible(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const FaIcon(FontAwesomeIcons.calendar),
-                      const Gap(8),
-                      Flexible(
-                        child: AutoSizeText(
-                          textAlign: TextAlign.left,
-                          maxLines: 1,
-                          '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
-                          style: Theme.of(context).textTheme.titleMedium!,
-                        ),
-                      ),
-                    ],
-                  ),
+                Text(
+                  convertDateFormat(weather.date.toString().substring(0, 10)),
+                  style: Theme.of(context).textTheme.titleMedium!,
                 ),
               ],
             ),
@@ -123,22 +284,15 @@ Widget weatherCard({
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${formatFloat(weather.tempC!)}°',
+                          '${formatFloat(weather.avgtempC!)}°',
                           style:
                               Theme.of(context).textTheme.titleLarge?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 70,
                                   ),
-                        ),
-                        Text(
-                          'Feels like ${formatFloat(weather.feelslikeC!)}°',
-                          style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    fontSize: 18,
-                                  ),
+                          textAlign: TextAlign.right,
                         ),
                       ],
                     ),
@@ -158,7 +312,7 @@ Widget weatherCard({
                         // size: 20,
                       ),
                       const Gap(2),
-                      Text('${formatFloat(weather.windKph!)} km/h'),
+                      Text('${formatFloat(weather.maxwindKph!)} km/h'),
                     ],
                   ),
                 ),
@@ -171,7 +325,7 @@ Widget weatherCard({
                         // size: 20,
                       ),
                       const Gap(2),
-                      Text('${formatFloat(weather.humidity!)}%'),
+                      Text('${formatFloat(weather.avghumidity!)}%'),
                     ],
                   ),
                 ),
@@ -184,7 +338,7 @@ Widget weatherCard({
                         // size: 20,
                       ),
                       const Gap(2),
-                      Text("${formatFloat(weather.cloud!)}%"),
+                      Text('${formatFloat(weather.dailyChanceOfRain!)}%'),
                     ],
                   ),
                 ),
@@ -193,135 +347,8 @@ Widget weatherCard({
           ],
         ),
       ),
-    ),
-  );
-}
-
-Widget weatherForecastCard({
-  required WeatherDatum weather,
-  required BuildContext context,
-}) {
-  return Card(
-    elevation: 4,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(16),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const FaIcon(FontAwesomeIcons.calendar),
-              const Gap(8),
-              Text(
-                convertDateFormat(weather.date.toString().substring(0, 10)),
-                style: Theme.of(context).textTheme.titleMedium!,
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: 'https:${weather.condition!.icon!}',
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            CircularProgressIndicator(
-                      value: downloadProgress.progress,
-                    ),
-                    imageBuilder: (context, imageProvider) {
-                      return Container(
-                        width: 100.0,
-                        height: 100.0,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  Text(
-                    weather.condition!.text!,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ],
-              ),
-              Flexible(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Column(
-                    children: [
-                      Text(
-                        '${formatFloat(weather.avgtempC!)}°',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 70,
-                            ),
-                        textAlign: TextAlign.right,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const Divider(),
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const FaIcon(
-                      FontAwesomeIcons.wind,
-                      // size: 20,
-                    ),
-                    const Gap(2),
-                    Text('${formatFloat(weather.maxwindKph!)} km/h'),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const FaIcon(
-                      FontAwesomeIcons.droplet,
-                      // size: 20,
-                    ),
-                    const Gap(2),
-                    Text('${formatFloat(weather.avghumidity!)}%'),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const FaIcon(
-                      FontAwesomeIcons.cloudShowersHeavy,
-                      // size: 20,
-                    ),
-                    const Gap(2),
-                    Text('${formatFloat(weather.dailyChanceOfRain!)}%'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
+    );
+  }
 }
 
 String convertDateFormat(String dateString) {

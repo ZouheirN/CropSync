@@ -109,7 +109,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
                                       children: [
                                         SizedBox(
                                           height: 300,
-                                          child: weatherForecastCard(
+                                          child: WeatherForecastCard(
                                             weather: filteredData
                                                 .first.weatherData[index],
                                             context: context,
