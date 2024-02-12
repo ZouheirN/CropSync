@@ -1,6 +1,7 @@
 import 'package:cropsync/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
 import 'package:lottie/lottie.dart';
@@ -45,14 +46,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
+                  padding: const EdgeInsets.only(right: 16),
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
                       pageController.jumpToPage(numPages - 1);
                     },
-                    child: const Text(
-                      'Skip',
-                      style: TextStyle(
+                    child: Text(
+                      currentPage != numPages - 1 ? 'Skip' : '',
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                       ),
@@ -60,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 600,
+                  height: MediaQuery.sizeOf(context).height * 0.7,
                   child: PageView(
                     physics: const ClampingScrollPhysics(),
                     controller: pageController,
@@ -184,9 +186,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ? Container(
               height: 100,
               width: double.infinity,
-              color: MyApp.themeNotifier.value == ThemeMode.light
-                  ? Colors.white
-                  : const Color(0xFF1A1C1B),
               child: GestureDetector(
                 onTap: () {
                   userPrefsBox.put('showOnboarding', false);
@@ -203,8 +202,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
               ),
-            )
-          : const SizedBox.shrink(),
+            ).animate().fade()
+          : null,
     );
   }
 
