@@ -90,12 +90,24 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
     });
 
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-          position.latitude, position.longitude,
-          localeIdentifier: 'en_LB');
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      String subAdministrativeArea = placemarks[0].subAdministrativeArea!;
+
+      // check if subAdministrativeArea is not english
+      if (subAdministrativeArea.contains(RegExp(r'[a-zA-Z]')) == false) {
+        // loop through the placemarks to find the first english subAdministrativeArea
+        for (var placemark in placemarks) {
+          if (placemark.subAdministrativeArea!.contains(RegExp(r'[a-zA-Z]'))) {
+            subAdministrativeArea = placemark.subAdministrativeArea!;
+            break;
+          }
+        }
+      }
 
       setState(() {
-        cityTextController.text = placemarks[0].subAdministrativeArea!;
+        cityTextController.text = subAdministrativeArea;
         countryTextController.text = placemarks[0].country!;
       });
     } on Exception {
@@ -182,8 +194,20 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
                     try {
                       List<Placemark> placemarks =
                           await placemarkFromCoordinates(
-                              value.latitude, value.longitude,
-                              localeIdentifier: 'en_LB');
+                              value.latitude, value.longitude);
+
+                      String subAdministrativeArea = placemarks[0].subAdministrativeArea!;
+
+                      // check if subAdministrativeArea is not english
+                      if (subAdministrativeArea.contains(RegExp(r'[a-zA-Z]')) == false) {
+                        // loop through the placemarks to find the first english subAdministrativeArea
+                        for (var placemark in placemarks) {
+                          if (placemark.subAdministrativeArea!.contains(RegExp(r'[a-zA-Z]'))) {
+                            subAdministrativeArea = placemark.subAdministrativeArea!;
+                            break;
+                          }
+                        }
+                      }
 
                       panelController.open();
                       mapController.move(
@@ -200,8 +224,7 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
                             useRadiusInMeter: true,
                           )
                         ];
-                        cityTextController.text =
-                            placemarks[0].subAdministrativeArea!;
+                        cityTextController.text = subAdministrativeArea;
                         countryTextController.text = placemarks[0].country!;
                       });
                     } on Exception {
