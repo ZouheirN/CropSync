@@ -217,7 +217,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(
-                                  ruleValidated ? Icons.check : Icons.close,
+                                  ruleValidated ? Icons.check_rounded : Icons.close_rounded,
                                   color:
                                       ruleValidated ? Colors.green : Colors.red,
                                 ),

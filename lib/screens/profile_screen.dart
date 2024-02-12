@@ -138,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SecondaryButton(
                     onPressed: () => pickImage(ImageSource.gallery),
-                    icon: Icons.image,
+                    icon: Icons.image_rounded,
                     text: 'Browse Gallery',
                   ),
                   const Gap(10),
@@ -239,8 +239,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   ListTile(
                     leading: Icon(MyApp.themeNotifier.value == ThemeMode.light
-                        ? Icons.dark_mode
-                        : Icons.light_mode),
+                        ? Icons.dark_mode_rounded
+                        : Icons.light_mode_rounded),
                     title: Text(MyApp.themeNotifier.value == ThemeMode.light
                         ? 'Switch to Dark Mode'
                         : 'Switch to Light Mode'),

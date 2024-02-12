@@ -101,7 +101,7 @@ class _CropsScreenState extends State<CropsScreen> {
                       ),
                     ),
                   ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error_rounded),
                 )
               : null,
           title: cropNames[index] != null

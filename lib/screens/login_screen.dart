@@ -31,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordTextController = TextEditingController();
 
   bool isLoading = false;
+  bool isObscure = true;
   Text status = const Text("");
 
   Future<void> login() async {
@@ -250,18 +251,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Email',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const Gap(10),
         PrimaryTextField(
-          hintText: 'Enter your email',
+          hintText: 'Email',
           textController: emailTextController,
-          prefixIcon: const Icon(Icons.email),
+          prefixIcon: const Icon(Icons.email_rounded),
           textInputAction: TextInputAction.next,
           autofillHints: const [AutofillHints.email],
           validator: (value) {
@@ -285,21 +278,29 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Password',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const Gap(10),
         PrimaryTextField(
-          hintText: 'Enter your password',
+          hintText: 'Password',
           textController: passwordTextController,
-          prefixIcon: const Icon(Icons.lock),
-          obscureText: true,
+          prefixIcon: const Icon(Icons.lock_rounded),
+          obscureText: isObscure,
           autofillHints: const [AutofillHints.password],
           onEditingComplete: () => TextInput.finishAutofillContext(),
+          suffixIcon: Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              onPressed: () {
+                setState(() {
+                  isObscure = !isObscure;
+                });
+              },
+              icon: Icon(
+                isObscure
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
+                color: Colors.grey,
+              ),
+            ),
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter your password';

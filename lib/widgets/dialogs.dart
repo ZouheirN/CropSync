@@ -7,6 +7,7 @@ import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:quickalert/models/quickalert_animtype.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
@@ -144,9 +145,10 @@ class Dialogs {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text("Enter your email to reset it"),
-              const SizedBox(height: 10),
+              const Gap(10),
               PrimaryTextField(
-                hintText: 'Enter your email',
+                prefixIcon: const Icon(Icons.email_rounded),
+                hintText: 'Email',
                 textController: textController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -160,7 +162,7 @@ class Dialogs {
                   return null;
                 },
               ),
-              const SizedBox(height: 10),
+              const Gap(10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

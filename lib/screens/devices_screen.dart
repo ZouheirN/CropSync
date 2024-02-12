@@ -113,7 +113,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         actions: [
           IconButton(
             onPressed: () => addDevice(context),
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.add_rounded),
           ),
         ],
       ),

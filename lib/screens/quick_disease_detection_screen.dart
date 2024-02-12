@@ -107,7 +107,7 @@ class _QuickDiseaseDetectionScreenState
                   ),
                   SecondaryButton(
                     onPressed: () => pickImage(ImageSource.gallery),
-                    icon: Icons.image,
+                    icon: Icons.image_rounded,
                     text: 'Browse Gallery',
                   ),
                   const Gap(10),

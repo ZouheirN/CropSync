@@ -131,6 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            const Gap(60),
                             const Text(
                               'Register',
                               style: TextStyle(
@@ -146,7 +147,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 fontSize: 15.0,
                               ),
                             ),
-                            const Gap(40),
+                            const Gap(60),
                             buildFullNameTextInputField(),
                             const Gap(20),
                             buildEmailTextInputField(),
@@ -218,18 +219,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Full Name',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const Gap(10),
         PrimaryTextField(
-          hintText: 'Enter your full name',
+          hintText: 'Full Name',
           textController: fullNameTextController,
-          prefixIcon: const Icon(Icons.person),
+          prefixIcon: const Icon(Icons.person_rounded),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter your full name';
@@ -253,18 +246,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Email',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const Gap(10),
         PrimaryTextField(
-          hintText: 'Enter your email',
+          hintText: 'Email',
           textController: emailTextController,
-          prefixIcon: const Icon(Icons.email),
+          prefixIcon: const Icon(Icons.email_rounded),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter your email';
@@ -286,14 +271,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Password',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const Gap(10),
         FancyPasswordField(
           hidePasswordIcon: const Icon(
             Icons.visibility_off_outlined,
@@ -332,7 +309,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          ruleValidated ? Icons.check : Icons.close,
+                          ruleValidated ? Icons.check_rounded : Icons.close_rounded,
                           color: ruleValidated ? Colors.green : Colors.red,
                         ),
                         const Gap(8),
@@ -355,9 +332,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               horizontal: 20,
             ),
             filled: true,
-            prefixIcon: Icon(Icons.lock),
-            // fillColor: ,
-            hintText: 'Enter your password',
+            prefixIcon: Icon(Icons.lock_rounded),
+            hintText: 'Password',
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(20),
@@ -383,18 +359,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Confirm Password',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const Gap(10),
         PrimaryTextField(
-          hintText: 'Enter your password again',
+          hintText: 'Confirm Password',
           textController: confirmPasswordTextController,
-          prefixIcon: const Icon(Icons.lock),
+          prefixIcon: const Icon(Icons.lock_rounded),
           obscureText: true,
           validator: (value) {
             if (value == null || value.isEmpty) {
