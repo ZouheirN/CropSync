@@ -2,13 +2,15 @@ import 'dart:convert';
 
 import 'package:cropsync/json/device_camera.dart';
 import 'package:flutter/material.dart';
+import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 class DeviceCameraHistoryScreen extends StatefulWidget {
   const DeviceCameraHistoryScreen({super.key});
 
   @override
-  State<DeviceCameraHistoryScreen> createState() => _DeviceCameraHistoryScreenState();
+  State<DeviceCameraHistoryScreen> createState() =>
+      _DeviceCameraHistoryScreenState();
 }
 
 class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
@@ -37,25 +39,39 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: FittedBox(child: Text('${deviceCamera.deviceName!} Camera History')),
+        title: FittedBox(
+            child: Text('${deviceCamera.deviceName!} Camera History')),
       ),
       body: InfiniteList(
         itemCount: items.length,
         isLoading: isLoading,
         centerLoading: true,
         onFetchData: fetchData,
-        separatorBuilder: (context, index) => const Divider(),
-        padding: const EdgeInsets.all(16),
+        loadingBuilder: (context) {
+          return const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        },
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Image.memory(
+          return StickyHeader(
+            header: Container(
+              height: 50.0,
+              color: Colors.blueGrey[700],
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                items[index],
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            content: Image.memory(
               base64Decode(deviceCamera.image!),
               fit: BoxFit.cover,
-              height: 200,
-              width: 200,
-            ),
-            subtitle: Text(
-              items[index],
+              width: double.infinity,
+              height: 200.0,
             ),
           );
         },

@@ -1,5 +1,8 @@
+import 'package:cropsync/json/weather.dart';
 import 'package:cropsync/models/devices_model.dart';
+import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/services/weather_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
@@ -67,6 +70,14 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
         name: deviceNameController.text.trim(),
         location: deviceLocationController.text.trim(),
       );
+
+      // call other api
+      WeatherApi.getWeatherData().then((value) {
+        if (value.runtimeType == List<Weather>) {
+          di<WeatherModel>().weather = value;
+          Logger().d('Fetched Weather');
+        }
+      });
 
       if (!mounted) return;
       Navigator.pop(context);

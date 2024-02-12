@@ -146,11 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
               body: SingleChildScrollView(
                 child: Form(
                   key: formKey,
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.67,
-                      maxWidth: MediaQuery.of(context).size.width,
-                    ),
+                  child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 16,

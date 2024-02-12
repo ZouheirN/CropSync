@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/json/weather.dart';
 import 'package:cropsync/json/weather_forecast.dart';
@@ -36,37 +37,52 @@ Widget weatherCard({
               children: [
                 const FaIcon(FontAwesomeIcons.raspberryPi),
                 const Gap(8),
-                Text(
-                  weather.name!,
-                  style: Theme.of(context).textTheme.titleMedium!,
+                Flexible(
+                  child: AutoSizeText(
+                    textAlign: TextAlign.center,
+                    weather.name!,
+                    maxLines: 1,
+                    style: Theme.of(context).textTheme.titleMedium!,
+                  ),
                 ),
               ],
             ),
             const Gap(2),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const FaIcon(FontAwesomeIcons.locationDot),
-                    const Gap(8),
-                    Text(
-                      weather.location!,
-                      style: Theme.of(context).textTheme.titleMedium!,
-                    ),
-                  ],
+                Flexible(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const FaIcon(FontAwesomeIcons.locationDot),
+                      const Gap(8),
+                      Flexible(
+                        child: AutoSizeText(
+                          textAlign: TextAlign.left,
+                          weather.location!,
+                          maxLines: 1,
+                          style: Theme.of(context).textTheme.titleMedium!,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const FaIcon(FontAwesomeIcons.calendar),
-                    const Gap(8),
-                    Text(
-                      '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
-                      style: Theme.of(context).textTheme.titleMedium!,
-                    ),
-                  ],
+                Flexible(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const FaIcon(FontAwesomeIcons.calendar),
+                      const Gap(8),
+                      Flexible(
+                        child: AutoSizeText(
+                          textAlign: TextAlign.left,
+                          maxLines: 1,
+                          '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+                          style: Theme.of(context).textTheme.titleMedium!,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

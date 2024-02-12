@@ -69,9 +69,9 @@ dependencies:
   badges: ^3.1.2
   font_awesome_flutter: ^10.7.0
   lottie: ^3.0.0
-  widget_marquee: ^0.0.8
   sticky_headers: ^0.3.0+2
   flutter_animate: ^4.5.0
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
