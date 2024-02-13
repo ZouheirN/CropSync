@@ -3,32 +3,18 @@ import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:watch_it/watch_it.dart';
 
-class AccountInformationScreen extends WatchingStatefulWidget {
-  const AccountInformationScreen({super.key});
+class AccountInformationScreen extends WatchingWidget {
+  final BuildContext context;
 
-  @override
-  State<AccountInformationScreen> createState() =>
-      _AccountInformationScreenState();
-}
-
-class _AccountInformationScreenState extends State<AccountInformationScreen> {
-  String version = '';
+  const AccountInformationScreen({super.key, required this.context});
 
   changePassword() async {
     Navigator.of(context).pushNamed(
       '/change-password',
       arguments: {'forgotPassword': false},
     );
-  }
-
-  @override
-  void initState() {
-    PackageInfo.fromPlatform()
-        .then((value) => setState(() => version = value.version));
-    super.initState();
   }
 
   @override
@@ -76,21 +62,6 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
               onPressed: changePassword,
               textColor: Colors.white,
               backgroundColor: Theme.of(context).primaryColor,
-            ),
-            const Gap(20),
-            const Divider(
-              height: 10,
-              endIndent: 16,
-              indent: 16,
-            ),
-            const Gap(10),
-            Text(
-              'CropSync v$version',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
             ),
           ],
         ),

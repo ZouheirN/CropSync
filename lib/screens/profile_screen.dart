@@ -238,46 +238,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     indent: 16,
                   ),
                   ListTile(
-                    leading: const Icon(Icons.dark_mode_rounded),
-                    title: const Text('Dark Mode'),
-                    trailing: Switch(
-                      value: MyApp.themeNotifier.value == ThemeMode.dark,
-                      onChanged: (value) async {
-                        final userPrefsBox = Hive.box('userPrefs');
-
-                        userPrefsBox.put(
-                          'darkModeEnabled',
-                          MyApp.themeNotifier.value == ThemeMode.light
-                              ? true
-                              : false,
-                        );
-
-                        setState(() {
-                          MyApp.themeNotifier.value =
-                              MyApp.themeNotifier.value == ThemeMode.light
-                                  ? ThemeMode.dark
-                                  : ThemeMode.light;
-                        });
-                      },
-                    ),
-                    // onTap: () async {
-                    //   final userPrefsBox = Hive.box('userPrefs');
-                    //
-                    //   userPrefsBox.put(
-                    //     'darkModeEnabled',
-                    //     MyApp.themeNotifier.value == ThemeMode.light
-                    //         ? true
-                    //         : false,
-                    //   );
-                    //
-                    //   setState(() {
-                    //     MyApp.themeNotifier.value =
-                    //         MyApp.themeNotifier.value == ThemeMode.light
-                    //             ? ThemeMode.dark
-                    //             : ThemeMode.light;
-                    //   });
-                    // },
+                    leading: const Icon(Icons.settings_rounded),
+                    title: const Text('Settings'),
+                    trailing: const Icon(Icons.chevron_right_rounded),
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/settings');
+                    },
                   ),
+                  // ListTile(
+                  //   leading: const Icon(Icons.dark_mode_rounded),
+                  //   title: const Text('Dark Theme'),
+                  //   trailing: Switch(
+                  //     value: MyApp.themeNotifier.value == ThemeMode.dark,
+                  //     onChanged: (value) async {
+                  //       final userPrefsBox = Hive.box('userPrefs');
+                  //
+                  //       userPrefsBox.put(
+                  //         'darkModeEnabled',
+                  //         MyApp.themeNotifier.value == ThemeMode.light
+                  //             ? true
+                  //             : false,
+                  //       );
+                  //
+                  //       setState(() {
+                  //         MyApp.themeNotifier.value =
+                  //             MyApp.themeNotifier.value == ThemeMode.light
+                  //                 ? ThemeMode.dark
+                  //                 : ThemeMode.light;
+                  //       });
+                  //     },
+                  //   ),
+                  //   // onTap: () async {
+                  //   //   final userPrefsBox = Hive.box('userPrefs');
+                  //   //
+                  //   //   userPrefsBox.put(
+                  //   //     'darkModeEnabled',
+                  //   //     MyApp.themeNotifier.value == ThemeMode.light
+                  //   //         ? true
+                  //   //         : false,
+                  //   //   );
+                  //   //
+                  //   //   setState(() {
+                  //   //     MyApp.themeNotifier.value =
+                  //   //         MyApp.themeNotifier.value == ThemeMode.light
+                  //   //             ? ThemeMode.dark
+                  //   //             : ThemeMode.light;
+                  //   //   });
+                  //   // },
+                  // ),
                   ListTile(
                     leading: const Icon(Icons.logout_rounded),
                     title: const Text('Logout'),
