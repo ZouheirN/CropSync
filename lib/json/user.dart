@@ -1,10 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'dart:convert';
 
 part 'user.g.dart';
 
-User userFromJson(Map<String,dynamic> json) => User.fromJson(json);
+User userFromJson(Map<String, dynamic> json) => User.fromJson(json);
 
 String userToJson(User data) => json.encode(data.toJson());
 
@@ -33,19 +34,21 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    token: json["token"],
-    profilePicture: json["profilePicture"] != null ? base64Decode(json["profilePicture"]) : null,
-    uploadProgress: json["profilePicture"] != null ? 1 : null,
-    fullName: json["fullName"],
-    email: json["email"],
-    isVerified: json["isVerified"],
-  );
+        token: json["token"],
+        profilePicture: json["profilePicture"] != null
+            ? base64Decode(json["profilePicture"])
+            : null,
+        uploadProgress: json["profilePicture"] != null ? 1 : null,
+        fullName: json["fullName"],
+        email: json["email"],
+        isVerified: json["isVerified"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "token": token,
-    "profilePicture": profilePicture,
-    "fullName": fullName,
-    "email": email,
-    "isVerified": isVerified,
-  };
+        "token": token,
+        "profilePicture": profilePicture,
+        "fullName": fullName,
+        "email": email,
+        "isVerified": isVerified,
+      };
 }

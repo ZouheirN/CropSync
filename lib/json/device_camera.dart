@@ -1,10 +1,7 @@
-
 import 'dart:convert';
-
 
 List<DeviceCamera> deviceCameraFromJson(List<dynamic> json) =>
     List<DeviceCamera>.from(json.map((x) => DeviceCamera.fromJson(x)));
-
 
 String deviceCameraToJson(List<DeviceCamera> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

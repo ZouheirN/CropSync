@@ -4,6 +4,7 @@ import 'package:cropsync/json/image.dart';
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
+import 'package:cropsync/models/home_list_items_model.dart';
 import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
@@ -84,6 +85,20 @@ Future<void> main() async {
     }
   }
 
+  // put home list items to state management
+  if (userPrefsBox.get('homeListItems') != null) {
+    final homeListItems = userPrefsBox.get('homeListItems') as List<String>;
+    di<HomeListItemsModel>().homeListItems = homeListItems;
+  } else {
+    final homeListItems = [
+      'Weather',
+      'Alerts',
+      'Device Camera',
+    ];
+    di<HomeListItemsModel>().homeListItems = homeListItems;
+    userPrefsBox.put('homeListItems', homeListItems);
+  }
+
   runApp(
     MyApp(
       isUserLoggedIn: isUserLoggedIn,
@@ -144,8 +159,7 @@ class MyApp extends StatelessWidget {
               '/add-device': (context) => const AddDeviceScreen(),
               '/edit-device': (context) => const EditDeviceScreen(),
               '/add-device-map': (context) => const AddDeviceMapScreen(),
-              '/account-information': (context) =>
-                  AccountInformationScreen(
+              '/account-information': (context) => AccountInformationScreen(
                     context: context,
                   ),
               '/otp': (context) => const OTPScreen(),
@@ -167,4 +181,5 @@ void registerManagers() {
   di.registerSingleton<DeviceCameraModel>(DeviceCameraModel());
   di.registerSingleton<DevicesModel>(DevicesModel());
   di.registerSingleton<OtherVars>(OtherVars());
+  di.registerSingleton<HomeListItemsModel>(HomeListItemsModel());
 }

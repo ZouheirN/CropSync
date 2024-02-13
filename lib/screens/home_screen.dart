@@ -1,9 +1,9 @@
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
+import 'package:cropsync/models/home_list_items_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/widgets/buttons.dart';
-import 'package:cropsync/widgets/device_camera_card.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -41,8 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ))
         .toList();
 
-    final deviceCameraPages =
-        deviceCamera.map((e) => deviceCameraCard(e, context)).toList();
+    final deviceCameraPages = deviceCamera
+        .map(
+          (e) => DeviceCameraCard(
+            deviceCamera: e,
+            context: context,
+          ),
+        )
+        .toList();
 
     // final weatherAlerts = weather
     //     .map((e) {
@@ -56,6 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
     //     .toList()
     //     .where((element) => element != null)
     //     .toList();
+
+    final weatherAlerts = List.generate(0, (index) => null);
+
+    final homeListItems =
+        watchPropertyValue((HomeListItemsModel h) => h.listItems);
 
     return Visibility(
       visible: devices.isNotEmpty,
@@ -74,11 +85,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 children: [
-                  buildWeather(weatherPages),
-                  const Gap(20),
-                  // buildAlerts(weatherAlerts),
-                  // const Gap(20),
-                  buildDeviceCamera(deviceCameraPages),
+                  for (var item in homeListItems)
+                    if (item == 'Weather')
+                      buildWeather(weatherPages)
+                    else if (item == 'Alerts')
+                      buildAlerts(weatherAlerts)
+                    else if (item == 'Device Camera')
+                      buildDeviceCamera(deviceCameraPages),
                   const Gap(20),
                 ],
               ),
@@ -184,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               Icon(
-                Icons.warning_rounded,
+                Icons.notifications_rounded,
                 color: Colors.red,
               ),
             ],
