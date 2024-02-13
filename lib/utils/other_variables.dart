@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-class OtherVars extends ChangeNotifier{
+class OtherVars extends ChangeNotifier {
   final otherVarsBox = Hive.box('otherVars');
 
   bool get autoRefresh => otherVarsBox.get('autoRefresh') ?? false;

@@ -4,7 +4,6 @@ import 'package:cropsync/json/image.dart';
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
-import 'package:cropsync/models/home_list_items_model.dart';
 import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
@@ -23,10 +22,12 @@ import 'package:cropsync/screens/settings_screen.dart';
 import 'package:cropsync/screens/weather_forecast_screen.dart';
 import 'package:cropsync/screens/welcome_screen.dart';
 import 'package:cropsync/utils/other_variables.dart';
+import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
 Future<void> main() async {
@@ -88,16 +89,30 @@ Future<void> main() async {
   // put home list items to state management
   if (userPrefsBox.get('homeListItems') != null) {
     final homeListItems = userPrefsBox.get('homeListItems') as List<String>;
-    di<HomeListItemsModel>().homeListItems = homeListItems;
-  } else {
-    final homeListItems = [
-      'Weather',
-      'Alerts',
-      'Device Camera',
-    ];
-    di<HomeListItemsModel>().homeListItems = homeListItems;
-    userPrefsBox.put('homeListItems', homeListItems);
+    UserPrefs().homeListItems = homeListItems;
+    di<UserPrefs>().homeListItems = homeListItems;
   }
+  // else {
+  //   final homeListItems = [
+  //     'Weather',
+  //     'Alerts',
+  //     'Device Camera',
+  //   ];
+  //   di<UserPrefsModel>().homeListItems = homeListItems;
+  //   userPrefsBox.put('homeListItems', homeListItems);
+  // }
+
+  // put start page to state management
+  if (userPrefsBox.get('startPage') != null) {
+    final startPage = userPrefsBox.get('startPage') as String;
+    UserPrefs().startPage = startPage;
+    di<UserPrefs>().startPage = startPage;
+  }
+  // else {
+  //   const startPage = 'Home';
+  //   di<UserPrefsModel>().startPage = startPage;
+  //   userPrefsBox.put('startPage', startPage);
+  // }
 
   runApp(
     MyApp(
@@ -181,5 +196,5 @@ void registerManagers() {
   di.registerSingleton<DeviceCameraModel>(DeviceCameraModel());
   di.registerSingleton<DevicesModel>(DevicesModel());
   di.registerSingleton<OtherVars>(OtherVars());
-  di.registerSingleton<HomeListItemsModel>(HomeListItemsModel());
+  di.registerSingleton<UserPrefs>(UserPrefs());
 }

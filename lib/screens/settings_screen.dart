@@ -1,5 +1,5 @@
 import 'package:cropsync/main.dart';
-import 'package:cropsync/models/home_list_items_model.dart';
+import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
@@ -16,6 +16,13 @@ class SettingsScreen extends WatchingStatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final userPrefsBox = Hive.box('userPrefs');
   String version = '';
+  final listPages = [
+    'Home',
+    'Crops',
+    'Camera',
+    'Devices',
+    'Profile',
+  ];
 
   @override
   void initState() {
@@ -48,8 +55,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> listItems =
-        watchPropertyValue((HomeListItemsModel h) => h.listItems);
+    final listItems = watchPropertyValue((UserPrefs u) => u.homeListItems);
+
+    final startPage = watchPropertyValue((UserPrefs u) => u.startPage);
 
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +70,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
             'General',
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          const Gap(10),
+          ListTile(
+            title: const Text('Start Page'),
+            trailing: DropdownButton(
+              items: listPages
+                  .map((e) => DropdownMenuItem<String>(
+                        value: e,
+                        child: Text(e),
+                      ))
+                  .toList(),
+              value: startPage,
+              onChanged: (value) {
+                di<UserPrefs>().startPage = value!;
+              },
+            ),
+          ),
           ReorderableListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -84,7 +106,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }
               final item = listItems.removeAt(oldIndex);
               listItems.insert(newIndex, item);
-              di<HomeListItemsModel>().homeListItems = listItems;
+              di<UserPrefs>().homeListItems = listItems;
             },
             itemCount: listItems.length,
           ),
@@ -97,10 +119,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: const Text('Dark Theme'),
             value: MyApp.themeNotifier.value == ThemeMode.dark,
             onChanged: (value) async {
-              userPrefsBox.put(
-                'darkModeEnabled',
-                MyApp.themeNotifier.value == ThemeMode.light ? true : false,
-              );
+              // userPrefsBox.put(
+              //   'darkModeEnabled',
+              //   MyApp.themeNotifier.value == ThemeMode.light ? true : false,
+              // );
+
+              di<UserPrefs>().darkModeEnabled = value;
 
               setState(() {
                 MyApp.themeNotifier.value =

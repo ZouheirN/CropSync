@@ -1,10 +1,12 @@
 import 'package:cropsync/main.dart';
+import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
 import 'package:lottie/lottie.dart';
+import 'package:watch_it/watch_it.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -234,10 +236,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    userPrefsBox.put(
-                      'darkModeEnabled',
-                      false,
-                    );
+                    // userPrefsBox.put(
+                    //   'darkModeEnabled',
+                    //   false,
+                    // );
+                    di<UserPrefs>().darkModeEnabled = false;
                     setState(() {
                       MyApp.themeNotifier.value = ThemeMode.light;
                     });
@@ -291,10 +294,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    userPrefsBox.put(
-                      'darkModeEnabled',
-                      true,
-                    );
+                    // userPrefsBox.put(
+                    //   'darkModeEnabled',
+                    //   true,
+                    // );
+                    di<UserPrefs>().darkModeEnabled = true;
                     setState(() {
                       MyApp.themeNotifier.value = ThemeMode.dark;
                     });

@@ -11,6 +11,7 @@ import 'package:cropsync/screens/quick_disease_detection_screen.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/weather_api.dart';
 import 'package:cropsync/utils/other_variables.dart';
+import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
 import 'package:logger/logger.dart';
@@ -28,7 +29,23 @@ class MainScreen extends WatchingStatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int index = 0;
+  int index = di<UserPrefs>().startPage == 'Home'
+      ? 0
+      : di<UserPrefs>().startPage == 'Crops'
+          ? 1
+          : di<UserPrefs>().startPage == 'Camera'
+              ? 2
+              : di<UserPrefs>().startPage == 'Devices'
+                  ? 3
+                  : 4;
+
+  final screens = [
+    const HomeScreen(),
+    const CropsScreen(),
+    const QuickDiseaseDetectionScreen(),
+    const DevicesScreen(),
+    const ProfileScreen(),
+  ];
 
   void weather() async {
     final weatherData = await WeatherApi.getWeatherData();
@@ -91,14 +108,6 @@ class _MainScreenState extends State<MainScreen> {
 
     super.initState();
   }
-
-  final screens = [
-    const HomeScreen(),
-    const CropsScreen(),
-    const QuickDiseaseDetectionScreen(),
-    const DevicesScreen(),
-    const ProfileScreen(),
-  ];
 
   @override
   Widget build(BuildContext context) {

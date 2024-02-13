@@ -1,8 +1,8 @@
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
-import 'package:cropsync/models/home_list_items_model.dart';
 import 'package:cropsync/models/weather_model.dart';
+import 'package:cropsync/utils/user_prefs.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final weatherAlerts = List.generate(0, (index) => null);
 
     final homeListItems =
-        watchPropertyValue((HomeListItemsModel h) => h.listItems);
+        watchPropertyValue((UserPrefs u) => u.homeListItems);
 
     return Visibility(
       visible: devices.isNotEmpty,
