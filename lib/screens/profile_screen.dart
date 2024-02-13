@@ -238,29 +238,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     indent: 16,
                   ),
                   ListTile(
-                    leading: Icon(MyApp.themeNotifier.value == ThemeMode.light
-                        ? Icons.dark_mode_rounded
-                        : Icons.light_mode_rounded),
-                    title: Text(MyApp.themeNotifier.value == ThemeMode.light
-                        ? 'Switch to Dark Mode'
-                        : 'Switch to Light Mode'),
-                    onTap: () async {
-                      final userPrefsBox = Hive.box('userPrefs');
+                    leading: const Icon(Icons.dark_mode_rounded),
+                    title: const Text('Dark Mode'),
+                    trailing: Switch(
+                      value: MyApp.themeNotifier.value == ThemeMode.dark,
+                      onChanged: (value) async {
+                        final userPrefsBox = Hive.box('userPrefs');
 
-                      userPrefsBox.put(
-                        'darkModeEnabled',
-                        MyApp.themeNotifier.value == ThemeMode.light
-                            ? true
-                            : false,
-                      );
+                        userPrefsBox.put(
+                          'darkModeEnabled',
+                          MyApp.themeNotifier.value == ThemeMode.light
+                              ? true
+                              : false,
+                        );
 
-                      setState(() {
-                        MyApp.themeNotifier.value =
-                            MyApp.themeNotifier.value == ThemeMode.light
-                                ? ThemeMode.dark
-                                : ThemeMode.light;
-                      });
-                    },
+                        setState(() {
+                          MyApp.themeNotifier.value =
+                              MyApp.themeNotifier.value == ThemeMode.light
+                                  ? ThemeMode.dark
+                                  : ThemeMode.light;
+                        });
+                      },
+                    ),
+                    // onTap: () async {
+                    //   final userPrefsBox = Hive.box('userPrefs');
+                    //
+                    //   userPrefsBox.put(
+                    //     'darkModeEnabled',
+                    //     MyApp.themeNotifier.value == ThemeMode.light
+                    //         ? true
+                    //         : false,
+                    //   );
+                    //
+                    //   setState(() {
+                    //     MyApp.themeNotifier.value =
+                    //         MyApp.themeNotifier.value == ThemeMode.light
+                    //             ? ThemeMode.dark
+                    //             : ThemeMode.light;
+                    //   });
+                    // },
                   ),
                   ListTile(
                     leading: const Icon(Icons.logout_rounded),

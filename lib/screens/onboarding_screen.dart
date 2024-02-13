@@ -73,7 +73,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     },
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(40.0),
+                        padding: const EdgeInsets.only(top: 40, left: 40.0, right: 40.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -144,36 +144,35 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: buildPagesIndicator(),
                 ),
+                const Spacer(),
                 if (currentPage != numPages - 1)
-                  Expanded(
-                    child: Align(
-                      alignment: FractionalOffset.bottomRight,
-                      child: TextButton(
-                        onPressed: () {
-                          pageController.nextPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Next',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                              ),
-                            ),
-                            Gap(10),
-                            Icon(
-                              Icons.arrow_forward_rounded,
+                  Align(
+                    alignment: FractionalOffset.bottomRight,
+                    child: TextButton(
+                      onPressed: () {
+                        pageController.nextPage(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Next',
+                            style: TextStyle(
                               color: Colors.white,
-                              size: 30,
+                              fontSize: 22,
                             ),
-                          ],
-                        ),
+                          ),
+                          Gap(10),
+                          Icon(
+                            Icons.arrow_forward_rounded,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ],
                       ),
                     ),
                   )
@@ -183,7 +182,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
       ),
       bottomSheet: currentPage == numPages - 1
-          ? Container(
+          ? SizedBox(
               height: 100,
               width: double.infinity,
               child: GestureDetector(

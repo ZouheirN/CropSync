@@ -37,6 +37,8 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
     final arg = ModalRoute.of(context)!.settings.arguments as Map;
     final DeviceCamera deviceCamera = arg['deviceCamera'];
 
+    // todo add date range
+
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(
@@ -47,6 +49,7 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
         isLoading: isLoading,
         centerLoading: true,
         onFetchData: fetchData,
+        physics: const BouncingScrollPhysics(),
         loadingBuilder: (context) {
           return const Padding(
             padding: EdgeInsets.all(16.0),

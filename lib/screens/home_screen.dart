@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final deviceCamera =
         watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera.toList());
 
-    final overviewPages = weather
+    final weatherPages = weather
         .map((e) => WeatherCard(
               context: context,
               isTappable: true,
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 children: [
-                  buildOverview(overviewPages),
+                  buildWeather(weatherPages),
                   const Gap(20),
                   // buildAlerts(weatherAlerts),
                   // const Gap(20),
@@ -89,8 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Overview
-  Widget buildOverview(pages) {
+  // Weather
+  Widget buildWeather(pages) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -100,27 +100,40 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Overview',
+                'Weather',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               Icon(
                 Icons.wb_cloudy_rounded,
-                color: Colors.white,
+                color: Colors.blue,
               ),
             ],
           ),
         ),
         const Gap(16),
-        if (pages.isEmpty)
-          const SizedBox(
-            height: 300,
-            child: Center(
+        SizedBox(
+          height: 300,
+          child: Visibility(
+            visible: pages.isNotEmpty,
+            replacement: const Center(
               child: CircularProgressIndicator(),
+              // child: Shimmer.fromColors(
+              //   baseColor: Colors.grey[300]!,
+              //   highlightColor: Colors.grey[100]!,
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(
+              //       horizontal: 38,
+              //       vertical: 16,
+              //     ),
+              //     child: Container(
+              //       decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(16),
+              //         color: Colors.white,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ),
-          )
-        else
-          SizedBox(
-            height: 300,
             child: PageView.builder(
               controller: overviewPageController,
               itemCount: pages.length,
@@ -129,6 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
+        ),
         if (pages.isNotEmpty && pages.length > 1)
           Column(
             children: [
@@ -222,17 +236,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const Gap(16),
-        if (pages.isEmpty)
-          const SizedBox(
-            height: 280,
-            child: Center(
+        SizedBox(
+          width: double.infinity,
+          height: 280,
+          child: Visibility(
+            visible: pages.isNotEmpty,
+            replacement: const Center(
               child: CircularProgressIndicator(),
             ),
-          )
-        else
-          SizedBox(
-            width: double.infinity,
-            height: 280,
             child: PageView.builder(
               controller: deviceCameraPageController,
               itemCount: pages.length,
@@ -241,6 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
+        ),
         if (pages.isNotEmpty && pages.length > 1)
           Column(
             children: [
