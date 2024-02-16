@@ -89,7 +89,7 @@ Future<void> main() async {
   // put home list items to state management
   if (userPrefsBox.get('homeListItems') != null) {
     final homeListItems = userPrefsBox.get('homeListItems') as List<String>;
-    UserPrefs().homeListItems = homeListItems;
+    // UserPrefs().homeListItems = homeListItems;
     di<UserPrefs>().homeListItems = homeListItems;
   }
   // else {
@@ -105,7 +105,7 @@ Future<void> main() async {
   // put start page to state management
   if (userPrefsBox.get('startPage') != null) {
     final startPage = userPrefsBox.get('startPage') as String;
-    UserPrefs().startPage = startPage;
+    // UserPrefs().startPage = startPage;
     di<UserPrefs>().startPage = startPage;
   }
   // else {

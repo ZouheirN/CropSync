@@ -105,37 +105,45 @@ class WeatherCard extends StatelessWidget {
                 ],
               ),
               Row(
+                // mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CachedNetworkImage(
-                        imageUrl: 'https:${weather.condition!.icon!}',
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) =>
-                                CircularProgressIndicator(
-                          value: downloadProgress.progress,
-                        ),
-                        imageBuilder: (context, imageProvider) {
-                          return Container(
-                            width: 100.0,
-                            height: 100.0,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
+                  Flexible(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: 'https:${weather.condition!.icon!}',
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                          ),
+                          imageBuilder: (context, imageProvider) {
+                            return Container(
+                              width: 100.0,
+                              height: 100.0,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                      Text(
-                        weather.condition!.text!,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ],
+                            );
+                          },
+                        ),
+                        Flexible(
+                          child: AutoSizeText(
+                            weather.condition!.text!,
+                            style: Theme.of(context).textTheme.titleLarge,
+                            maxFontSize: 16,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Flexible(
                     child: FittedBox(
@@ -256,35 +264,42 @@ class WeatherForecastCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl: 'https:${weather.condition!.icon!}',
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              CircularProgressIndicator(
-                        value: downloadProgress.progress,
-                      ),
-                      imageBuilder: (context, imageProvider) {
-                        return Container(
-                          width: 100.0,
-                          height: 100.0,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
+                Flexible(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: 'https:${weather.condition!.icon!}',
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) =>
+                                CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                        ),
+                        imageBuilder: (context, imageProvider) {
+                          return Container(
+                            width: 100.0,
+                            height: 100.0,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    Text(
-                      weather.condition!.text!,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ],
+                          );
+                        },
+                      ),
+                      Flexible(
+                        child: AutoSizeText(
+                          weather.condition!.text!,
+                          style: Theme.of(context).textTheme.titleLarge,
+                          maxFontSize: 16,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Flexible(
                   child: FittedBox(

@@ -74,10 +74,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: const Text('Start Page'),
             trailing: DropdownButton(
               items: listPages
-                  .map((e) => DropdownMenuItem<String>(
-                        value: e,
-                        child: Text(e),
-                      ))
+                  .map(
+                    (e) => DropdownMenuItem<String>(
+                      value: e,
+                      child: Text(e),
+                    ),
+                  )
                   .toList(),
               value: startPage,
               onChanged: (value) {
