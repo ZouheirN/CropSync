@@ -8,6 +8,7 @@ class UserPrefs extends ChangeNotifier {
     'Weather',
     'Alerts',
     'Device Camera',
+    'Statistics',
   ];
 
   List<String> get homeListItems => _homeListItems;

@@ -3,6 +3,7 @@ import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
+import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -48,6 +49,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Icons.camera_alt_rounded,
           color: Colors.green,
         );
+      case 'Statistics':
+        return const Icon(
+          Icons.bar_chart_rounded,
+          color: Colors.orange,
+        );
       default:
         return const Icon(Icons.error);
     }
@@ -87,30 +93,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
           ),
-          ReorderableListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            header: const Text(
-              'Home Items Order',
-              style: TextStyle(fontSize: 18),
+          ListTile(
+            title: const Text('Home Items Order'),
+            subtitle: ReorderableListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: checkIndex(listItems[index]),
+                  key: ValueKey(index),
+                  title: Text(listItems[index]),
+                  trailing: const Icon(Icons.drag_handle_rounded),
+                );
+              },
+              onReorder: (oldIndex, newIndex) {
+                if (newIndex > oldIndex) {
+                  newIndex -= 1;
+                }
+                final item = listItems.removeAt(oldIndex);
+                listItems.insert(newIndex, item);
+                di<UserPrefs>().homeListItems = listItems;
+              },
+              itemCount: listItems.length,
             ),
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: checkIndex(listItems[index]),
-                key: ValueKey(index),
-                title: Text(listItems[index]),
-                trailing: const Icon(Icons.drag_handle_rounded),
-              );
-            },
-            onReorder: (oldIndex, newIndex) {
-              if (newIndex > oldIndex) {
-                newIndex -= 1;
-              }
-              final item = listItems.removeAt(oldIndex);
-              listItems.insert(newIndex, item);
-              di<UserPrefs>().homeListItems = listItems;
-            },
-            itemCount: listItems.length,
           ),
           const Gap(20),
           Text(
@@ -118,14 +123,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           SwitchListTile(
-            title: const Text('Dark Theme'),
+            title: const Text('Dark Mode'),
             value: MyApp.themeNotifier.value == ThemeMode.dark,
             onChanged: (value) async {
-              // userPrefsBox.put(
-              //   'darkModeEnabled',
-              //   MyApp.themeNotifier.value == ThemeMode.light ? true : false,
-              // );
-
               di<UserPrefs>().darkModeEnabled = value;
 
               setState(() {
