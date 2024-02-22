@@ -136,6 +136,14 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
   }
 
   @override
+  void dispose() {
+    deviceNameController.dispose();
+    deviceLocationController.dispose();
+    deviceCodeController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Add Device')),

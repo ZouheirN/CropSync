@@ -33,12 +33,6 @@ class PrimaryTextField extends StatefulWidget {
 
 class _PrimaryTextFieldState extends State<PrimaryTextField> {
   @override
-  void dispose() {
-    widget.textController?.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return TextFormField(
       obscureText: widget.obscureText ?? false,

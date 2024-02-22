@@ -128,6 +128,8 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
   @override
   void dispose() {
     mapController.dispose();
+    cityTextController.dispose();
+    countryTextController.dispose();
     super.dispose();
   }
 

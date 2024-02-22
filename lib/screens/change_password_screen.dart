@@ -133,6 +133,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   void dispose() {
     passwordValidatorController.dispose();
+    oldPasswordController.dispose();
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -156,15 +159,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (!forgotPassword)
-                  const Text(
-                    'Old Password',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                if (!forgotPassword) const Gap(10),
-                if (!forgotPassword)
                   PrimaryTextField(
                     textController: oldPasswordController,
-                    hintText: 'Enter your old password',
+                    hintText: 'Old Password',
                     obscureText: true,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -174,11 +171,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     },
                   ),
                 if (!forgotPassword) const Gap(20),
-                const Text(
-                  'New Password',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const Gap(10),
                 FancyPasswordField(
                   hidePasswordIcon: const Icon(
                     Icons.visibility_off_outlined,
@@ -243,7 +235,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       horizontal: 20,
                     ),
                     filled: true,
-                    hintText: 'Enter your new password',
+                    hintText: 'New Password',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(20),
@@ -261,15 +253,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                 ),
                 const Gap(20),
-                const Text(
-                  'Confirm Password',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const Gap(10),
                 PrimaryTextField(
                   obscureText: true,
                   textController: confirmPasswordController,
-                  hintText: 'Confirm your new password',
+                  hintText: 'Confirm New Password',
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please confirm your new password';

@@ -99,6 +99,14 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
   }
 
   @override
+  void dispose() {
+    deviceNameController.dispose();
+    deviceLocationController.dispose();
+    deviceCodeController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Edit Device')),
