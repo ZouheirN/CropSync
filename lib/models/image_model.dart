@@ -32,4 +32,10 @@ class ImageModel extends ChangeNotifier {
     imagesBox.putAt(index, _images[index]);
     notifyListeners();
   }
+
+  void setInfo(int index, String info) {
+    _images[index].info = info;
+    imagesBox.putAt(index, _images[index]);
+    notifyListeners();
+  }
 }

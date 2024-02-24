@@ -27,7 +27,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
 Future<void> main() async {
@@ -92,15 +91,6 @@ Future<void> main() async {
     // UserPrefs().homeListItems = homeListItems;
     di<UserPrefs>().homeListItems = homeListItems;
   }
-  // else {
-  //   final homeListItems = [
-  //     'Weather',
-  //     'Alerts',
-  //     'Device Camera',
-  //   ];
-  //   di<UserPrefsModel>().homeListItems = homeListItems;
-  //   userPrefsBox.put('homeListItems', homeListItems);
-  // }
 
   // put start page to state management
   if (userPrefsBox.get('startPage') != null) {
@@ -108,11 +98,6 @@ Future<void> main() async {
     // UserPrefs().startPage = startPage;
     di<UserPrefs>().startPage = startPage;
   }
-  // else {
-  //   const startPage = 'Home';
-  //   di<UserPrefsModel>().startPage = startPage;
-  //   userPrefsBox.put('startPage', startPage);
-  // }
 
   runApp(
     MyApp(

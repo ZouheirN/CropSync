@@ -39,12 +39,18 @@ class _QuickDiseaseDetectionScreenState
       image: img.readAsBytesSync(),
       result: '',
       uploadProgress: 0,
+      info: '',
     ));
 
     //todo send to server
-    final response = DiseaseApi.uploadDiseaseImage(
-      image: base64Encode(img.readAsBytesSync()),
-      index: di<ImageModel>().images.length - 1,
+    // final response = DiseaseApi.uploadDiseaseImage(
+    //   image: base64Encode(img.readAsBytesSync()),
+    //   index: di<ImageModel>().images.length - 1,
+    // );
+
+    DiseaseApi.getDiseaseData(
+      img.readAsBytesSync(),
+      di<ImageModel>().images.length - 1,
     );
   }
 
@@ -180,6 +186,36 @@ class _QuickDiseaseDetectionScreenState
                     child: FocusedMenuHolder(
                       menuItems: [
                         FocusedMenuItem(
+                          title: const Text(
+                            'More Information',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('More Information'),
+                                  content: Text(images[index].info ?? ''),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Close'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          backgroundColor: Colors.white,
+                          trailingIcon: const Icon(
+                            Icons.info_rounded,
+                            color: Colors.black,
+                          ),
+                        ),
+                        FocusedMenuItem(
                           title: Text(
                             images[index].result == 'Upload Failed' ||
                                     images[index].result == 'Uploading...'
@@ -188,10 +224,14 @@ class _QuickDiseaseDetectionScreenState
                             style: const TextStyle(color: Colors.black),
                           ),
                           onPressed: () {
-                            DiseaseApi.uploadDiseaseImage(
-                              image: base64Encode(images[index].image),
-                              index: index,
+                            DiseaseApi.getDiseaseData(
+                              images[index].image,
+                              di<ImageModel>().images.length - 1,
                             );
+                            // DiseaseApi.uploadDiseaseImage(
+                            //   image: base64Encode(images[index].image),
+                            //   index: index,
+                            // );
                           },
                           backgroundColor: Colors.white,
                           trailingIcon: const Icon(

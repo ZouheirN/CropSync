@@ -12,10 +12,13 @@ class ImageObject extends HiveObject {
   String? result;
   @HiveField(3)
   double? uploadProgress;
+  @HiveField(4)
+  String? info;
 
   ImageObject({
     required this.image,
     required this.result,
     required this.uploadProgress,
+    required this.info,
   });
 }
