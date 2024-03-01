@@ -1,9 +1,10 @@
 import 'dart:ui';
 
-import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/widgets/buttons.dart';
+import 'package:cropsync/widgets/tagline.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hyper_effects/hyper_effects.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -46,13 +47,12 @@ class WelcomeScreen extends StatelessWidget {
               padding: const EdgeInsets.only(
                 left: 40,
                 right: 40,
-                top: 20,
-                bottom: 80,
+                top: 10,
+                bottom: 65,
               ),
               child: Column(
                 children: [
                   buildTitle(),
-                  // const Gap(270),
                   Expanded(flex: 5, child: Container()),
                   buildText(),
                   const Spacer(),
@@ -89,6 +89,13 @@ class WelcomeScreen extends StatelessWidget {
                   // color: Colors.green,
                   fontWeight: FontWeight.bold,
                   fontSize: 50,
+                  shadows: <Shadow>[
+                    Shadow(
+                      offset: Offset(2.0, 2.0),
+                      blurRadius: 10.0,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                  ],
                 ),
               ),
               TextSpan(
@@ -97,6 +104,13 @@ class WelcomeScreen extends StatelessWidget {
                   color: Color.fromARGB(255, 22, 149, 72),
                   fontWeight: FontWeight.bold,
                   fontSize: 50,
+                  shadows: <Shadow>[
+                    Shadow(
+                      offset: Offset(2.0, 2.0),
+                      blurRadius: 10.0,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -110,15 +124,8 @@ class WelcomeScreen extends StatelessWidget {
   Widget buildText() {
     return const Column(
       children: [
-        Gap(20),
-        Text(
-          'Monitor your crops and get real-time updates!',
-          textAlign: TextAlign.left,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-          ),
-        ),
+        Gap(100),
+        TagLine(),
       ],
     );
   }

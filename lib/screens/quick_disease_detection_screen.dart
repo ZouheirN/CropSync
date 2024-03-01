@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cropsync/json/image.dart';
@@ -42,11 +41,11 @@ class _QuickDiseaseDetectionScreenState
       info: '',
     ));
 
-    //todo send to server
-    // final response = DiseaseApi.uploadDiseaseImage(
-    //   image: base64Encode(img.readAsBytesSync()),
-    //   index: di<ImageModel>().images.length - 1,
-    // );
+//todo send to server
+// final response = DiseaseApi.uploadDiseaseImage(
+//   image: base64Encode(img.readAsBytesSync()),
+//   index: di<ImageModel>().images.length - 1,
+// );
 
     DiseaseApi.getDiseaseData(
       img.readAsBytesSync(),
@@ -156,7 +155,7 @@ class _QuickDiseaseDetectionScreenState
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
             buildGrid(images),
@@ -169,8 +168,7 @@ class _QuickDiseaseDetectionScreenState
   Widget buildGrid(images) {
     int columnCount = MediaQuery.of(context).size.width > 600 ? 3 : 2;
 
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.7,
+    return Expanded(
       child: AnimationLimiter(
         child: GridView.count(
           crossAxisCount: columnCount,
@@ -228,10 +226,10 @@ class _QuickDiseaseDetectionScreenState
                               images[index].image,
                               di<ImageModel>().images.length - 1,
                             );
-                            // DiseaseApi.uploadDiseaseImage(
-                            //   image: base64Encode(images[index].image),
-                            //   index: index,
-                            // );
+// DiseaseApi.uploadDiseaseImage(
+//   image: base64Encode(images[index].image),
+//   index: index,
+// );
                           },
                           backgroundColor: Colors.white,
                           trailingIcon: const Icon(

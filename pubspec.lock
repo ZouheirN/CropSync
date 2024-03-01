@@ -297,6 +297,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.3"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
   expansion_tile_card:
     dependency: "direct main"
     description:
@@ -382,14 +390,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_animate:
-    dependency: "direct main"
-    description:
-      name: flutter_animate
-      sha256: "7c8a6594a9252dad30cc2ef16e33270b6248c4dedc3b3d06c86c4f3f4dc05ae5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.5.0"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -502,14 +502,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  flutter_shaders:
-    dependency: transitive
-    description:
-      name: flutter_shaders
-      sha256: "02750b545c01ff4d8e9bbe8f27a7731aa3778402506c67daa1de7f5fc3f4befe"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.2"
   flutter_staggered_animations:
     dependency: "direct main"
     description:
@@ -664,6 +656,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  google_fonts:
+    dependency: "direct main"
+    description:
+      name: google_fonts
+      sha256: f0b8d115a13ecf827013ec9fc883390ccc0e87a96ed5347a3114cac177ef18e8
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.0"
   google_generative_ai:
     dependency: "direct main"
     description:
@@ -728,6 +728,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  hyper_effects:
+    dependency: "direct main"
+    description:
+      name: hyper_effects
+      sha256: "121c31daf7ea38364c5b2c29eac3371c2cfa55930db59769d9095c76d8d6d308"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.3"
   image:
     dependency: transitive
     description:
@@ -1389,6 +1397,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.1"
+  unicode_emojis:
+    dependency: transitive
+    description:
+      name: unicode_emojis
+      sha256: "365a36a29924ac9b9d88e934215b23f318620033dc4a6f6b9499af37ceb99375"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   universal_platform:
     dependency: transitive
     description:

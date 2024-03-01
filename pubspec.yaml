@@ -70,10 +70,10 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   lottie: ^3.0.0
   sticky_headers: ^0.3.0+2
-  flutter_animate: ^4.5.0
   auto_size_text: ^3.0.0
   shimmer: ^3.0.0
   google_generative_ai: ^0.2.1
+  hyper_effects: ^0.2.3
 
 dev_dependencies:
   flutter_test:

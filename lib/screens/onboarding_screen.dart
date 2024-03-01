@@ -2,7 +2,6 @@ import 'package:cropsync/main.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
 import 'package:lottie/lottie.dart';
@@ -75,7 +74,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     },
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 40, left: 40.0, right: 40.0),
+                        padding: const EdgeInsets.only(
+                            top: 40, left: 40.0, right: 40.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -184,15 +184,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
       ),
       bottomSheet: currentPage == numPages - 1
-          ? SizedBox(
-              height: 100,
-              width: double.infinity,
-              child: GestureDetector(
-                onTap: () {
-                  userPrefsBox.put('showOnboarding', false);
-                  Navigator.of(context).pushReplacementNamed('/welcome');
-                },
-                child: const Center(
+          ? GestureDetector(
+              onTap: () {
+                userPrefsBox.put('showOnboarding', false);
+                Navigator.of(context).pushReplacementNamed('/welcome');
+              },
+              child: const SizedBox(
+                height: 100,
+                width: double.infinity,
+                child: Center(
                   child: Text(
                     'Get Started',
                     style: TextStyle(
@@ -203,7 +203,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
               ),
-            ).animate().fade()
+            )
           : null,
     );
   }
