@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:logger/logger.dart';
+import 'package:cropsync/main.dart';
 
 class WeatherForecastScreen extends StatefulWidget {
   const WeatherForecastScreen({super.key});
@@ -26,7 +26,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
   Future getData() async {
     final weatherForecast = await WeatherApi.getWeatherForecastData();
     if (weatherForecast.runtimeType == List<WeatherForecast>) {
-      Logger().d('Fetched Weather Forecast');
+      logger.d('Fetched Weather Forecast');
       return weatherForecast;
     }
   }

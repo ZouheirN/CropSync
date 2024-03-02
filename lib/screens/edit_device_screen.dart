@@ -9,7 +9,7 @@ import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:logger/logger.dart';
+import 'package:cropsync/main.dart';
 import 'package:watch_it/watch_it.dart';
 
 class EditDeviceScreen extends StatefulWidget {
@@ -63,7 +63,7 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
         return;
       }
 
-      Logger().d('Device edited on server');
+      logger.d('Device edited on server');
 
       di<DevicesModel>().editDevice(
         id: device.deviceId,
@@ -75,7 +75,7 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
       WeatherApi.getWeatherData().then((value) {
         if (value.runtimeType == List<Weather>) {
           di<WeatherModel>().weather = value;
-          Logger().d('Fetched Weather');
+          logger.d('Fetched Weather');
         }
       });
 

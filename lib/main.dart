@@ -10,6 +10,7 @@ import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/account_information_screen.dart';
 import 'package:cropsync/screens/add_device_map_screen.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
+import 'package:cropsync/screens/camera_control_screen.dart';
 import 'package:cropsync/screens/change_password_screen.dart';
 import 'package:cropsync/screens/device_camera_history_screen.dart';
 import 'package:cropsync/screens/edit_device_screen.dart';
@@ -27,7 +28,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
+
+final logger = Logger();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -168,6 +172,7 @@ class MyApp extends StatelessWidget {
                   const DeviceCameraHistoryScreen(),
               '/weather-forecast': (context) => const WeatherForecastScreen(),
               '/settings': (context) => const SettingsScreen(),
+              '/camera-control': (context) => const CameraControlScreen(),
             });
       },
     );

@@ -57,7 +57,7 @@ dependencies:
   path_provider: ^2.1.2
   focused_menu: ^1.0.5
   photo_view: ^0.14.0
-  package_info_plus: ^5.0.1
+  package_info_plus: ^4.2.0
   cached_network_image: ^3.3.1
   smooth_page_indicator: ^1.1.0
   expansion_tile_card: ^3.0.0
@@ -74,6 +74,8 @@ dependencies:
   shimmer: ^3.0.0
   google_generative_ai: ^0.2.1
   hyper_effects: ^0.2.3
+  arrow_pad: ^0.2.0
+  web_socket_channel: ^2.4.4
 
 dev_dependencies:
   flutter_test:

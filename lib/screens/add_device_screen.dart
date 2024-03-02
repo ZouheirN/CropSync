@@ -8,7 +8,7 @@ import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:logger/logger.dart';
+import 'package:cropsync/main.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AddDeviceScreen extends StatefulWidget {
@@ -64,7 +64,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         return;
       }
 
-      Logger().d('Device is not configured');
+      logger.d('Device is not configured');
 
       // add device to server and get activation key
       final globalResult = await DeviceApi.addDevice(
@@ -90,7 +90,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         return;
       }
 
-      Logger().d('Device added to server');
+      logger.d('Device added to server');
 
       // configure local device using activation key
       final localResult = await LocalDeviceApi.addDeviceConfiguration(
@@ -115,7 +115,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         return;
       }
 
-      Logger().d('Device configured locally');
+      logger.d('Device configured locally');
 
       di<DevicesModel>().addDevice(
         id: globalResult["deviceId"],

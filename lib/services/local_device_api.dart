@@ -1,17 +1,23 @@
 import 'dart:io';
 
+import 'package:cropsync/main.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
 class LocalDeviceApi {
   static final dio = Dio();
 
   static Future<String> getDeviceIp(String deviceCode) async {
-    final addresses = await InternetAddress.lookup('comitup-$deviceCode');
-    return addresses[0].address;
+    try {
+      final addresses = await InternetAddress.lookup('comitup-$deviceCode');
+      logger.i(addresses[0].address);
+      return addresses[0].address;
+    } on SocketException catch (e) {
+      logger.e(e);
+      return '';
+    }
   }
 
   static Future<dynamic> addDeviceConfiguration(
@@ -37,7 +43,7 @@ class LocalDeviceApi {
         return ReturnTypes.error;
       }
 
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
       return ReturnTypes.fail;
     }
   }
@@ -61,7 +67,7 @@ class LocalDeviceApi {
         return ReturnTypes.error;
       }
 
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       return ReturnTypes.fail;
     }
@@ -79,7 +85,7 @@ class LocalDeviceApi {
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
 
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       return ReturnTypes.fail;
     }

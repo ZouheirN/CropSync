@@ -7,7 +7,7 @@ import 'package:cropsync/utils/api_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:logger/logger.dart';
+import 'package:cropsync/main.dart';
 
 class WeatherApi {
   static final dio = Dio();
@@ -30,7 +30,7 @@ class WeatherApi {
 
       return weatherFromJson(response.data);
     } on DioException catch (e) {
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       return null;
     }
@@ -52,7 +52,7 @@ class WeatherApi {
 
       return weatherForecastFromJson(response.data);
     } on DioException catch (e) {
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       return null;
     }

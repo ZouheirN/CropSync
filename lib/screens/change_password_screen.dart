@@ -10,7 +10,7 @@ import 'package:cropsync/widgets/textfields.dart';
 import 'package:fancy_password_field/fancy_password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:logger/logger.dart';
+import 'package:cropsync/main.dart';
 import 'package:watch_it/watch_it.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -66,7 +66,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           invalidTokenResponse(context);
         }
 
-        Logger().d(result);
+        logger.d(result);
 
         UserToken.setToken(result.token);
         di<UserModel>().user = result;
@@ -117,7 +117,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           return;
         }
 
-        Logger().d(result);
+        logger.d(result);
 
         UserToken.setToken(result.token);
         di<UserModel>().user = result;

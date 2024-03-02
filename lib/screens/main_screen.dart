@@ -14,7 +14,7 @@ import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
-import 'package:logger/logger.dart';
+import 'package:cropsync/main.dart';
 import 'package:watch_it/watch_it.dart';
 
 import 'crops_screen.dart';
@@ -51,7 +51,7 @@ class _MainScreenState extends State<MainScreen> {
     final weatherData = await WeatherApi.getWeatherData();
     if (weatherData.runtimeType == List<Weather>) {
       di<WeatherModel>().weather = weatherData;
-      Logger().d('Fetched Weather');
+      logger.d('Fetched Weather');
     }
 
     Timer.periodic(const Duration(minutes: 15), (timer) async {
@@ -60,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
       final weatherData = await WeatherApi.getWeatherData();
       if (weatherData.runtimeType == List<Weather>) {
         di<WeatherModel>().weather = weatherData;
-        Logger().d('Fetched Weather');
+        logger.d('Fetched Weather');
       }
     });
   }
@@ -68,14 +68,14 @@ class _MainScreenState extends State<MainScreen> {
   void deviceCamera() async {
     final deviceCameraData = await DeviceApi.getDeviceCamera();
     di<DeviceCameraModel>().deviceCamera = deviceCameraData;
-    Logger().d('Fetched Device Camera');
+    logger.d('Fetched Device Camera');
 
     Timer.periodic(const Duration(minutes: 20), (timer) async {
       if (!OtherVars().autoRefresh) return;
 
       final deviceCameraData = await DeviceApi.getDeviceCamera();
       di<DeviceCameraModel>().deviceCamera = deviceCameraData;
-      Logger().d('Fetched Device Camera');
+      logger.d('Fetched Device Camera');
     });
   }
 
@@ -83,7 +83,7 @@ class _MainScreenState extends State<MainScreen> {
     final devices = await DeviceApi.getDevices();
     if (devices.runtimeType == List<Device>) {
       di<DevicesModel>().devices = devices;
-      Logger().d('Fetched Devices');
+      logger.d('Fetched Devices');
     }
 
     Timer.periodic(const Duration(minutes: 1), (timer) async {
@@ -92,7 +92,7 @@ class _MainScreenState extends State<MainScreen> {
       final devices = await DeviceApi.getDevices();
       if (devices.runtimeType == List<Device>) {
         di<DevicesModel>().devices = devices;
-        Logger().d('Fetched Devices');
+        logger.d('Fetched Devices');
       }
     });
   }
@@ -116,11 +116,11 @@ class _MainScreenState extends State<MainScreen> {
     return FGBGNotifier(
       onEvent: (event) async {
         if (event == FGBGType.background) {
-          Logger().d('Paused Fetching');
+          logger.d('Paused Fetching');
           OtherVars().autoRefresh = false;
         } else {
           await Future.delayed(const Duration(seconds: 2));
-          Logger().d('Resumed Fetching');
+          logger.d('Resumed Fetching');
           OtherVars().autoRefresh = true;
         }
       },

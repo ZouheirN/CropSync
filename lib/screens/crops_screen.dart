@@ -24,7 +24,7 @@ class _CropsScreenState extends State<CropsScreen> {
     final devices = await DeviceApi.getDevices();
     if (devices.runtimeType == List<Device>) {
       di<DevicesModel>().devices = devices;
-      Logger().d('Fetched Devices by Refresh');
+      logger.d('Fetched Devices by Refresh');
     }
   }
 

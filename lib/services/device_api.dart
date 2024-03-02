@@ -7,7 +7,7 @@ import 'package:cropsync/utils/api_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:logger/logger.dart';
+import 'package:cropsync/main.dart';
 
 class DeviceApi {
   static final dio = Dio();
@@ -40,7 +40,7 @@ class DeviceApi {
       return response.data;
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       if (e.response?.data['error'] == "UnAuthorized Access!") {
         return ReturnTypes.fail;
@@ -78,7 +78,7 @@ class DeviceApi {
       return response.data;
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       if (e.response?.data['error'] == "UnAuthorized Access!") {
         return ReturnTypes.fail;
@@ -113,7 +113,7 @@ class DeviceApi {
 
       return deviceList;
     } on DioException catch (e) {
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       return null;
     }
@@ -147,7 +147,7 @@ class DeviceApi {
       return response.data;
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       if (e.response?.data['error'] == "UnAuthorized Access!") {
         return ReturnTypes.fail;

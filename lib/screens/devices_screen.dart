@@ -7,7 +7,7 @@ import 'package:cropsync/widgets/dialogs.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:logger/logger.dart';
+import 'package:cropsync/main.dart';
 import 'package:watch_it/watch_it.dart';
 
 class DevicesScreen extends WatchingStatefulWidget {
@@ -59,7 +59,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         return;
       }
 
-      Logger().d('Local configuration deleted');
+      logger.d('Local configuration deleted');
 
       // delete from server
       final globalResult =
@@ -82,7 +82,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         return;
       }
 
-      Logger().d('Device deleted from server');
+      logger.d('Device deleted from server');
 
       di<DevicesModel>().deleteDevice(device.deviceId!);
 
@@ -98,7 +98,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
     final devices = await DeviceApi.getDevices();
     if (devices.runtimeType == List<Device>) {
       di<DevicesModel>().devices = devices;
-      Logger().d('Fetched Devices by Refresh');
+      logger.d('Fetched Devices by Refresh');
     }
   }
 
@@ -162,6 +162,17 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                     icon: const Icon(Icons.add_rounded),
                                   )
                                 : null,
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.camera_rounded),
+                            title: const Text(
+                              'Control Camera',
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pushNamed('/camera-control', arguments: {
+                                'device': devices[index],
+                              });
+                            },
                           ),
                           ButtonBar(
                             alignment: MainAxisAlignment.spaceAround,

@@ -22,34 +22,34 @@ class HomeScreen extends WatchingStatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final overviewPageController =
-  PageController(viewportFraction: 0.8, keepPage: true);
+      PageController(viewportFraction: 0.8, keepPage: true);
   final deviceCameraPageController =
-  PageController(viewportFraction: 0.8, keepPage: true);
+      PageController(viewportFraction: 0.8, keepPage: true);
 
   @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
     final weather = watchPropertyValue((WeatherModel w) => w.weather.toList());
     final deviceCamera =
-    watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera.toList());
+        watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera.toList());
 
     final weatherPages = weather
-        .map((e) =>
-        WeatherCard(
-          context: context,
-          isTappable: true,
-          weather: e,
-        ))
+        .map(
+          (e) => WeatherCard(
+            context: context,
+            isTappable: true,
+            weather: e,
+          ),
+        )
         .toList();
 
     final deviceCameraPages = deviceCamera
         .map(
-          (e) =>
-          DeviceCameraCard(
+          (e) => DeviceCameraCard(
             deviceCamera: e,
             context: context,
           ),
-    )
+        )
         .toList();
 
     // final weatherAlerts = weather
@@ -67,8 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final weatherAlerts = List.generate(0, (index) => null);
 
-    final homeListItems =
-    watchPropertyValue((UserPrefs u) => u.homeListItems);
+    final homeListItems = watchPropertyValue((UserPrefs u) => u.homeListItems);
 
     return Visibility(
       visible: devices.isNotEmpty,
@@ -80,26 +79,22 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: AnimationConfiguration.toStaggeredList(
                 duration: const Duration(milliseconds: 375),
-                childAnimationBuilder: (widget) =>
-                    SlideAnimation(
-                      horizontalOffset: 50.0,
-                      child: FadeInAnimation(
-                        child: widget,
-                      ),
-                    ),
+                childAnimationBuilder: (widget) => SlideAnimation(
+                  horizontalOffset: 50.0,
+                  child: FadeInAnimation(
+                    child: widget,
+                  ),
+                ),
                 children: [
                   for (var item in homeListItems)
                     if (item == 'Weather')
                       buildWeather(weatherPages)
-                    else
-                      if (item == 'Alerts')
-                        buildAlerts(weatherAlerts)
-                      else
-                        if (item == 'Device Camera')
-                          buildDeviceCamera(deviceCameraPages)
-                        else
-                          if (item == 'Statistics')
-                            buildStatistics(),
+                    else if (item == 'Alerts')
+                      buildAlerts(weatherAlerts)
+                    else if (item == 'Device Camera')
+                      buildDeviceCamera(deviceCameraPages)
+                    else if (item == 'Statistics')
+                      buildStatistics(),
                   const Gap(20),
                 ],
               ),
@@ -213,10 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
           for (var alert in weatherAlerts)
             ExpansionTileCard(
               title: Text(
-                  '${alert!['device']} (${(alert['alert'] as List<String>)
-                      .length} ${(alert['alert'] as List<String>).length == 1
-                      ? 'Alert'
-                      : 'Alerts'})'),
+                  '${alert!['device']} (${(alert['alert'] as List<String>).length} ${(alert['alert'] as List<String>).length == 1 ? 'Alert' : 'Alerts'})'),
               children: [
                 ListTile(
                   title: Text(alert['location'].toString()),
@@ -346,9 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const Gap(16),
             CommonButton(
               text: 'Add a Device',
-              backgroundColor: Theme
-                  .of(context)
-                  .primaryColor,
+              backgroundColor: Theme.of(context).primaryColor,
               textColor: Colors.white,
               onPressed: () {
                 Navigator.of(context).pushNamed('/add-device');

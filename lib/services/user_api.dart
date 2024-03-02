@@ -4,7 +4,7 @@ import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:logger/logger.dart';
+import 'package:cropsync/main.dart';
 import 'package:watch_it/watch_it.dart';
 
 class UserApi {
@@ -29,7 +29,7 @@ class UserApi {
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
 
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       return ReturnTypes.fail;
     }
@@ -56,7 +56,7 @@ class UserApi {
         return ReturnTypes.emailTaken;
       }
 
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       return ReturnTypes.fail;
     }
@@ -87,7 +87,7 @@ class UserApi {
         return ReturnTypes.invalidToken;
       }
 
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       return ReturnTypes.fail;
     }
@@ -124,7 +124,7 @@ class UserApi {
         return ReturnTypes.invalidToken;
       }
 
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
       return ReturnTypes.fail;
     }
   }
@@ -153,7 +153,7 @@ class UserApi {
         return ReturnTypes.invalidToken;
       }
 
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
       return ReturnTypes.fail;
     }
   }
@@ -173,7 +173,7 @@ class UserApi {
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
 
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       return ReturnTypes.fail;
     }
@@ -200,7 +200,7 @@ class UserApi {
         return ReturnTypes.invalidToken;
       }
 
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       return ReturnTypes.fail;
     }
@@ -231,7 +231,7 @@ class UserApi {
         return ReturnTypes.invalidToken;
       }
 
-      Logger().e(e.response?.data);
+      logger.e(e.response?.data);
 
       return ReturnTypes.fail;
     }
