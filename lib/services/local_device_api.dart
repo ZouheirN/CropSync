@@ -4,6 +4,7 @@ import 'package:cropsync/main.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:dio/dio.dart';
+import 'package:nsd/nsd.dart';
 import 'package:watch_it/watch_it.dart';
 
 class LocalDeviceApi {
@@ -11,8 +12,19 @@ class LocalDeviceApi {
 
   static Future<String> getDeviceIp(String deviceCode) async {
     try {
-      final addresses = await InternetAddress.lookup('comitup-$deviceCode');
+      final addresses = await InternetAddress.lookup('comitup-999');
       logger.i(addresses[0].address);
+
+      // final discovery = await startDiscovery('_cropsync$deviceCode._tcp');
+      // String ip = '';
+      // discovery.addListener(() {
+      //   logger.i(discovery.services);
+      //   ip = discovery.services.first.host ?? '';
+      // });
+      // while (discovery.services.isEmpty) {
+      //   await Future.delayed(const Duration(seconds: 1));
+      // }
+
       return addresses[0].address;
     } on SocketException catch (e) {
       logger.e(e);

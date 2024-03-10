@@ -1,11 +1,14 @@
 import 'dart:async';
-import 'dart:convert';
+import 'dart:io';
 
-import 'package:arrow_pad/arrow_pad.dart';
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/services/local_device_api.dart';
+import 'package:cropsync/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:gap/gap.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class CameraControlScreen extends StatefulWidget {
@@ -16,51 +19,50 @@ class CameraControlScreen extends StatefulWidget {
 }
 
 class _CameraControlScreenState extends State<CameraControlScreen> {
-  dynamic _device;
-  String ip = 'Connecting...';
-  bool isConnectedToSocket = false;
+  dynamic device;
+  String status = 'Waiting for connection...';
+  bool isTcp = false;
+
+  VlcPlayerController? videoPlayerController;
+
   WebSocketChannel? channel;
 
-  // void startTimer() async {
-  //   while (mounted) {
-  //     channel?.sink.add('camera');
-  //     await Future.delayed(const Duration(seconds: 8));
-  //   }
-  // }
+  final textEditingController = TextEditingController();
+  final espTextEditingController = TextEditingController();
 
   @override
   void initState() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
       final args =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       setState(() {
-        _device = args['device'] as Device;
+        device = args['device'] as Device;
       });
-      LocalDeviceApi.getDeviceIp(_device.code!).then((value) {
-        final channel = WebSocketChannel.connect(
-          Uri.parse('ws://$value:65432'),
-        );
 
-        setState(() {
-          if (value == '') {
-            ip = 'Failed to connect';
-          } else {
-            // startTimer();
-            ip = 'Connected to $value';
-            isConnectedToSocket = true;
-            this.channel = channel;
-            channel.sink.add('camera');
-          }
-        });
+      videoPlayerController = VlcPlayerController.network(
+        'udp://@:8888',
+        options: VlcPlayerOptions(
+          extras: [
+            '--demux=h264',
+          ],
+        ),
+      );
+
+      getLocalIpAddress().then((value) {
+        if (value == null) return;
+
+        textEditingController.text = value;
       });
     });
-
     super.initState();
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
+    videoPlayerController?.dispose();
+    textEditingController.dispose();
     channel?.sink.close();
+    espTextEditingController.dispose();
     super.dispose();
   }
 
@@ -72,84 +74,192 @@ class _CameraControlScreenState extends State<CameraControlScreen> {
       ),
       body: Column(
         children: [
-          if (channel != null)
-            StreamBuilder(
-              stream: channel!.stream,
-              builder: (context, snapshot) {
-                if (snapshot.hasData && snapshot.data.startsWith("IMAGE:") ) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    color: Colors.black,
-                    child: Image.memory(
-                      base64Decode(snapshot.data.substring(6)),
-                      fit: BoxFit.cover,
-                    ),
-                  );
-                }
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     const Text('UDP'),
+          //     Switch(
+          //         value: isTcp,
+          //         onChanged: (value) async {
+          //           if (value == false) {
+          //             dynamic deviceIp = await getLocalIpAddress();
+          //             if (deviceIp == null) return;
+          //
+          //             textEditingController.text = deviceIp;
+          //             videoPlayerController = VlcPlayerController.network(
+          //               'udp://@:8888',
+          //               options: VlcPlayerOptions(
+          //                 extras: [
+          //                   '--demux=h264',
+          //                 ],
+          //               ),
+          //             );
+          //
+          //             status = 'Connect to this device';
+          //           } else {
+          //             textEditingController.clear();
+          //           }
+          //
+          //           setState(() {
+          //             isTcp = value;
+          //           });
+          //         }),
+          //     const Text('TCP'),
+          //   ],
+          // ),
+          if (isTcp)
+            ListTile(
+                title: TextField(
+                  controller: textEditingController,
+                  decoration: const InputDecoration(
+                    labelText: 'Enter IP',
+                  ),
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.connect_without_contact_rounded),
+                  onPressed: () async {
+                    final ip = await LocalDeviceApi.getDeviceIp(device.code!);
 
-                return SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      Text('Getting Image...')
-                    ],
-                  ),
-                );
-              },
-            )
-          else if (ip == 'Failed to connect')
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: const Column(
-                children: [
-                  Icon(
-                    Icons.error_rounded,
-                    color: Colors.red,
-                  ),
-                  Text(
-                    'Failed to connect to device',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ],
+                    if (ip == '') {
+                      Dialogs.showErrorDialog('Connection Error',
+                          'Failed to get IP of device', context);
+                      return;
+                    }
+
+                    setState(() {
+                      textEditingController.text = ip;
+                    });
+                  },
+                ),
+                subtitle: ElevatedButton(
+                  onPressed: () {
+                    if (textEditingController.text.isEmpty) {
+                      Dialogs.showErrorDialog(
+                          'Connection Error', 'IP cannot be empty', context);
+                      return;
+                    }
+
+                    videoPlayerController = VlcPlayerController.network(
+                      'tcp/h264://${textEditingController.text}:8888',
+                    );
+
+                    setState(() {
+                      status = 'Connected to ${textEditingController.text}';
+                    });
+                  },
+                  child: const Text('Connect'),
+                ))
+          else
+            ListTile(
+              title: TextField(
+                controller: textEditingController,
+                decoration: const InputDecoration(
+                  labelText: 'Your IP Address',
+                ),
+                enabled: false,
+              ),
+            ),
+          if (videoPlayerController != null)
+            Center(
+              child: VlcPlayer(
+                controller: videoPlayerController!,
+                aspectRatio: 16 / 9,
+                placeholder: const Center(child: CircularProgressIndicator()),
               ),
             )
           else
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                ],
+            const SizedBox(
+              height: 200,
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
             ),
-          if (_device != null)
-            Text(
-              'Device: ${_device.name}',
-              style: const TextStyle(fontSize: 20),
+          ListTile(
+            title: TextField(
+              controller: espTextEditingController,
+              decoration: const InputDecoration(
+                labelText: 'Enter ESP IP',
+              ),
+              keyboardType: TextInputType.number,
             ),
+            trailing: IconButton(
+              icon: const Icon(Icons.check_rounded),
+              onPressed: () async {
+                setState(() {
+                  channel = WebSocketChannel.connect(
+                    Uri.parse('ws://${espTextEditingController.text}:81'),
+                  );
+                  status = 'Connected to ${espTextEditingController.text}';
+                });
+              },
+            ),
+          ),
           Text(
-            ip,
+            status,
             style: const TextStyle(fontSize: 16),
           ),
+          StreamBuilder(
+            stream: channel?.stream,
+            builder: (context, snapshot) {
+              return Text(snapshot.hasData ? 'Message From ESP: ${snapshot.data}' : '');
+            },
+          ),
           Expanded(
-            child: Container(
-              alignment: Alignment.center,
-              child: ArrowPad(
-                padding: const EdgeInsets.all(80),
-                onPressed: (direction) {
-                  if (isConnectedToSocket) {
-                    channel?.sink.add(direction.toString());
-                    channel?.sink.add('camera');
-                  }
-                },
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    channel?.sink.add('left');
+                  },
+                  icon: const Icon(
+                    Icons.arrow_circle_left_rounded,
+                    size: 100,
+                  ),
+                ),
+                const Gap(10),
+                IconButton(
+                  onPressed: () {
+                    channel?.sink.add('right');
+                  },
+                  icon: const Icon(
+                    Icons.arrow_circle_right_rounded,
+                    size: 100,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<String?> getLocalIpAddress() async {
+    final interfaces = await NetworkInterface.list(
+        type: InternetAddressType.IPv4, includeLinkLocal: true);
+
+    try {
+      // Try VPN connection first
+      NetworkInterface vpnInterface =
+          interfaces.firstWhere((element) => element.name == "tun0");
+      return vpnInterface.addresses.first.address;
+    } on StateError {
+      // Try wlan connection next
+      try {
+        NetworkInterface interface =
+            interfaces.firstWhere((element) => element.name == "wlan0");
+        return interface.addresses.first.address;
+      } catch (ex) {
+        // Try any other connection next
+        try {
+          NetworkInterface interface = interfaces.firstWhere((element) =>
+              !(element.name == "tun0" || element.name == "wlan0"));
+          return interface.addresses.first.address;
+        } catch (ex) {
+          return null;
+        }
+      }
+    }
   }
 }

@@ -76,6 +76,8 @@ dependencies:
   hyper_effects: ^0.2.3
   arrow_pad: ^0.2.0
   web_socket_channel: ^2.4.4
+  nsd: ^3.0.0
+  flutter_vlc_player: ^7.4.1
 
 dev_dependencies:
   flutter_test:

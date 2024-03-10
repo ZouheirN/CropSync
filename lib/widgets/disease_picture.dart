@@ -12,8 +12,9 @@ class DiseasePicture extends WatchingWidget {
   Widget build(BuildContext context) {
     final images = watchPropertyValue((ImageModel m) => m.images.toList());
 
-    if (images.isEmpty) {
-      return Container();
+    // check if index is contained in images
+    if (index >= images.length) {
+      return const SizedBox();
     }
 
     final progress = images[index].uploadProgress;

@@ -139,7 +139,7 @@ class _QuickDiseaseDetectionScreenState
 
   @override
   Widget build(BuildContext context) {
-    final images = watchPropertyValue((ImageModel m) => m.images.toList());
+    final dynamic images = watchPropertyValue((ImageModel m) => m.images.toList());
 
     return Scaffold(
       appBar: AppBar(
