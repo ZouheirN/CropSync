@@ -1,8 +1,7 @@
-import 'package:cropsync/json/weather.dart';
+import 'package:cropsync/json/device.dart';
+import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
-import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/services/device_api.dart';
-import 'package:cropsync/services/weather_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
@@ -10,26 +9,27 @@ import 'package:cropsync/widgets/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
-import 'package:cropsync/main.dart';
 import 'package:watch_it/watch_it.dart';
 
-class EditDeviceScreen extends StatefulWidget {
-  const EditDeviceScreen({super.key});
+class AssignCropScreen extends StatefulWidget {
+  const AssignCropScreen({super.key});
 
   @override
-  State<EditDeviceScreen> createState() => _EditDeviceScreenState();
+  State<AssignCropScreen> createState() => _AssignCropScreenState();
 }
 
-class _EditDeviceScreenState extends State<EditDeviceScreen> {
+class _AssignCropScreenState extends State<AssignCropScreen> {
+  Device? device;
   final formKey = GlobalKey<FormState>();
 
   final deviceNameController = TextEditingController();
   final deviceLocationController = TextEditingController();
   final deviceCodeController = TextEditingController();
+  final deviceCropController = TextEditingController();
 
   bool isLoading = false;
 
-  Future<void> confirmEdit() async {
+  Future<void> confirm() async {
     if (formKey.currentState!.validate()) {
       if (isLoading) return;
 
@@ -37,25 +37,20 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
         isLoading = true;
       });
 
-      final arg = ModalRoute.of(context)!.settings.arguments as Map;
-      final device = arg['device'];
-
-      // edit device on server
-      final globalResult = await DeviceApi.editDevice(
-        deviceId: device.deviceId,
-        name: deviceNameController.text.trim(),
-        location: deviceLocationController.text.trim(),
+      final response = await DeviceApi.setDeviceCrop(
+        deviceId: device!.deviceId!,
+        name: deviceCropController.text.trim(),
       );
 
       if (!mounted) return;
-      if (globalResult == ReturnTypes.fail) {
+      if (response == ReturnTypes.fail) {
         setState(() {
           isLoading = false;
         });
         Dialogs.showErrorDialog(
-            'Error', 'Editing device failed, try again', context);
+            'Error', 'Assigning crop failed, try again', context);
         return;
-      } else if (globalResult == ReturnTypes.error) {
+      } else if (response == ReturnTypes.error) {
         setState(() {
           isLoading = false;
         });
@@ -64,21 +59,12 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
         return;
       }
 
-      logger.d('Device edited on server');
+      logger.d('Crop added on server');
 
-      di<DevicesModel>().editDevice(
-        id: device.deviceId,
-        name: deviceNameController.text.trim(),
-        location: deviceLocationController.text.trim(),
+      di<DevicesModel>().assignCrop(
+        id: device!.deviceId!,
+        name: deviceCropController.text.trim(),
       );
-
-      // call other api
-      WeatherApi.getWeatherData().then((value) {
-        if (value.runtimeType == List<Weather>) {
-          di<WeatherModel>().weather = value;
-          logger.d('Fetched Weather');
-        }
-      });
 
       if (!mounted) return;
       Navigator.pop(context);
@@ -90,27 +76,21 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      final arg = ModalRoute.of(context)!.settings.arguments as Map;
-      final device = arg['device'];
-      deviceNameController.text = device.name;
-      deviceLocationController.text = device.location;
-      deviceCodeController.text = device.code;
+      final args =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      device = args['device'] as Device;
+      deviceNameController.text = device!.name ?? '';
+      deviceLocationController.text = device!.location ?? '';
+      deviceCodeController.text = device!.code ?? '';
     });
-    super.initState();
-  }
 
-  @override
-  void dispose() {
-    deviceNameController.dispose();
-    deviceLocationController.dispose();
-    deviceCodeController.dispose();
-    super.dispose();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Device')),
+      appBar: AppBar(title: const Text('Assign Crop')),
       body: Form(
         key: formKey,
         child: ListView(
@@ -122,12 +102,14 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
             const Gap(20),
             buildDeviceConfigField(),
             const Gap(20),
+            buildDeviceCropField(),
+            const Gap(20),
             CommonButton(
-              text: 'Edit',
+              text: 'Confirm',
               textColor: Colors.white,
               backgroundColor: Theme.of(context).primaryColor,
               isLoading: isLoading,
-              onPressed: confirmEdit,
+              onPressed: confirm,
             ),
             const Gap(20),
           ],
@@ -150,15 +132,8 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
         ),
         const Gap(10),
         PrimaryTextField(
-          // hintText: 'Enter Device Name',
           textController: deviceNameController,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter a device name';
-            }
-
-            return null;
-          },
+          enabled: false,
         ),
       ],
     );
@@ -168,47 +143,29 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
   Widget buildDeviceLocationField() {
     return Column(
       children: [
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Device Location',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            IconButton(
-                onPressed: () async {
-                  final location =
-                      await Navigator.of(context).pushNamed('/add-device-map');
-
-                  if (location.toString() != "null") {
-                    setState(() {
-                      deviceLocationController.text = location.toString();
-                    });
-                  }
-                },
-                icon: const Icon(Icons.edit_location_rounded))
+            Icon(Icons.location_on_rounded)
           ],
         ),
         const Gap(10),
         PrimaryTextField(
-          // hintText: 'Choose Location',
           enabled: false,
           textController: deviceLocationController,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please choose your device\'s location';
-            }
-
-            return null;
-          },
         ),
       ],
     );
   }
 
+  // Device Config Field
   Widget buildDeviceConfigField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,7 +174,7 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Device Configuration',
+              'Device Code',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -228,12 +185,36 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
         const Gap(10),
         PrimaryTextField(
           enabled: false,
-          // hintText: 'Device Code',
           textController: deviceCodeController,
-          keyboardType: TextInputType.number,
+        ),
+      ],
+    );
+  }
+
+  // Device Crop Field
+  Widget buildDeviceCropField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Crop',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        const Gap(10),
+        PrimaryTextField(
+          hintText: 'Enter Crop Name',
+          textController: deviceCropController,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter your device\'s code';
+              return 'Please enter your device\'s crop';
             }
 
             return null;

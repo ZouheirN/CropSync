@@ -12,20 +12,21 @@ class LocalDeviceApi {
 
   static Future<String> getDeviceIp(String deviceCode) async {
     try {
-      final addresses = await InternetAddress.lookup('comitup-999');
-      logger.i(addresses[0].address);
+      // final addresses = await InternetAddress.lookup('cropsync-999');
+      // logger.i(addresses[0].address);
 
-      // final discovery = await startDiscovery('_cropsync$deviceCode._tcp');
-      // String ip = '';
-      // discovery.addListener(() {
-      //   logger.i(discovery.services);
-      //   ip = discovery.services.first.host ?? '';
-      // });
-      // while (discovery.services.isEmpty) {
-      //   await Future.delayed(const Duration(seconds: 1));
-      // }
+      final discovery = await startDiscovery('_cropsync$deviceCode._tcp');
+      String ip = '';
+      discovery.addListener(() {
+        logger.i(discovery.services);
+        ip = discovery.services.first.host ?? '';
+      });
+      while (discovery.services.isEmpty) {
+        await Future.delayed(const Duration(seconds: 1));
+      }
 
-      return addresses[0].address;
+      return ip;
+      // return addresses[0].address;
     } on SocketException catch (e) {
       logger.e(e);
       return '';

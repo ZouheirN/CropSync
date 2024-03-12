@@ -158,7 +158,11 @@ class _DevicesScreenState extends State<DevicesScreen> {
                             ),
                             trailing: devices[index].crop?.name == null
                                 ? IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.of(context).pushNamed('/assign-crop', arguments: {
+                                        'device': devices[index],
+                                      });
+                                    },
                                     icon: const Icon(Icons.add_rounded),
                                   )
                                 : null,

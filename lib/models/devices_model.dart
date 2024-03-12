@@ -60,6 +60,15 @@ class DevicesModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void assignCrop({required String id, required String name}) {
+    final index = _devices.indexWhere((element) => element.deviceId == id);
+    _devices[index].crop = Crop(
+      name: name,
+    );
+    devicesBox.put('devices', _devices);
+    notifyListeners();
+  }
+
   void deleteDevice(String id) {
     _devices.removeWhere((element) => element.deviceId == id);
     devicesBox.put('devices', _devices);

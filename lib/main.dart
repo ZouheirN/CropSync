@@ -10,6 +10,7 @@ import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/account_information_screen.dart';
 import 'package:cropsync/screens/add_device_map_screen.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
+import 'package:cropsync/screens/assign_crop_screen.dart';
 import 'package:cropsync/screens/camera_control_screen.dart';
 import 'package:cropsync/screens/change_password_screen.dart';
 import 'package:cropsync/screens/device_camera_history_screen.dart';
@@ -173,6 +174,7 @@ class MyApp extends StatelessWidget {
               '/weather-forecast': (context) => const WeatherForecastScreen(),
               '/settings': (context) => const SettingsScreen(),
               '/camera-control': (context) => const CameraControlScreen(),
+              '/assign-crop': (context) => const AssignCropScreen(),
             });
       },
     );

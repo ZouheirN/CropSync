@@ -4,7 +4,6 @@ import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/tagline.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:hyper_effects/hyper_effects.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});

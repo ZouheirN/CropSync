@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class PrimaryTextField extends StatefulWidget {
   final TextEditingController? textController;
-  final String hintText;
+  final String? hintText;
   final bool enabled;
   final String? Function(String?)? validator;
   final bool? obscureText;
@@ -16,7 +16,7 @@ class PrimaryTextField extends StatefulWidget {
   const PrimaryTextField({
     super.key,
     this.textController,
-    required this.hintText,
+    this.hintText,
     this.enabled = true,
     this.validator,
     this.obscureText,

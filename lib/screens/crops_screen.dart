@@ -79,31 +79,31 @@ class _CropsScreenState extends State<CropsScreen> {
     return Column(
       children: [
         ExpansionTileCard(
-          leading: cropNames[index] != null
-              ? CachedNetworkImage(
-                  imageUrl:
-                      "https://www.tasteofhome.com/wp-content/uploads/2019/10/shutterstock_346577078.jpg?fit=700",
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                    value: downloadProgress.progress,
-                    color: MyApp.themeNotifier.value == ThemeMode.light
-                        ? Colors.black
-                        : Colors.white,
-                  ),
-                  imageBuilder: (context, imageProvider) => Container(
-                    width: 50.0,
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error_rounded),
-                )
-              : null,
+          // leading: cropNames[index] != null
+          //     ? CachedNetworkImage(
+          //         imageUrl:
+          //             "https://www.tasteofhome.com/wp-content/uploads/2019/10/shutterstock_346577078.jpg?fit=700",
+          //         progressIndicatorBuilder: (context, url, downloadProgress) =>
+          //             CircularProgressIndicator(
+          //           value: downloadProgress.progress,
+          //           color: MyApp.themeNotifier.value == ThemeMode.light
+          //               ? Colors.black
+          //               : Colors.white,
+          //         ),
+          //         imageBuilder: (context, imageProvider) => Container(
+          //           width: 50.0,
+          //           height: 50.0,
+          //           decoration: BoxDecoration(
+          //             borderRadius: BorderRadius.circular(10),
+          //             image: DecorationImage(
+          //               image: imageProvider,
+          //               fit: BoxFit.cover,
+          //             ),
+          //           ),
+          //         ),
+          //         errorWidget: (context, url, error) => const Icon(Icons.error_rounded),
+          //       )
+          //     : null,
           title: cropNames[index] != null
               ? Text(cropNames[index]!)
               : const Text(
@@ -119,7 +119,11 @@ class _CropsScreenState extends State<CropsScreen> {
                 alignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/assign-crop', arguments: {
+                        'device': devices[index],
+                      });
+                    },
                     child: const Column(
                       children: <Widget>[
                         Icon(Icons.grass_rounded),
