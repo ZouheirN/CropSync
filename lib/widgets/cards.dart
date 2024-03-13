@@ -6,8 +6,8 @@ import 'package:cropsync/json/device_camera.dart';
 import 'package:cropsync/json/weather.dart';
 import 'package:cropsync/json/weather_forecast.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 class WeatherCard extends StatelessWidget {
   final Weather weather;
@@ -53,7 +53,8 @@ class WeatherCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const FaIcon(FontAwesomeIcons.raspberryPi),
+                  // const FaIcon(FontAwesomeIcons.raspberryPi),
+                  const Icon(FontAwesome.raspberry_pi_brand),
                   const Gap(8),
                   Flexible(
                     child: AutoSizeText(
@@ -72,7 +73,7 @@ class WeatherCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const FaIcon(FontAwesomeIcons.locationDot),
+                        const Icon(FontAwesome.location_dot_solid),
                         const Gap(8),
                         Flexible(
                           child: AutoSizeText(
@@ -89,7 +90,7 @@ class WeatherCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        const FaIcon(FontAwesomeIcons.calendar),
+                        const Icon(FontAwesome.calendar),
                         const Gap(8),
                         Flexible(
                           child: AutoSizeText(
@@ -183,10 +184,7 @@ class WeatherCard extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const FaIcon(
-                          FontAwesomeIcons.wind,
-                          // size: 20,
-                        ),
+                        const Icon(FontAwesome.wind_solid),
                         const Gap(2),
                         Text('${formatFloat(weather.windKph!)} km/h'),
                       ],
@@ -196,10 +194,7 @@ class WeatherCard extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const FaIcon(
-                          FontAwesomeIcons.droplet,
-                          // size: 20,
-                        ),
+                        const Icon(FontAwesome.droplet_solid),
                         const Gap(2),
                         Text('${formatFloat(weather.humidity!)}%'),
                       ],
@@ -209,10 +204,7 @@ class WeatherCard extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const FaIcon(
-                          FontAwesomeIcons.cloudShowersHeavy,
-                          // size: 20,
-                        ),
+                        const Icon(FontAwesome.cloud_showers_heavy_solid),
                         const Gap(2),
                         Text("${formatFloat(weather.cloud!)}%"),
                       ],
@@ -253,7 +245,7 @@ class WeatherForecastCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const FaIcon(FontAwesomeIcons.calendar),
+                const Icon(FontAwesome.calendar),
                 const Gap(8),
                 Text(
                   convertDateFormat(weather.date.toString().substring(0, 10)),
@@ -328,10 +320,7 @@ class WeatherForecastCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const FaIcon(
-                        FontAwesomeIcons.wind,
-                        // size: 20,
-                      ),
+                      const Icon(FontAwesome.wind_solid),
                       const Gap(2),
                       Text('${formatFloat(weather.maxwindKph!)} km/h'),
                     ],
@@ -341,10 +330,7 @@ class WeatherForecastCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const FaIcon(
-                        FontAwesomeIcons.droplet,
-                        // size: 20,
-                      ),
+                      const Icon(FontAwesome.droplet_solid),
                       const Gap(2),
                       Text('${formatFloat(weather.avghumidity!)}%'),
                     ],
@@ -354,10 +340,7 @@ class WeatherForecastCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const FaIcon(
-                        FontAwesomeIcons.cloudShowersHeavy,
-                        // size: 20,
-                      ),
+                      const Icon(FontAwesome.cloud_showers_heavy_solid),
                       const Gap(2),
                       Text('${formatFloat(weather.dailyChanceOfRain!)}%'),
                     ],

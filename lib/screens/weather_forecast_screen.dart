@@ -3,9 +3,9 @@ import 'package:cropsync/services/weather_api.dart';
 import 'package:cropsync/widgets/cards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:cropsync/main.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 class WeatherForecastScreen extends StatefulWidget {
   const WeatherForecastScreen({super.key});
@@ -67,7 +67,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const FaIcon(FontAwesomeIcons.raspberryPi),
+                          const Icon(FontAwesome.raspberry_pi_brand),
                           const Gap(8),
                           Text(
                             deviceName,
@@ -81,7 +81,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const FaIcon(FontAwesomeIcons.locationDot),
+                          const Icon(FontAwesome.location_dot_solid),
                           const Gap(8),
                           Text(
                             deviceLocation,
