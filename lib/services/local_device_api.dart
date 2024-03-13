@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cropsync/main.dart';
@@ -18,11 +19,11 @@ class LocalDeviceApi {
       final discovery = await startDiscovery('_cropsync$deviceCode._tcp');
       String ip = '';
       discovery.addListener(() {
-        logger.i(discovery.services);
-        ip = discovery.services.first.host ?? '';
+        logger.i(utf8.decode(discovery.services.first.txt!['ip']!));
+        ip = utf8.decode(discovery.services.first.txt!['ip']!);
       });
       while (discovery.services.isEmpty) {
-        await Future.delayed(const Duration(seconds: 1));
+        await Future.delayed(const Duration(milliseconds: 200));
       }
 
       return ip;

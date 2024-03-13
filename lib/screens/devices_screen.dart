@@ -1,4 +1,5 @@
 import 'package:cropsync/json/device.dart';
+import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/local_device_api.dart';
@@ -7,7 +8,6 @@ import 'package:cropsync/widgets/dialogs.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:cropsync/main.dart';
 import 'package:watch_it/watch_it.dart';
 
 class DevicesScreen extends WatchingStatefulWidget {
@@ -159,9 +159,11 @@ class _DevicesScreenState extends State<DevicesScreen> {
                             trailing: devices[index].crop?.name == null
                                 ? IconButton(
                                     onPressed: () {
-                                      Navigator.of(context).pushNamed('/assign-crop', arguments: {
-                                        'device': devices[index],
-                                      });
+                                      Navigator.of(context).pushNamed(
+                                          '/assign-crop',
+                                          arguments: {
+                                            'device': devices[index],
+                                          });
                                     },
                                     icon: const Icon(Icons.add_rounded),
                                   )
@@ -173,7 +175,8 @@ class _DevicesScreenState extends State<DevicesScreen> {
                               'Control Camera',
                             ),
                             onTap: () {
-                              Navigator.of(context).pushNamed('/camera-control', arguments: {
+                              Navigator.of(context)
+                                  .pushNamed('/camera-control', arguments: {
                                 'device': devices[index],
                               });
                             },
