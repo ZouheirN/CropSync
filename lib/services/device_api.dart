@@ -13,6 +13,9 @@ class DeviceApi {
   static final dio = Dio();
 
   static final apiUrl = dotenv.env['API_URL'];
+  static final imageApiUrl = dotenv.env['IMAGE_API_URL'];
+  static final rapidApiKey = dotenv.env['X_RAPIDAPI_KEY'];
+  static final rapidApiHost = dotenv.env['X-RapidAPI-Host'];
 
   static Future<dynamic> addDevice({
     required String name,
@@ -164,6 +167,8 @@ class DeviceApi {
     if (token == '') return ReturnTypes.invalidToken;
 
     try {
+      final cropImage = await getCropImage(name: name);
+
       final response = await dio.post(
         '$apiUrl/user/set/crop',
         options: Options(
@@ -174,6 +179,7 @@ class DeviceApi {
         data: {
           'name': name,
           'deviceId': deviceId,
+          'profile': cropImage,
         },
       );
 
@@ -192,4 +198,35 @@ class DeviceApi {
     }
   }
 
+  static Future<dynamic> getCropImage({required String name}) async {
+    try {
+      final response = await dio.post(
+        '$imageApiUrl',
+        options: Options(
+          headers: {
+            'content-type': 'application/json',
+            'X-RapidAPI-Key': rapidApiKey,
+            'X-RapidAPI-Host': rapidApiHost,
+          },
+        ),
+        data: {
+          'text': '$name crop/plant in grass field',
+          'safesearch': 'on',
+          'region': 'wt-wt',
+          'color': '',
+          'size': 'small',
+          'type_image': 'photo',
+          'layout': 'square',
+          'max_results': 1
+        },
+      );
+
+      return response.data['result'][0]['image'];
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+      logger.e(e.response?.data);
+
+      return ReturnTypes.fail;
+    }
+  }
 }

@@ -12,16 +12,21 @@ String cropToJson(Crop data) => json.encode(data.toJson());
 class Crop {
   @HiveField(0)
   String? name;
+  @HiveField(1)
+  String? profile;
 
   Crop({
     this.name,
+    this.profile,
   });
 
   factory Crop.fromJson(Map<String, dynamic> json) => Crop(
         name: json["name"],
+        profile: json["profile"],
       );
 
   Map<String, dynamic> toJson() => {
         "name": name,
+        "profile": profile,
       };
 }

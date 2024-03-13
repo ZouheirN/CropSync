@@ -150,7 +150,7 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
         ),
         const Gap(10),
         PrimaryTextField(
-          // hintText: 'Enter Device Name',
+          hintText: 'Enter Device Name',
           textController: deviceNameController,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -217,7 +217,7 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Device Configuration',
+              'Device Code',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,

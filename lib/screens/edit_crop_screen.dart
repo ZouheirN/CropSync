@@ -11,14 +11,14 @@ import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
 import 'package:watch_it/watch_it.dart';
 
-class AssignCropScreen extends StatefulWidget {
-  const AssignCropScreen({super.key});
+class EditCropScreen extends StatefulWidget {
+  const EditCropScreen({super.key});
 
   @override
-  State<AssignCropScreen> createState() => _AssignCropScreenState();
+  State<EditCropScreen> createState() => _EditCropScreenState();
 }
 
-class _AssignCropScreenState extends State<AssignCropScreen> {
+class _EditCropScreenState extends State<EditCropScreen> {
   Device? device;
   final formKey = GlobalKey<FormState>();
 
@@ -29,7 +29,7 @@ class _AssignCropScreenState extends State<AssignCropScreen> {
 
   bool isLoading = false;
 
-  Future<void> confirm() async {
+  Future<void> confirmEdit() async {
     if (formKey.currentState!.validate()) {
       if (isLoading) return;
 
@@ -64,7 +64,7 @@ class _AssignCropScreenState extends State<AssignCropScreen> {
       di<DevicesModel>().assignCrop(
         id: device!.deviceId!,
         name: deviceCropController.text.trim(),
-        profile: response['profile']
+        profile: response['profile'],
       );
 
       if (!mounted) return;
@@ -78,11 +78,12 @@ class _AssignCropScreenState extends State<AssignCropScreen> {
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       final args =
-          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       device = args['device'] as Device;
       deviceNameController.text = device!.name ?? '';
       deviceLocationController.text = device!.location ?? '';
       deviceCodeController.text = device!.code ?? '';
+      deviceCropController.text = device!.crop?.name ?? '';
     });
 
     super.initState();
@@ -91,7 +92,7 @@ class _AssignCropScreenState extends State<AssignCropScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Assign Crop')),
+      appBar: AppBar(title: const Text('Edit Crop')),
       body: Form(
         key: formKey,
         child: ListView(
@@ -110,7 +111,7 @@ class _AssignCropScreenState extends State<AssignCropScreen> {
               textColor: Colors.white,
               backgroundColor: Theme.of(context).primaryColor,
               isLoading: isLoading,
-              onPressed: confirm,
+              onPressed: confirmEdit,
             ),
             const Gap(20),
           ],

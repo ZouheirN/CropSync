@@ -253,7 +253,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Device Configuration',
+              'Device Code',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -262,7 +262,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
             IconButton(
                 onPressed: () {
                   Dialogs.showInformationDialog(
-                      'Device Configuarion',
+                      'Device Code',
                       'This is the code that you will find on your device\'s package, or you can check it from the device\'s hotspot name.\n\nMake sure you are connected to the same network as your device.',
                       context);
                 },

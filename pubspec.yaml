@@ -117,9 +117,9 @@ flutter:
     - assets/images/leaves.jpg
     - assets/lottie/onboarding1.json
     - assets/lottie/onboarding2.json
-    - assets/weather.json
     - assets/device_camera.json
     - .env
+    - assets/icon/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -18,15 +18,18 @@ class CropAdapter extends TypeAdapter<Crop> {
     };
     return Crop(
       name: fields[0] as String?,
+      profile: fields[1] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Crop obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.name);
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.profile);
   }
 
   @override

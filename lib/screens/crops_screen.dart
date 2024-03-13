@@ -2,14 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
-import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
-import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
 class CropsScreen extends WatchingStatefulWidget {
@@ -79,31 +77,32 @@ class _CropsScreenState extends State<CropsScreen> {
     return Column(
       children: [
         ExpansionTileCard(
-          // leading: cropNames[index] != null
-          //     ? CachedNetworkImage(
-          //         imageUrl:
-          //             "https://www.tasteofhome.com/wp-content/uploads/2019/10/shutterstock_346577078.jpg?fit=700",
-          //         progressIndicatorBuilder: (context, url, downloadProgress) =>
-          //             CircularProgressIndicator(
-          //           value: downloadProgress.progress,
-          //           color: MyApp.themeNotifier.value == ThemeMode.light
-          //               ? Colors.black
-          //               : Colors.white,
-          //         ),
-          //         imageBuilder: (context, imageProvider) => Container(
-          //           width: 50.0,
-          //           height: 50.0,
-          //           decoration: BoxDecoration(
-          //             borderRadius: BorderRadius.circular(10),
-          //             image: DecorationImage(
-          //               image: imageProvider,
-          //               fit: BoxFit.cover,
-          //             ),
-          //           ),
-          //         ),
-          //         errorWidget: (context, url, error) => const Icon(Icons.error_rounded),
-          //       )
-          //     : null,
+          leading: cropNames[index] != null &&
+                  devices[index].crop.profile != null
+              ? CachedNetworkImage(
+                  imageUrl: devices[index].crop.profile,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      CircularProgressIndicator(
+                    value: downloadProgress.progress,
+                    color: MyApp.themeNotifier.value == ThemeMode.light
+                        ? Colors.black
+                        : Colors.white,
+                  ),
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: 50.0,
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) =>
+                      const Icon(Icons.error_rounded),
+                )
+              : null,
           title: cropNames[index] != null
               ? Text(cropNames[index]!)
               : const Text(
@@ -120,7 +119,8 @@ class _CropsScreenState extends State<CropsScreen> {
                 children: <Widget>[
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/assign-crop', arguments: {
+                      Navigator.of(context)
+                          .pushNamed('/assign-crop', arguments: {
                         'device': devices[index],
                       });
                     },
@@ -151,14 +151,87 @@ class _CropsScreenState extends State<CropsScreen> {
             else
               Column(
                 children: [
-                  const ListTile(
-                    title: Text('Status'),
+                  ListTile(
+                    title: const Text('Nitrogen: 0'),
+                    leading: SizedBox(
+                      height: 30,
+                      child: Image.asset(
+                        'assets/icon/nitrogen.png',
+                        color: MyApp.themeNotifier.value == ThemeMode.light
+                            ? const Color(0xFF3F4642)
+                            : const Color(0xFFBEC6BF),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Phosphorus: 0'),
+                    leading: SizedBox(
+                      height: 30,
+                      child: Image.asset(
+                        'assets/icon/phosphorus.png',
+                        color: MyApp.themeNotifier.value == ThemeMode.light
+                            ? const Color(0xFF3F4642)
+                            : const Color(0xFFBEC6BF),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Potassium: 0'),
+                    leading: SizedBox(
+                      height: 30,
+                      child: Image.asset(
+                        'assets/icon/potassium.png',
+                        color: MyApp.themeNotifier.value == ThemeMode.light
+                            ? const Color(0xFF3F4642)
+                            : const Color(0xFFBEC6BF),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                      title: const Text('Temperature: 0°C'),
+                      leading: SizedBox(
+                        height: 30,
+                        child: Image.asset(
+                          'assets/icon/temperature.png',
+                          color: MyApp.themeNotifier.value == ThemeMode.light
+                              ? const Color(0xFF3F4642)
+                              : const Color(0xFFBEC6BF),
+                        ),
+                      ),),
+                  ListTile(
+                    title: const Text('pH: 0'),
+                    leading: SizedBox(
+                      height: 30,
+                      child: Image.asset(
+                        'assets/icon/ph.png',
+                        color: MyApp.themeNotifier.value == ThemeMode.light
+                            ? const Color(0xFF3F4642)
+                            : const Color(0xFFBEC6BF),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Moisture: 0%'),
+                    leading: SizedBox(
+                      height: 30,
+                      child: Image.asset(
+                        'assets/icon/moisture.png',
+                        color: MyApp.themeNotifier.value == ThemeMode.light
+                            ? const Color(0xFF3F4642)
+                            : const Color(0xFFBEC6BF),
+                      ),
+                    ),
                   ),
                   ButtonBar(
                     alignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed('/edit-crop', arguments: {
+                            'device': devices[index],
+                          });
+                        },
                         child: const Column(
                           children: <Widget>[
                             Icon(Icons.edit_rounded),

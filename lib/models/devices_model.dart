@@ -60,10 +60,11 @@ class DevicesModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void assignCrop({required String id, required String name}) {
+  void assignCrop({required String id, required String name, required String profile}) {
     final index = _devices.indexWhere((element) => element.deviceId == id);
     _devices[index].crop = Crop(
       name: name,
+      profile: profile,
     );
     devicesBox.put('devices', _devices);
     notifyListeners();
