@@ -10,7 +10,6 @@ import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/account_information_screen.dart';
 import 'package:cropsync/screens/add_device_map_screen.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
-import 'package:cropsync/screens/set_crop_screen.dart';
 import 'package:cropsync/screens/camera_control_screen.dart';
 import 'package:cropsync/screens/change_password_screen.dart';
 import 'package:cropsync/screens/device_camera_history_screen.dart';
@@ -20,6 +19,7 @@ import 'package:cropsync/screens/main_screen.dart';
 import 'package:cropsync/screens/onboarding_screen.dart';
 import 'package:cropsync/screens/otp_screen.dart';
 import 'package:cropsync/screens/register_screen.dart';
+import 'package:cropsync/screens/set_crop_screen.dart';
 import 'package:cropsync/screens/settings_screen.dart';
 import 'package:cropsync/screens/weather_forecast_screen.dart';
 import 'package:cropsync/screens/welcome_screen.dart';
@@ -93,14 +93,12 @@ Future<void> main() async {
   // put home list items to state management
   if (userPrefsBox.get('homeListItems') != null) {
     final homeListItems = userPrefsBox.get('homeListItems') as List<String>;
-    // UserPrefs().homeListItems = homeListItems;
     di<UserPrefs>().homeListItems = homeListItems;
   }
 
   // put start page to state management
   if (userPrefsBox.get('startPage') != null) {
     final startPage = userPrefsBox.get('startPage') as String;
-    // UserPrefs().startPage = startPage;
     di<UserPrefs>().startPage = startPage;
   }
 
@@ -136,46 +134,47 @@ class MyApp extends StatelessWidget {
       valueListenable: themeNotifier,
       builder: (context, currentMode, child) {
         return MaterialApp(
-            theme: ThemeData(
-              brightness: Brightness.light,
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: const Color(0xFF57CC99),
-              ),
+          theme: ThemeData(
+            brightness: Brightness.light,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF57CC99),
             ),
-            darkTheme: ThemeData(
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            colorScheme: ColorScheme.fromSeed(
               brightness: Brightness.dark,
-              colorScheme: ColorScheme.fromSeed(
-                brightness: Brightness.dark,
-                seedColor: const Color(0xFF57CC99),
-              ),
+              seedColor: const Color(0xFF57CC99),
             ),
-            themeMode: currentMode,
-            debugShowCheckedModeBanner: false,
-            routes: {
-              '/': (context) => showOnboarding
-                  ? const OnboardingScreen()
-                  : isUserLoggedIn
-                      ? const MainScreen()
-                      : const WelcomeScreen(),
-              '/main': (context) => const MainScreen(),
-              '/welcome': (context) => const WelcomeScreen(),
-              '/register': (context) => const RegisterScreen(),
-              '/login': (context) => const LoginScreen(),
-              '/add-device': (context) => const AddDeviceScreen(),
-              '/edit-device': (context) => const EditDeviceScreen(),
-              '/add-device-map': (context) => const AddDeviceMapScreen(),
-              '/account-information': (context) => AccountInformationScreen(
-                    context: context,
-                  ),
-              '/otp': (context) => const OTPScreen(),
-              '/change-password': (context) => const ChangePasswordScreen(),
-              '/device-camera-history': (context) =>
-                  const DeviceCameraHistoryScreen(),
-              '/weather-forecast': (context) => const WeatherForecastScreen(),
-              '/settings': (context) => const SettingsScreen(),
-              '/camera-control': (context) => const CameraControlScreen(),
-              '/set-crop': (context) => const SetCropScreen(),
-            });
+          ),
+          themeMode: currentMode,
+          debugShowCheckedModeBanner: false,
+          routes: {
+            '/': (context) => showOnboarding
+                ? const OnboardingScreen()
+                : isUserLoggedIn
+                    ? const MainScreen()
+                    : const WelcomeScreen(),
+            '/main': (context) => const MainScreen(),
+            '/welcome': (context) => const WelcomeScreen(),
+            '/register': (context) => const RegisterScreen(),
+            '/login': (context) => const LoginScreen(),
+            '/add-device': (context) => const AddDeviceScreen(),
+            '/edit-device': (context) => const EditDeviceScreen(),
+            '/add-device-map': (context) => const AddDeviceMapScreen(),
+            '/account-information': (context) => AccountInformationScreen(
+                  context: context,
+                ),
+            '/otp': (context) => const OTPScreen(),
+            '/change-password': (context) => const ChangePasswordScreen(),
+            '/device-camera-history': (context) =>
+                const DeviceCameraHistoryScreen(),
+            '/weather-forecast': (context) => const WeatherForecastScreen(),
+            '/settings': (context) => const SettingsScreen(),
+            '/camera-control': (context) => const CameraControlScreen(),
+            '/set-crop': (context) => const SetCropScreen(),
+          },
+        );
       },
     );
   }

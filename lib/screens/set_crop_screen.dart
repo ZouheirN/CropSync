@@ -17,9 +17,11 @@ class SetCropScreen extends StatefulWidget {
 class _SetCropScreenState extends State<SetCropScreen> {
   Device? device;
   bool isLoading = false;
+  bool hasReachedMax = false;
 
   var plants = <PlantsDatum>[];
   int page = 1;
+
   final searchController = TextEditingController();
 
   void fetchData() async {
@@ -33,6 +35,7 @@ class _SetCropScreenState extends State<SetCropScreen> {
 
     if (response == ReturnTypes.endOfPages) {
       setState(() {
+        hasReachedMax = true;
         isLoading = false;
       });
     } else {
@@ -78,6 +81,7 @@ class _SetCropScreenState extends State<SetCropScreen> {
         itemCount: plants.length,
         isLoading: isLoading,
         centerLoading: true,
+        hasReachedMax: hasReachedMax,
         onFetchData: fetchData,
         physics: const BouncingScrollPhysics(),
         loadingBuilder: (context) {

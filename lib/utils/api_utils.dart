@@ -110,6 +110,7 @@ class PlantSearchDelegate extends SearchDelegate {
     int page = 1;
     bool noResultsFound = false;
     bool isLoading = false;
+    bool hasReachedMax = false;
 
     return StatefulBuilder(
       builder: (context, setState) {
@@ -123,6 +124,7 @@ class PlantSearchDelegate extends SearchDelegate {
 
           if (response == ReturnTypes.endOfPages) {
             setState(() {
+              hasReachedMax = true;
               isLoading = false;
             });
           } else if (response.isEmpty) {
@@ -149,6 +151,7 @@ class PlantSearchDelegate extends SearchDelegate {
           separatorBuilder: (context, index) => const Divider(),
           itemCount: plants.length,
           isLoading: isLoading,
+          hasReachedMax: hasReachedMax,
           centerLoading: true,
           onFetchData: fetchData,
           physics: const BouncingScrollPhysics(),
