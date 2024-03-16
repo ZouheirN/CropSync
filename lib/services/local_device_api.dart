@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cropsync/main.dart';
@@ -15,19 +14,22 @@ class LocalDeviceApi {
     try {
       // final addresses = await InternetAddress.lookup('cropsync-999');
       // logger.i(addresses[0].address);
+      // return addresses[0].address;
 
-      final discovery = await startDiscovery('_cropsync$deviceCode._tcp');
+      final discovery = await startDiscovery('_cropsync$deviceCode._tcp',
+          ipLookupType: IpLookupType.v4);
       String ip = '';
       discovery.addListener(() {
-        logger.i(utf8.decode(discovery.services.first.txt!['ip']!));
-        ip = utf8.decode(discovery.services.first.txt!['ip']!);
+        // logger.i(utf8.decode(discovery.services.first.txt!['ip']!));
+        // ip = utf8.decode(discovery.services.first.txt!['ip']!);
+        logger.i(discovery.services);
+        ip = discovery.services.first.addresses!.first.address;
       });
       while (discovery.services.isEmpty) {
         await Future.delayed(const Duration(milliseconds: 200));
       }
 
       return ip;
-      // return addresses[0].address;
     } on SocketException catch (e) {
       logger.e(e);
       return '';
@@ -104,4 +106,43 @@ class LocalDeviceApi {
       return ReturnTypes.fail;
     }
   }
+
+// static Future<dynamic> startStream({required String ip, required String deviceCode}) async {
+//   try {
+//     final ip = await getDeviceIp(deviceCode);
+//
+//     await dio.post(
+//       'http://$ip:3000/start-rpicam-vid',
+//       data: {
+//         "ip": ip,
+//       },
+//     );
+//
+//     return true;
+//   } on DioException catch (e) {
+//     if (e.response == null) return ReturnTypes.error;
+//
+//     logger.e(e.response?.data);
+//
+//     return ReturnTypes.fail;
+//   }
+// }
+//
+// static Future<dynamic> stopStream({required String deviceCode}) async {
+//   try {
+//     final ip = await getDeviceIp(deviceCode);
+//
+//     await dio.post(
+//       'http://$ip:3000/stop-rpicam-vid',
+//     );
+//
+//     return true;
+//   } on DioException catch (e) {
+//     if (e.response == null) return ReturnTypes.error;
+//
+//     logger.e(e.response?.data);
+//
+//     return ReturnTypes.fail;
+//   }
+// }
 }

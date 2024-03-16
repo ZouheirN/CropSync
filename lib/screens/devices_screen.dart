@@ -160,7 +160,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                 ? IconButton(
                                     onPressed: () {
                                       Navigator.of(context).pushNamed(
-                                          '/assign-crop',
+                                          '/set-crop',
                                           arguments: {
                                             'device': devices[index],
                                           });

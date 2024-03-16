@@ -3,12 +3,10 @@ import 'dart:io';
 
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/services/local_device_api.dart';
-import 'package:cropsync/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:gap/gap.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class CameraControlScreen extends StatefulWidget {
@@ -21,7 +19,6 @@ class CameraControlScreen extends StatefulWidget {
 class _CameraControlScreenState extends State<CameraControlScreen> {
   dynamic device;
   String status = 'Waiting for connection...';
-  bool isTcp = false;
 
   VlcPlayerController? videoPlayerController;
 
@@ -52,6 +49,8 @@ class _CameraControlScreenState extends State<CameraControlScreen> {
         if (value == null) return;
 
         textEditingController.text = value;
+
+        // LocalDeviceApi.startStream(ip: value, deviceCode: device.code!);
       });
     });
     super.initState();
@@ -59,6 +58,7 @@ class _CameraControlScreenState extends State<CameraControlScreen> {
 
   @override
   Future<void> dispose() async {
+    // LocalDeviceApi.stopStream(deviceCode: device.code!);
     videoPlayerController?.dispose();
     textEditingController.dispose();
     channel?.sink.close();
@@ -74,82 +74,6 @@ class _CameraControlScreenState extends State<CameraControlScreen> {
       ),
       body: Column(
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     const Text('UDP'),
-          //     Switch(
-          //         value: isTcp,
-          //         onChanged: (value) async {
-          //           if (value == false) {
-          //             dynamic deviceIp = await getLocalIpAddress();
-          //             if (deviceIp == null) return;
-          //
-          //             textEditingController.text = deviceIp;
-          //             videoPlayerController = VlcPlayerController.network(
-          //               'udp://@:8888',
-          //               options: VlcPlayerOptions(
-          //                 extras: [
-          //                   '--demux=h264',
-          //                 ],
-          //               ),
-          //             );
-          //
-          //             status = 'Connect to this device';
-          //           } else {
-          //             textEditingController.clear();
-          //           }
-          //
-          //           setState(() {
-          //             isTcp = value;
-          //           });
-          //         }),
-          //     const Text('TCP'),
-          //   ],
-          // ),
-          if (isTcp)
-            ListTile(
-                title: TextField(
-                  controller: textEditingController,
-                  decoration: const InputDecoration(
-                    labelText: 'Enter IP',
-                  ),
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.connect_without_contact_rounded),
-                  onPressed: () async {
-                    final ip = await LocalDeviceApi.getDeviceIp(device.code!);
-
-                    if (ip == '') {
-                      Dialogs.showErrorDialog('Connection Error',
-                          'Failed to get IP of device', context);
-                      return;
-                    }
-
-                    setState(() {
-                      textEditingController.text = ip;
-                    });
-                  },
-                ),
-                subtitle: ElevatedButton(
-                  onPressed: () {
-                    if (textEditingController.text.isEmpty) {
-                      Dialogs.showErrorDialog(
-                          'Connection Error', 'IP cannot be empty', context);
-                      return;
-                    }
-
-                    videoPlayerController = VlcPlayerController.network(
-                      'tcp/h264://${textEditingController.text}:8888',
-                    );
-
-                    setState(() {
-                      status = 'Connected to ${textEditingController.text}';
-                    });
-                  },
-                  child: const Text('Connect'),
-                ))
-          else
             ListTile(
               title: TextField(
                 controller: textEditingController,

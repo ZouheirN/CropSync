@@ -121,7 +121,7 @@ class _CropsScreenState extends State<CropsScreen> {
                   TextButton(
                     onPressed: () {
                       Navigator.of(context)
-                          .pushNamed('/assign-crop', arguments: {
+                          .pushNamed('/set-crop', arguments: {
                         'device': devices[index],
                       });
                     },
@@ -229,7 +229,7 @@ class _CropsScreenState extends State<CropsScreen> {
                       TextButton(
                         onPressed: () {
                           Navigator.of(context)
-                              .pushNamed('/edit-crop', arguments: {
+                              .pushNamed('/set-crop', arguments: {
                             'device': devices[index],
                           });
                         },
