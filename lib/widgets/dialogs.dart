@@ -185,12 +185,12 @@ class Dialogs {
                         if (response == ReturnTypes.fail) {
                           if (!context.mounted) return;
                           showErrorDialog(
-                              'Error', 'Failed to send OTP', context);
+                              'Error', 'Failed to send OTP.', context);
                           return;
                         } else if (response == ReturnTypes.error) {
                           if (!context.mounted) return;
                           showErrorDialog(
-                              'Error', 'An error occurred', context);
+                              'Error', 'An error occurred, try again.', context);
                           return;
                         }
 

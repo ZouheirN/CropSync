@@ -34,31 +34,31 @@ class _DevicesScreenState extends State<DevicesScreen> {
   Future<void> deleteDevice(Device device, BuildContext context) async {
     final confirmDelete = await Dialogs.showConfirmationDialog(
         'Confirm Deletion',
-        'Are you sure you want to delete ${device.name}',
+        'Are you sure you want to delete ${device.name}?',
         context);
 
     if (confirmDelete) {
       // delete from local device
-      if (!mounted) return;
-      Dialogs.showLoadingDialog('Deleting Device', context);
+      if (!context.mounted) return;
+      Dialogs.showLoadingDialog('Deleting Device...', context);
       final result = await LocalDeviceApi.deleteDeviceConfiguration(
           deviceCode: device.code!);
 
-      if (!mounted) return;
+      if (!context.mounted) return;
       if (result == ReturnTypes.fail) {
         Navigator.pop(context);
         Dialogs.showErrorDialog(
-            'Error', 'An error occurred, try again', context);
+            'Error', 'Could not connect to ${device.name}.', context);
         return;
       } else if (result == ReturnTypes.error) {
         Navigator.pop(context);
         Dialogs.showErrorDialog(
-            'Error', 'An error occurred, try again', context);
+            'Error', 'An error occurred, try again.', context);
         return;
       } else if (result == ReturnTypes.hasNotBeenConfigured) {
         Navigator.pop(context);
         Dialogs.showErrorDialog(
-            'Error', 'Device has not been configured', context);
+            'Error', 'Device has not been configured.', context);
         return;
       }
 
@@ -68,16 +68,16 @@ class _DevicesScreenState extends State<DevicesScreen> {
       final globalResult =
           await DeviceApi.deleteDevice(deviceId: device.deviceId!);
 
-      if (!mounted) return;
+      if (!context.mounted) return;
       if (globalResult == ReturnTypes.fail) {
         Navigator.pop(context);
         Dialogs.showErrorDialog(
-            'Error', 'An error occurred, try again', context);
+            'Error', 'An error occurred, try again.', context);
         return;
       } else if (globalResult == ReturnTypes.error) {
         Navigator.pop(context);
         Dialogs.showErrorDialog(
-            'Error', 'An error occurred, try again', context);
+            'Error', 'An error occurred, try again.', context);
         return;
       } else if (globalResult == ReturnTypes.invalidToken) {
         Navigator.pop(context);
@@ -89,10 +89,11 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
       di<DevicesModel>().deleteDevice(device.deviceId!);
 
+      if (!context.mounted) return;
       Navigator.pop(context);
 
       Dialogs.showSuccessDialog(
-          'Success', 'Device deleted successfully', context);
+          'Success', 'Device deleted successfully.', context);
       return;
     }
   }
@@ -208,11 +209,28 @@ class _DevicesScreenState extends State<DevicesScreen> {
                         'Image Frequency: ${imageItems[selectedImageFrequency]}');
 
                     // set frequency on local device
-                    await LocalDeviceApi.setFrequencies(
+                    final response = await LocalDeviceApi.setFrequencies(
                       deviceCode: device.code!,
                       soilFrequency: soilItems[selectedSoilFrequency]!,
                       imageFrequency: imageItems[selectedImageFrequency]!,
                     );
+                    if (response == ReturnTypes.fail) {
+                      if (!context.mounted) return;
+                      setState(() {
+                        isLoading = false;
+                      });
+                      Dialogs.showErrorDialog('Error',
+                          'Could not connect to ${device.name}.', context);
+                      return;
+                    } else if (response == ReturnTypes.error) {
+                      if (!context.mounted) return;
+                      setState(() {
+                        isLoading = false;
+                      });
+                      Dialogs.showErrorDialog(
+                          'Error', 'An error occurred, try again', context);
+                      return;
+                    }
 
                     // todo set on server
 

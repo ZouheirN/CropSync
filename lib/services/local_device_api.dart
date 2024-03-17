@@ -18,15 +18,25 @@ class LocalDeviceApi {
 
       final discovery = await startDiscovery('_cropsync$deviceCode._tcp',
           ipLookupType: IpLookupType.v4);
+
       String ip = '';
+
       discovery.addListener(() {
         // logger.i(utf8.decode(discovery.services.first.txt!['ip']!));
         // ip = utf8.decode(discovery.services.first.txt!['ip']!);
         logger.i(discovery.services);
         ip = discovery.services.first.addresses!.first.address;
       });
+
+      int timeout = 0;
+
       while (discovery.services.isEmpty) {
         await Future.delayed(const Duration(milliseconds: 200));
+        timeout++;
+        if (timeout > 50) {
+          discovery.dispose();
+          return '';
+        }
       }
 
       discovery.dispose();
@@ -43,6 +53,10 @@ class LocalDeviceApi {
 
     try {
       final ip = await getDeviceIp(deviceCode);
+
+      if (ip == '') {
+        return ReturnTypes.fail;
+      }
 
       final response = await dio.post(
         'http://$ip:3000/set',
@@ -70,6 +84,10 @@ class LocalDeviceApi {
     try {
       final ip = await getDeviceIp(deviceCode);
 
+      if (ip == '') {
+        return ReturnTypes.fail;
+      }
+
       final response = await dio.delete(
         'http://$ip:3000/delete',
       );
@@ -94,6 +112,10 @@ class LocalDeviceApi {
     try {
       final ip = await getDeviceIp(deviceCode);
 
+      if (ip == '') {
+        return ReturnTypes.fail;
+      }
+
       final response = await dio.get(
         'http://$ip:3000/check',
       );
@@ -115,6 +137,10 @@ class LocalDeviceApi {
   }) async {
     try {
       final ip = await getDeviceIp(deviceCode);
+
+      if (ip == '') {
+        return ReturnTypes.fail;
+      }
 
       await dio.post('http://$ip:3000/set-frequencies', data: {
         "imageFrequency": imageFrequency,

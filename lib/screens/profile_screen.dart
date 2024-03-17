@@ -10,7 +10,6 @@ import 'package:cropsync/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
-import 'package:hive/hive.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:watch_it/watch_it.dart';
@@ -52,10 +51,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (!mounted) return;
     if (result == ReturnTypes.fail) {
-      Dialogs.showErrorDialog('Error', 'An error occurred, try again', context);
+      Dialogs.showErrorDialog('Error', 'An error occurred, try again.', context);
       return;
     } else if (result == ReturnTypes.error) {
-      Dialogs.showErrorDialog('Error', 'An error occurred, try again', context);
+      Dialogs.showErrorDialog('Error', 'An error occurred, try again.', context);
       return;
     } else if (result == ReturnTypes.invalidToken) {
       invalidTokenResponse(context);
@@ -99,10 +98,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (!mounted) return;
     if (result == ReturnTypes.fail) {
-      Dialogs.showErrorDialog('Error', 'An error occurred, try again', context);
+      Dialogs.showErrorDialog('Error', 'An error occurred, try again.', context);
       return;
     } else if (result == ReturnTypes.error) {
-      Dialogs.showErrorDialog('Error', 'An error occurred, try again', context);
+      Dialogs.showErrorDialog('Error', 'An error occurred, try again.', context);
       return;
     } else if (result == ReturnTypes.invalidToken) {
       invalidTokenResponse(context);

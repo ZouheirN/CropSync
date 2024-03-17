@@ -46,21 +46,21 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
           isLoading = false;
         });
         Dialogs.showErrorDialog(
-            'Error', 'Configuration failed, try again', context);
+            'Error', 'Could not connect to device.', context);
         return;
       } else if (isDeviceAlreadyConfigured == ReturnTypes.error) {
         setState(() {
           isLoading = false;
         });
         Dialogs.showErrorDialog(
-            'Error', 'An error occurred, try again', context);
+            'Error', 'An error occurred, try again.', context);
         return;
       } else if (isDeviceAlreadyConfigured) {
         setState(() {
           isLoading = false;
         });
         Dialogs.showErrorDialog(
-            'Error', 'Device is already configured', context);
+            'Error', 'Device is already configured.', context);
         return;
       }
 
@@ -79,14 +79,14 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
           isLoading = false;
         });
         Dialogs.showErrorDialog(
-            'Error', 'Adding device failed, try again', context);
+            'Error', 'Adding device failed, try again.', context);
         return;
       } else if (globalResult == ReturnTypes.error) {
         setState(() {
           isLoading = false;
         });
         Dialogs.showErrorDialog(
-            'Error', 'An error occurred, try again', context);
+            'Error', 'An error occurred, try again.', context);
         return;
       }
 
@@ -104,14 +104,14 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
           isLoading = false;
         });
         Dialogs.showErrorDialog(
-            'Error', 'Configuration failed, try again', context);
+            'Error', 'Could not connect to device.', context);
         return;
       } else if (localResult == ReturnTypes.error) {
         setState(() {
           isLoading = false;
         });
         Dialogs.showErrorDialog(
-            'Error', 'An error occurred, try again', context);
+            'Error', 'An error occurred, try again.', context);
         return;
       }
 

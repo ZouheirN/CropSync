@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cropsync/json/device.dart';
-import 'package:cropsync/services/local_device_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';

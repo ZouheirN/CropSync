@@ -4,7 +4,6 @@ import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:logger/logger.dart';
 import 'package:pinput/pinput.dart';
 import 'package:watch_it/watch_it.dart';
 

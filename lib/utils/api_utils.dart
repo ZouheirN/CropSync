@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/json/plants.dart';
 import 'package:cropsync/main.dart';
@@ -9,7 +8,6 @@ import 'package:cropsync/services/trefle_api.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/plants_list.dart';
 import 'package:flutter/material.dart';
-import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 import 'package:watch_it/watch_it.dart';
 
 void invalidTokenResponse(BuildContext context) {
@@ -60,11 +58,11 @@ class PlantSearchDelegate extends SearchDelegate {
     if (response == ReturnTypes.fail) {
       Navigator.pop(context);
       Dialogs.showErrorDialog(
-          'Error', 'Assigning crop failed, try again', context);
+          'Error', 'Assigning crop failed, try again.', context);
       return;
     } else if (response == ReturnTypes.error) {
       Navigator.pop(context);
-      Dialogs.showErrorDialog('Error', 'An error occurred, try again', context);
+      Dialogs.showErrorDialog('Error', 'An error occurred, try again.', context);
       return;
     }
 

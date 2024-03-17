@@ -1,7 +1,6 @@
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/other_variables.dart';
-import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
