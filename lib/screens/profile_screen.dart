@@ -115,63 +115,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void showSelectPhotoOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      // isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(16),
         ),
       ),
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.37,
-        maxChildSize: 0.4,
-        minChildSize: 0.37,
-        expand: false,
-        builder: (context, scrollController) {
-          return SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
-              child: Column(
-                children: [
-                  const Icon(
-                    Icons.drag_handle_rounded,
-                    color: Colors.grey,
-                  ),
-                  SecondaryButton(
-                    onPressed: () => pickImage(ImageSource.gallery),
-                    icon: Icons.image_rounded,
-                    text: 'Browse Gallery',
-                  ),
-                  const Gap(10),
-                  const Center(
-                    child: Text(
-                      'OR',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                  const Gap(10),
-                  SecondaryButton(
-                    onPressed: () => pickImage(ImageSource.camera),
-                    icon: Icons.camera_alt_outlined,
-                    text: 'Use a Camera',
-                  ),
-                  const Gap(10),
-                  const Center(
-                    child: Text(
-                      'OR',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                  const Gap(10),
-                  SecondaryButton(
-                    onPressed: removeProfilePicture,
-                    icon: Icons.delete_rounded,
-                    text: 'Remove Profile Picture',
-                  ),
-                ],
+      builder: (context) => SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.drag_handle_rounded,
+                color: Colors.grey,
               ),
-            ),
-          );
-        },
+              SecondaryButton(
+                onPressed: () => pickImage(ImageSource.gallery),
+                icon: Icons.image_rounded,
+                text: 'Browse Gallery',
+              ),
+              const Gap(10),
+              const Center(
+                child: Text(
+                  'OR',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              const Gap(10),
+              SecondaryButton(
+                onPressed: () => pickImage(ImageSource.camera),
+                icon: Icons.camera_alt_outlined,
+                text: 'Use a Camera',
+              ),
+              const Gap(10),
+              const Center(
+                child: Text(
+                  'OR',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              const Gap(10),
+              SecondaryButton(
+                onPressed: removeProfilePicture,
+                icon: Icons.delete_rounded,
+                text: 'Remove Profile Picture',
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

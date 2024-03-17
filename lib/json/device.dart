@@ -27,6 +27,10 @@ class Device {
   String? code;
   @HiveField(5)
   Crop? crop;
+  @HiveField(6)
+  int? soilFrequency;
+  @HiveField(7)
+  int? imageFrequency;
 
   Device({
     this.isConnected,
@@ -35,6 +39,8 @@ class Device {
     this.name,
     this.code,
     this.crop,
+    this.soilFrequency,
+    this.imageFrequency,
   });
 
   factory Device.fromJson(Map<String, dynamic> json) => Device(

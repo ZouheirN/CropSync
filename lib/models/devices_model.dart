@@ -1,5 +1,6 @@
 import 'package:cropsync/json/crop.dart';
 import 'package:cropsync/json/device.dart';
+import 'package:cropsync/main.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -24,6 +25,8 @@ class DevicesModel extends ChangeNotifier {
     required String location,
     required String code,
     required Crop crop,
+    required int soilFrequency,
+    required int imageFrequency,
   }) {
     _devices.add(
       Device(
@@ -33,6 +36,8 @@ class DevicesModel extends ChangeNotifier {
         isConnected: isConnected,
         location: location,
         code: code,
+        soilFrequency: soilFrequency,
+        imageFrequency: imageFrequency,
       ),
     );
     devicesBox.put('devices', _devices);
@@ -60,12 +65,25 @@ class DevicesModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setCrop({required String id, required String name, required String profile}) {
+  void setCrop(
+      {required String id, required String name, required String profile}) {
     final index = _devices.indexWhere((element) => element.deviceId == id);
     _devices[index].crop = Crop(
       name: name,
       profile: profile,
     );
+    devicesBox.put('devices', _devices);
+    notifyListeners();
+  }
+
+  void setFrequencies({
+    required String id,
+    required int soilFrequency,
+    required int imageFrequency,
+  }) {
+    final index = _devices.indexWhere((element) => element.deviceId == id);
+    _devices[index].soilFrequency = soilFrequency;
+    _devices[index].imageFrequency = imageFrequency;
     devicesBox.put('devices', _devices);
     notifyListeners();
   }

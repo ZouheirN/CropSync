@@ -79,6 +79,7 @@ Future<void> main() async {
   if (devicesBox.isNotEmpty) {
     final devices = devicesBox.get('devices');
     for (Device device in devices) {
+      logger.d('Device: ${device.soilFrequency}');
       di<DevicesModel>().addDevice(
         id: device.deviceId!,
         name: device.name!,
@@ -86,6 +87,8 @@ Future<void> main() async {
         location: device.location!,
         code: device.code!,
         crop: device.crop ?? Crop(),
+        soilFrequency: device.soilFrequency ?? 300,
+        imageFrequency: device.imageFrequency ?? 1200,
       );
     }
   }

@@ -124,6 +124,8 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         location: deviceLocationController.text.trim(),
         code: deviceCodeController.text.trim(),
         crop: Crop(),
+        soilFrequency: 300,
+        imageFrequency: 1200,
       );
 
       if (!mounted) return;

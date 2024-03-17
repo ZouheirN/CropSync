@@ -29,6 +29,7 @@ class LocalDeviceApi {
         await Future.delayed(const Duration(milliseconds: 200));
       }
 
+      discovery.dispose();
       return ip;
     } on SocketException catch (e) {
       logger.e(e);
@@ -98,6 +99,29 @@ class LocalDeviceApi {
       );
 
       return response.data['exists'];
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
+      logger.e(e.response?.data);
+
+      return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> setFrequencies({
+    required String deviceCode,
+    required int imageFrequency,
+    required int soilFrequency,
+  }) async {
+    try {
+      final ip = await getDeviceIp(deviceCode);
+
+      await dio.post('http://$ip:3000/set-frequencies', data: {
+        "imageFrequency": imageFrequency,
+        "soilFrequency": soilFrequency,
+      });
+
+      return ReturnTypes.success;
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
 
