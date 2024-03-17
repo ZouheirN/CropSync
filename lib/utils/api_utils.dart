@@ -7,6 +7,7 @@ import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/trefle_api.dart';
 import 'package:cropsync/widgets/dialogs.dart';
+import 'package:cropsync/widgets/plants_list.dart';
 import 'package:flutter/material.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 import 'package:watch_it/watch_it.dart';
@@ -147,84 +148,13 @@ class PlantSearchDelegate extends SearchDelegate {
           );
         }
 
-        return InfiniteList(
-          separatorBuilder: (context, index) => const Divider(),
-          itemCount: plants.length,
+        return PlantsList(
+          plants: plants,
           isLoading: isLoading,
           hasReachedMax: hasReachedMax,
-          centerLoading: true,
-          onFetchData: fetchData,
-          physics: const BouncingScrollPhysics(),
-          loadingBuilder: (context) {
-            return const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          },
-          itemBuilder: (context, index) {
-            return ListTile(
-              onTap: () {
-                PlantSearchDelegate(device).setPlant(
-                  imageUrl: plants[index].imageUrl!,
-                  name: plants[index].commonName!,
-                  context: context,
-                );
-              },
-              leading: CachedNetworkImage(
-                imageUrl: plants[index].imageUrl!,
-                imageBuilder: (context, imageProvider) => Container(
-                  width: 100,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-              title: Text(plants[index].commonName!),
-            );
-          },
+          fetchData: fetchData,
+          device: device,
         );
-        // return ListView.separated(
-        //   separatorBuilder: (context, index) => const Divider(),
-        //   itemCount: plants!.length,
-        //   padding: const EdgeInsets.all(16),
-        //   itemBuilder: (context, index) {
-        //     return ListTile(
-        //       onTap: () {
-        //         setPlant(
-        //           imageUrl: plants![index].imageUrl!,
-        //           name: plants![index].commonName!,
-        //           context: context,
-        //         );
-        //       },
-        //       leading: CachedNetworkImage(
-        //         imageUrl: plants![index].imageUrl!,
-        //         imageBuilder: (context, imageProvider) => Container(
-        //           width: 100,
-        //           height: 200,
-        //           decoration: BoxDecoration(
-        //             image: DecorationImage(
-        //               image: imageProvider,
-        //               fit: BoxFit.cover,
-        //             ),
-        //           ),
-        //         ),
-        //         placeholder: (context, url) =>
-        //             const CircularProgressIndicator(),
-        //         errorWidget: (context, url, error) => const Icon(Icons.error),
-        //       ),
-        //       title: Text(plants![index].commonName!),
-        //     );
-        //   },
-        // );
       },
     );
   }
