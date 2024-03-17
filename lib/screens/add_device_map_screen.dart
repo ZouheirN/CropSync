@@ -43,6 +43,9 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
       if (!mounted) return Future.error('Location services are disabled.');
       Dialogs.showErrorDialog('Location services are disabled',
           'Please enable location services to continue.', context);
+      setState(() {
+        isLoading = false;
+      });
       return Future.error('Location services are disabled.');
     }
 
@@ -53,6 +56,9 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
         if (!mounted) return Future.error('Location permissions are denied');
         Dialogs.showErrorDialog('Location permissions are denied',
             'Please enable location permissions to continue.', context);
+        setState(() {
+          isLoading = false;
+        });
         return Future.error('Location permissions are denied');
       }
     }
@@ -64,6 +70,9 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
       }
       Dialogs.showErrorDialog('Location permissions are permanently denied',
           'Please enable location permissions to continue.', context);
+      setState(() {
+        isLoading = false;
+      });
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }

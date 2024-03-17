@@ -4,6 +4,7 @@ import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/widgets/buttons.dart';
+import 'package:cropsync/widgets/dialogs.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -119,8 +120,7 @@ class _CropsScreenState extends State<CropsScreen> {
                 children: <Widget>[
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context)
-                          .pushNamed('/set-crop', arguments: {
+                      Navigator.of(context).pushNamed('/set-crop', arguments: {
                         'device': devices[index],
                       });
                     },
@@ -152,7 +152,7 @@ class _CropsScreenState extends State<CropsScreen> {
               Column(
                 children: [
                   ListTile(
-                    title: const Text('Nitrogen: 0'),
+                    title: const Text('Nitrogen: ... mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -164,7 +164,7 @@ class _CropsScreenState extends State<CropsScreen> {
                     ),
                   ),
                   ListTile(
-                    title: const Text('Phosphorus: 0'),
+                    title: const Text('Phosphorus: ... mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -176,7 +176,7 @@ class _CropsScreenState extends State<CropsScreen> {
                     ),
                   ),
                   ListTile(
-                    title: const Text('Potassium: 0'),
+                    title: const Text('Potassium: ... mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -188,18 +188,19 @@ class _CropsScreenState extends State<CropsScreen> {
                     ),
                   ),
                   ListTile(
-                      title: const Text('Temperature: 0°C'),
-                      leading: SizedBox(
-                        height: 30,
-                        child: Image.asset(
-                          'assets/icon/temperature.png',
-                          color: MyApp.themeNotifier.value == ThemeMode.light
-                              ? const Color(0xFF3F4642)
-                              : const Color(0xFFBEC6BF),
-                        ),
-                      ),),
+                    title: const Text('Temperature: ...°C'),
+                    leading: SizedBox(
+                      height: 30,
+                      child: Image.asset(
+                        'assets/icon/temperature.png',
+                        color: MyApp.themeNotifier.value == ThemeMode.light
+                            ? const Color(0xFF3F4642)
+                            : const Color(0xFFBEC6BF),
+                      ),
+                    ),
+                  ),
                   ListTile(
-                    title: const Text('pH: 0'),
+                    title: const Text('pH: ...'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -211,7 +212,7 @@ class _CropsScreenState extends State<CropsScreen> {
                     ),
                   ),
                   ListTile(
-                    title: const Text('Moisture: 0%'),
+                    title: const Text('Moisture: ...%'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -239,6 +240,23 @@ class _CropsScreenState extends State<CropsScreen> {
                               padding: EdgeInsets.symmetric(vertical: 2.0),
                             ),
                             Text('Edit'),
+                          ],
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Dialogs.showInformationDialog(
+                              'Information',
+                              'Nitrogen is used for plant growth and good green color.\nPhosphorus is used for root growth and flower and fruit development.\nPotassium is used for strong stem growth and movement of water in plants and food production.\nTemperature is the degree of hotness or coldness of a body or environment.\npH is a measure of how acidic/basic water is.\nMoisture is the presence of water in the soil.',
+                              context);
+                        },
+                        child: const Column(
+                          children: <Widget>[
+                            Icon(Icons.info_rounded),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 2.0),
+                            ),
+                            Text('Info'),
                           ],
                         ),
                       ),

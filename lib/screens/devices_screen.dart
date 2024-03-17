@@ -380,16 +380,19 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                     'Images: Every ${secondsToReadableText(devices[index].imageFrequency ?? 1200)}'),
                               ],
                             ),
-                            trailing: IconButton(
-                              onPressed: () {
-                                setFrequency(
-                                    context,
-                                    devices[index],
-                                    devices[index].soilFrequency ?? 300,
-                                    devices[index].imageFrequency ?? 1200);
-                              },
-                              icon: const Icon(Icons.edit_rounded),
-                            ),
+                            onTap: () {
+                              setFrequency(
+                                  context,
+                                  devices[index],
+                                  devices[index].soilFrequency ?? 300,
+                                  devices[index].imageFrequency ?? 1200);
+                            }
+                            // trailing: IconButton(
+                            //   onPressed: () {
+                            //
+                            //   },
+                            //   icon: const Icon(Icons.edit_rounded),
+                            // ),
                           ),
                           ButtonBar(
                             alignment: MainAxisAlignment.spaceAround,
