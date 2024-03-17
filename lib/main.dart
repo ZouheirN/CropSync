@@ -79,7 +79,6 @@ Future<void> main() async {
   if (devicesBox.isNotEmpty) {
     final devices = devicesBox.get('devices');
     for (Device device in devices) {
-      logger.d('Device: ${device.soilFrequency}');
       di<DevicesModel>().addDevice(
         id: device.deviceId!,
         name: device.name!,

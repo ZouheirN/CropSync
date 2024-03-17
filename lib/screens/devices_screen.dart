@@ -10,6 +10,7 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:watch_it/watch_it.dart';
 
 class DevicesScreen extends WatchingStatefulWidget {
@@ -347,7 +348,8 @@ class _DevicesScreenState extends State<DevicesScreen> {
                             },
                           ),
                           ListTile(
-                            leading: const Icon(Icons.collections_rounded),
+                            leading: const Icon(Bootstrap.database_fill_up),
+                            // leading: const Icon(Icons.cloud_upload_rounded),
                             title: const Text(
                               'Data Collection Frequency',
                             ),
