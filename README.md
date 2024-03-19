@@ -21,14 +21,23 @@
   <li>Quickly diagnose plant diseases via photo analysis</li>
 </ul>
 
+<h2 align="center">📋 Requirements</h2>
+
+- Backend Code API URL: [Repository](https://github.com/Ibrahim-Mneimneh/CropSync)
+- Google Generative AI API Key: [Get it here](https://makersuite.google.com/app/apikey)
+- Trefle API Key: [Get it here](https://trefle.io/)
+
+
 <h2 align="center">🛠️ Installation Steps</h2>
 
 <ol>
   <li>Ensure the backend code is running. Check the repository <a href="https://github.com/Ibrahim-Mneimneh/CropSync">here</a>.</li>
   <li>Clone this repository.
     <pre><code>git clone https://github.com/ZouheirN/CropSync.git</code></pre>
-  <li>Create a <code>.env</code> file in the root folder. Add your API URL in the format:
-    <pre><code>API_URL=(your API URL, ensuring it ends with /api)</code></pre>
+  <li>Create a <code>.env</code> file in the root folder. Add your environmental variables in the format:
+    <pre><code>API_URL=(your API URL, ensuring it ends with /api)
+GOOGLE_GENERATIVE_AI_API_KEY=(your API key)
+TREFLE_API_KEY=(your API Key)</code></pre>
   </li>
   <li>Build and launch the application.</li>
 </ol>
