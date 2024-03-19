@@ -77,13 +77,17 @@ class _SetCropScreenState extends State<SetCropScreen> {
           ),
         ],
       ),
-      body: PlantsList(
-        plants: plants,
-        isLoading: isLoading,
-        hasReachedMax: hasReachedMax,
-        fetchData: fetchData,
-        device: device!,
-      ),
+      body: device == null
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : PlantsList(
+              plants: plants,
+              isLoading: isLoading,
+              hasReachedMax: hasReachedMax,
+              fetchData: fetchData,
+              device: device!,
+            ),
     );
   }
 }

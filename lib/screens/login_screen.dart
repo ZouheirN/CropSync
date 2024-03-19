@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:bcrypt/bcrypt.dart';
 import 'package:cropsync/models/user_model.dart';
-import 'package:cropsync/screens/register_screen.dart';
 import 'package:cropsync/services/user_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/utils/curve.dart';
@@ -169,32 +168,26 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    'Welcome Back',
-                                    style: TextStyle(
-                                      fontSize: 32.0,
-                                      fontWeight: FontWeight.w600,
-                                    )
-                                  ),
-                                  Text(
-                                    'Login to your account',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 15.0,
-                                    )
-                                  )
+                                  Text('Welcome Back',
+                                      style: TextStyle(
+                                        fontSize: 32.0,
+                                        fontWeight: FontWeight.w600,
+                                      )),
+                                  Text('Login to your account',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 15.0,
+                                      ))
                                 ],
                               ),
                             ),
-                            AutofillGroup(
-                              child: Column(
+                            Column(
                                 children: [
                                   buildEmailTextInputField(),
                                   const Gap(20),
                                   buildPasswordTextInputField(),
                                 ],
                               ),
-                            ),
                             const Gap(10),
                             Align(
                               alignment: Alignment.centerRight,
@@ -223,12 +216,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const Text('Don\'t have an account? '),
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const RegisterScreen(),
-                                      ),
-                                    );
+                                    Navigator.of(context)
+                                        .pushReplacementNamed('/register');
                                   },
                                   child: const Text(
                                     'Register',
@@ -263,7 +252,6 @@ class _LoginScreenState extends State<LoginScreen> {
           textController: emailTextController,
           prefixIcon: const Icon(Icons.email_rounded),
           textInputAction: TextInputAction.next,
-          autofillHints: const [AutofillHints.email],
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter your email';
@@ -290,8 +278,6 @@ class _LoginScreenState extends State<LoginScreen> {
           textController: passwordTextController,
           prefixIcon: const Icon(Icons.lock_rounded),
           obscureText: isObscure,
-          autofillHints: const [AutofillHints.password],
-          onEditingComplete: () => TextInput.finishAutofillContext(),
           suffixIcon: Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: IconButton(

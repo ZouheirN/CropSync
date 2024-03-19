@@ -30,6 +30,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:watch_it/watch_it.dart';
 
 final logger = Logger();
@@ -159,8 +160,8 @@ class MyApp extends StatelessWidget {
                     : const WelcomeScreen(),
             '/main': (context) => const MainScreen(),
             '/welcome': (context) => const WelcomeScreen(),
-            '/register': (context) => const RegisterScreen(),
-            '/login': (context) => const LoginScreen(),
+            // '/register': (context) => const RegisterScreen(),
+            // '/login': (context) => const LoginScreen(),
             '/add-device': (context) => const AddDeviceScreen(),
             '/edit-device': (context) => const EditDeviceScreen(),
             '/add-device-map': (context) => const AddDeviceMapScreen(),
@@ -175,6 +176,26 @@ class MyApp extends StatelessWidget {
             '/settings': (context) => const SettingsScreen(),
             '/camera-control': (context) => const CameraControlScreen(),
             '/set-crop': (context) => const SetCropScreen(),
+          },
+          onGenerateRoute: (settings) {
+            switch (settings.name) {
+              case '/login':
+                return PageTransition(
+                  child: const LoginScreen(),
+                  type: PageTransitionType.rightToLeft,
+                  duration: const Duration(milliseconds: 150),
+                  reverseDuration: const Duration(milliseconds: 150),
+                );
+              case '/register':
+                return PageTransition(
+                  child: const RegisterScreen(),
+                  type: PageTransitionType.rightToLeft,
+                  duration: const Duration(milliseconds: 150),
+                  reverseDuration: const Duration(milliseconds: 150),
+                );
+              default:
+                return null;
+            }
           },
         );
       },
