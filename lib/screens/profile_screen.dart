@@ -136,11 +136,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 text: 'Browse Gallery',
               ),
               const Gap(10),
-              const Center(
-                child: Text(
-                  'OR',
-                  style: TextStyle(fontSize: 18),
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 5, right: 15),
+                      child: const Divider(
+                        color: Colors.white,
+                        height: 10,
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    'or',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 15, right: 5),
+                      child: const Divider(
+                        color: Colors.white,
+                        height: 10,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const Gap(10),
               SecondaryButton(
@@ -149,11 +172,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 text: 'Use a Camera',
               ),
               const Gap(10),
-              const Center(
-                child: Text(
-                  'OR',
-                  style: TextStyle(fontSize: 18),
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 5, right: 15),
+                      child: const Divider(
+                        color: Colors.white,
+                        height: 10,
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    'or',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 15, right: 5),
+                      child: const Divider(
+                        color: Colors.white,
+                        height: 10,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const Gap(10),
               SecondaryButton(

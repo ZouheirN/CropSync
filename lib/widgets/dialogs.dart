@@ -189,8 +189,8 @@ class Dialogs {
                           return;
                         } else if (response == ReturnTypes.error) {
                           if (!context.mounted) return;
-                          showErrorDialog(
-                              'Error', 'An error occurred, try again.', context);
+                          showErrorDialog('Error',
+                              'An error occurred, try again.', context);
                           return;
                         }
 

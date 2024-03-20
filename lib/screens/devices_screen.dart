@@ -112,6 +112,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
       'Every ${secondsToReadableText(300)}': 300,
       'Every ${secondsToReadableText(600)}': 600,
       'Every ${secondsToReadableText(900)}': 900,
+      'Every ${secondsToReadableText(1200)}': 1200,
       'Every ${secondsToReadableText(1800)}': 1800,
       'Every ${secondsToReadableText(3600)}': 3600,
       'Every ${secondsToReadableText(7200)}': 7200,
@@ -126,6 +127,9 @@ class _DevicesScreenState extends State<DevicesScreen> {
       'Every ${secondsToReadableText(7200)}': 7200,
       'Every ${secondsToReadableText(14400)}': 14400,
       'Every ${secondsToReadableText(21600)}': 21600,
+      'Every ${secondsToReadableText(28800)}': 28800,
+      'Every ${secondsToReadableText(36000)}': 36000,
+      'Every ${secondsToReadableText(43200)}': 43200,
     };
 
     var selectedSoilFrequency = soilItems.keys.firstWhere(
@@ -152,12 +156,14 @@ class _DevicesScreenState extends State<DevicesScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const ListTile(
-                  title: Text(
-                    'Set Data Collection Frequency',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
+                const Icon(
+                  Icons.drag_handle_rounded,
+                  color: Colors.grey,
+                ),
+                const Text(
+                  'Set Data Collection Frequency',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  textAlign: TextAlign.center,
                 ),
                 ListTile(
                   title: const Text('Soil Data'),
@@ -366,34 +372,34 @@ class _DevicesScreenState extends State<DevicesScreen> {
                             },
                           ),
                           ListTile(
-                            leading: const Icon(Bootstrap.database_fill_up),
-                            // leading: const Icon(Icons.cloud_upload_rounded),
-                            title: const Text(
-                              'Data Collection Frequency',
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    'Soil Data: Every ${secondsToReadableText(devices[index].soilFrequency ?? 1)}'),
-                                Text(
-                                    'Images: Every ${secondsToReadableText(devices[index].imageFrequency ?? 1200)}'),
-                              ],
-                            ),
-                            onTap: () {
-                              setFrequency(
-                                  context,
-                                  devices[index],
-                                  devices[index].soilFrequency ?? 300,
-                                  devices[index].imageFrequency ?? 1200);
-                            }
-                            // trailing: IconButton(
-                            //   onPressed: () {
-                            //
-                            //   },
-                            //   icon: const Icon(Icons.edit_rounded),
-                            // ),
-                          ),
+                              leading: const Icon(Bootstrap.database_fill_up),
+                              // leading: const Icon(Icons.cloud_upload_rounded),
+                              title: const Text(
+                                'Data Collection Frequency',
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      'Soil Data: Every ${secondsToReadableText(devices[index].soilFrequency ?? 1)}'),
+                                  Text(
+                                      'Images: Every ${secondsToReadableText(devices[index].imageFrequency ?? 1200)}'),
+                                ],
+                              ),
+                              onTap: () {
+                                setFrequency(
+                                    context,
+                                    devices[index],
+                                    devices[index].soilFrequency ?? 300,
+                                    devices[index].imageFrequency ?? 1200);
+                              }
+                              // trailing: IconButton(
+                              //   onPressed: () {
+                              //
+                              //   },
+                              //   icon: const Icon(Icons.edit_rounded),
+                              // ),
+                              ),
                           ButtonBar(
                             alignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[

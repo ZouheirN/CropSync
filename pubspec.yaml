@@ -47,7 +47,7 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   geolocator: ^10.1.0
   geocoding: ^2.1.1
-  quickalert: ^1.0.2
+  quickalert: ^1.1.0
   flutter_map: ^6.1.0
   sliding_up_panel: ^2.0.0+1
   latlong2: ^0.9.0

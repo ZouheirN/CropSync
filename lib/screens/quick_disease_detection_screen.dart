@@ -111,11 +111,34 @@ class _QuickDiseaseDetectionScreenState
                 text: 'Browse Gallery',
               ),
               const Gap(10),
-              const Center(
-                child: Text(
-                  'OR',
-                  style: TextStyle(fontSize: 18),
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 5, right: 15),
+                      child: const Divider(
+                        color: Colors.white,
+                        height: 10,
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    'or',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 15, right: 5),
+                      child: const Divider(
+                        color: Colors.white,
+                        height: 10,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const Gap(10),
               SecondaryButton(
@@ -132,7 +155,8 @@ class _QuickDiseaseDetectionScreenState
 
   @override
   Widget build(BuildContext context) {
-    final dynamic images = watchPropertyValue((ImageModel m) => m.images.toList());
+    final dynamic images =
+        watchPropertyValue((ImageModel m) => m.images.toList());
 
     return Scaffold(
       appBar: AppBar(
@@ -149,11 +173,19 @@ class _QuickDiseaseDetectionScreenState
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            buildGrid(images),
-          ],
-        ),
+        child: images.isEmpty
+            ? const Center(
+                child: Text(
+                  'Start by taking pictures of leaves to detect diseases.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
+              )
+            : Column(
+                children: [
+                  buildGrid(images),
+                ],
+              ),
       ),
     );
   }
