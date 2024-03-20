@@ -54,6 +54,7 @@ class PlantsList extends StatelessWidget {
               width: 100,
               height: 200,
               decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
                   image: imageProvider,
                   fit: BoxFit.cover,
@@ -64,6 +65,7 @@ class PlantsList extends StatelessWidget {
             errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
           title: Text(plants[index].commonName!),
+          subtitle: Text(plants[index].scientificName ?? ''),
         );
       },
     );

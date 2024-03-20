@@ -48,10 +48,10 @@ class _TagLineState extends State<TagLine> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
+        const Text(
           'Grow ',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onBackground,
+            color: Colors.white,
             fontSize: 40,
             fontWeight: FontWeight.bold,
           ),

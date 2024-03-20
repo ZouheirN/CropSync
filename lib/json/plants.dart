@@ -27,19 +27,23 @@ class Plants {
 class PlantsDatum {
   String? commonName;
   String? imageUrl;
+  String? scientificName;
 
   PlantsDatum({
     this.commonName,
     this.imageUrl,
+    this.scientificName,
   });
 
   factory PlantsDatum.fromJson(Map<String, dynamic> json) => PlantsDatum(
     commonName: json["common_name"],
     imageUrl: json["image_url"],
+    scientificName: json["scientific_name"],
   );
 
   Map<String, dynamic> toJson() => {
     "common_name": commonName,
     "image_url": imageUrl,
+    "scientific_name": scientificName,
   };
 }
