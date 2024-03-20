@@ -6,6 +6,7 @@ import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:cropsync/main.dart';
@@ -231,17 +232,29 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
           ],
         ),
         const Gap(10),
-        PrimaryTextField(
-          hintText: 'Choose Location',
-          enabled: false,
-          textController: deviceLocationController,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please choose your device\'s location';
-            }
+        GestureDetector(
+          onTap: () async {
+            final location =
+                await Navigator.of(context).pushNamed('/add-device-map');
 
-            return null;
+            if (location.toString() != "null") {
+              setState(() {
+                deviceLocationController.text = location.toString();
+              });
+            }
           },
+          child: PrimaryTextField(
+            hintText: 'Choose Location',
+            enabled: false,
+            textController: deviceLocationController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please choose your device\'s location';
+              }
+
+              return null;
+            },
+          ),
         ),
       ],
     );

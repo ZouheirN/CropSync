@@ -162,14 +162,14 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
         defaultPanelState: PanelState.CLOSED,
         controller: panelController,
         color: Colors.transparent,
-        maxHeight: MediaQuery.of(context).size.height * 0.3,
-        panel: _buildPanel(),
-        body: _buildMap(),
+        maxHeight: 280,
+        panel: buildPanel(),
+        body: buildMap(),
       ),
     );
   }
 
-  Widget _buildPanel() {
+  Widget buildPanel() {
     return Form(
       key: formKey,
       child: Container(
@@ -185,6 +185,7 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
                 Icons.drag_handle_rounded,
@@ -207,14 +208,18 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
                           await placemarkFromCoordinates(
                               value.latitude, value.longitude);
 
-                      String subAdministrativeArea = placemarks[0].subAdministrativeArea!;
+                      String subAdministrativeArea =
+                          placemarks[0].subAdministrativeArea!;
 
                       // check if subAdministrativeArea is not english
-                      if (subAdministrativeArea.contains(RegExp(r'[a-zA-Z]')) == false) {
+                      if (subAdministrativeArea.contains(RegExp(r'[a-zA-Z]')) ==
+                          false) {
                         // loop through the placemarks to find the first english subAdministrativeArea
                         for (var placemark in placemarks) {
-                          if (placemark.subAdministrativeArea!.contains(RegExp(r'[a-zA-Z]'))) {
-                            subAdministrativeArea = placemark.subAdministrativeArea!;
+                          if (placemark.subAdministrativeArea!
+                              .contains(RegExp(r'[a-zA-Z]'))) {
+                            subAdministrativeArea =
+                                placemark.subAdministrativeArea!;
                             break;
                           }
                         }
@@ -298,7 +303,7 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
     );
   }
 
-  Widget _buildMap() {
+  Widget buildMap() {
     return FlutterMap(
       mapController: mapController,
       options: MapOptions(
