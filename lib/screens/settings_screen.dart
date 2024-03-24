@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cropsync/main.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +24,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     'Camera',
     'Devices',
     'Profile',
+  ];
+  List<String> names = [
+    'Zouheir Nakouzi',
+    'Ibrahim Mneimneh',
+    'Samer Damaj',
+    'Hamza Mrad',
+    'Noor Al Khatib',
+    'Jamal Chabaan'
   ];
 
   @override
@@ -56,6 +66,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
       default:
         return const Icon(Icons.error);
     }
+  }
+
+  String shuffleNames(List<String> names) {
+    // Create a copy of the original list to avoid modifying it
+    List<String> shuffledNames = List.from(names);
+
+    // Shuffle the list using the Fisher-Yates algorithm
+    Random random = Random();
+    for (int i = shuffledNames.length - 1; i > 0; i--) {
+      int j = random.nextInt(i + 1);
+      String temp = shuffledNames[i];
+      shuffledNames[i] = shuffledNames[j];
+      shuffledNames[j] = temp;
+    }
+
+    // Create a bulleted list of shuffled names
+    String bulletedList = '';
+    for (int i = 0; i < shuffledNames.length; i++) {
+      bulletedList += '• ${shuffledNames[i]}\n';
+    }
+
+    return bulletedList;
   }
 
   @override
@@ -142,14 +174,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             icon: const Icon(Icons.info),
             applicationName: 'CropSync',
             applicationVersion: version,
-            aboutBoxChildren: const [
-              Text('CropSync is a project made by:\n'
-                  '• Zouheir Nakouzi\n'
-                  '• Ibrahim Mneimneh\n'
-                  '• Samer Damaj\n'
-                  '• Hamza Mrad\n'
-                  '• Noor Al Khatib\n'
-                  '• Jamal Chabaan'),
+            aboutBoxChildren: [
+              Text('CropSync is a project made by:\n${shuffleNames(names)}'),
             ],
           ),
         ],
