@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/json/device.dart';
+import 'package:cropsync/json/soil_data.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
+import 'package:cropsync/models/latest_soil_data_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/widgets/buttons.dart';
+import 'package:cropsync/widgets/cards.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +24,8 @@ class CropsScreen extends WatchingStatefulWidget {
 }
 
 class _CropsScreenState extends State<CropsScreen> {
+  Timer? timer;
+
   Future refresh() async {
     final devices = await DeviceApi.getDevices();
     if (devices.runtimeType == List<Device>) {
@@ -28,8 +35,63 @@ class _CropsScreenState extends State<CropsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    // get each device id in a list
+    final deviceIds =
+        di<DevicesModel>().devices.map((e) => e.deviceId).toList();
+
+    // get the latest soil data for each device
+    for (var deviceId in deviceIds) {
+      DeviceApi.getLatestSoilData(deviceId!).then((soilData) {
+        if (soilData.runtimeType == SoilData) {
+          di<LatestSoilDataModel>().setSoilData(soilData);
+          logger.d('Fetched Soil Data');
+        }
+      });
+    }
+
+    timer = Timer.periodic(const Duration(minutes: 1), (Timer t) {
+      // get each device id in a list
+      final deviceIds =
+          di<DevicesModel>().devices.map((e) => e.deviceId).toList();
+
+      // get the latest soil data for each device
+      for (var deviceId in deviceIds) {
+        DeviceApi.getLatestSoilData(deviceId!).then((soilData) {
+          if (soilData.runtimeType == SoilData) {
+            di<LatestSoilDataModel>().setSoilData(soilData);
+            logger.d('Fetched Soil Data');
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  SoilData fetchSoilDataForSpecificDevice(String deviceId) {
+    final soilData = di<LatestSoilDataModel>().soilData;
+    final index =
+        soilData.indexWhere((element) => element.keys.first == deviceId);
+
+    if (index != -1) {
+      return soilData[index].values.first;
+    }
+
+    return SoilData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
+    final latestSoilData =
+        watchPropertyValue((LatestSoilDataModel l) => l.soilData.toList());
 
     List<String?> cropNames =
         devices.map((device) => device.crop?.name).toList();
@@ -152,7 +214,23 @@ class _CropsScreenState extends State<CropsScreen> {
               Column(
                 children: [
                   ListTile(
-                    title: const Text('Nitrogen: ... mg/kg'),
+                    title: fetchSoilDataForSpecificDevice(
+                                    devices[index].deviceId)
+                                .nitrogen ==
+                            null
+                        ? const Row(
+                            children: [
+                              Text('Nitrogen: '),
+                              Gap(5),
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            'Nitrogen: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).nitrogen!)}mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -164,7 +242,23 @@ class _CropsScreenState extends State<CropsScreen> {
                     ),
                   ),
                   ListTile(
-                    title: const Text('Phosphorus: ... mg/kg'),
+                    title: fetchSoilDataForSpecificDevice(
+                                    devices[index].deviceId)
+                                .phosphorus ==
+                            null
+                        ? const Row(
+                            children: [
+                              Text('Phosphorus: '),
+                              Gap(5),
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            'Phosphorus: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).phosphorus!)}mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -176,7 +270,23 @@ class _CropsScreenState extends State<CropsScreen> {
                     ),
                   ),
                   ListTile(
-                    title: const Text('Potassium: ... mg/kg'),
+                    title: fetchSoilDataForSpecificDevice(
+                                    devices[index].deviceId)
+                                .potassium ==
+                            null
+                        ? const Row(
+                            children: [
+                              Text('Potassium: '),
+                              Gap(5),
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            'Potassium: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).potassium!)}mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -188,7 +298,23 @@ class _CropsScreenState extends State<CropsScreen> {
                     ),
                   ),
                   ListTile(
-                    title: const Text('Temperature: ...°C'),
+                    title: fetchSoilDataForSpecificDevice(
+                                    devices[index].deviceId)
+                                .temperature ==
+                            null
+                        ? const Row(
+                            children: [
+                              Text('Temperature: '),
+                              Gap(5),
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            'Temperature: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).temperature!)}°C'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -200,7 +326,23 @@ class _CropsScreenState extends State<CropsScreen> {
                     ),
                   ),
                   ListTile(
-                    title: const Text('pH: ...'),
+                    title: fetchSoilDataForSpecificDevice(
+                                    devices[index].deviceId)
+                                .ph ==
+                            null
+                        ? const Row(
+                            children: [
+                              Text('pH: '),
+                              Gap(5),
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            'pH: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).ph!)}'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -212,7 +354,23 @@ class _CropsScreenState extends State<CropsScreen> {
                     ),
                   ),
                   ListTile(
-                    title: const Text('Moisture: ...%'),
+                    title: fetchSoilDataForSpecificDevice(
+                                    devices[index].deviceId)
+                                .humidity ==
+                            null
+                        ? const Row(
+                            children: [
+                              Text('Moisture: '),
+                              Gap(5),
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            'Moisture: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).humidity!)}%'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -222,6 +380,14 @@ class _CropsScreenState extends State<CropsScreen> {
                             : const Color(0xFFBEC6BF),
                       ),
                     ),
+                  ),
+                  Text(
+                    fetchSoilDataForSpecificDevice(devices[index].deviceId)
+                                .sensorCollectionDate ==
+                            null
+                        ? ''
+                        : 'Date Collected: ${convertDateFormat(fetchSoilDataForSpecificDevice(devices[index].deviceId).sensorCollectionDate!.toString(), withTime: true)}',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                   ButtonBar(
                     alignment: MainAxisAlignment.spaceAround,

@@ -5,8 +5,10 @@ import 'package:cropsync/json/user.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/image_model.dart';
+import 'package:cropsync/models/latest_soil_data_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
+import 'package:cropsync/models/crop_chart_model.dart';
 import 'package:cropsync/screens/account_information_screen.dart';
 import 'package:cropsync/screens/add_device_map_screen.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
@@ -211,4 +213,6 @@ void registerManagers() {
   di.registerSingleton<DevicesModel>(DevicesModel());
   di.registerSingleton<OtherVars>(OtherVars());
   di.registerSingleton<UserPrefs>(UserPrefs());
+  di.registerSingleton<CropChartModel>(CropChartModel());
+  di.registerSingleton<LatestSoilDataModel>(LatestSoilDataModel());
 }

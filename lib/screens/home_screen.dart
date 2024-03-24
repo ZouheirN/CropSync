@@ -1,17 +1,17 @@
 import 'package:cropsync/main.dart';
+import 'package:cropsync/models/crop_chart_model.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:cropsync/widgets/buttons.dart';
+import 'package:cropsync/widgets/cards.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:watch_it/watch_it.dart';
-
-import '../widgets/cards.dart';
 
 class HomeScreen extends WatchingStatefulWidget {
   const HomeScreen({super.key});
@@ -25,6 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
       PageController(viewportFraction: 0.8, keepPage: true);
   final deviceCameraPageController =
       PageController(viewportFraction: 0.8, keepPage: true);
+  final cropLineChartsPageController =
+      PageController(viewportFraction: 0.8, keepPage: true);
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final weather = watchPropertyValue((WeatherModel w) => w.weather.toList());
     final deviceCamera =
         watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera.toList());
+    final cropCharts = watchPropertyValue((CropChartModel cc) => cc.cropCharts);
 
     final weatherPages = weather
         .map(
@@ -51,6 +54,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         )
         .toList();
+
+    final cropLineChartsPages = cropCharts.data == null
+        ? []
+        : cropCharts.data!
+            .map(
+              (e) => CropLineChartCard(
+                deviceName: e.deviceName!,
+                cropName: e.cropName!,
+                location: e.location!,
+                nitrogen: e.nitrogen!,
+                phosphorus: e.phosphorus!,
+                moisture: e.moisture!,
+                temperature: e.temperature!,
+                ph: e.ph!,
+                potassium: e.potassium!,
+              ),
+            )
+            .toList();
 
     // final weatherAlerts = weather
     //     .map((e) {
@@ -94,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     else if (item == 'Device Camera')
                       buildDeviceCamera(deviceCameraPages)
                     else if (item == 'Statistics')
-                      buildStatistics(),
+                      buildStatistics(cropLineChartsPages),
                   const Gap(20),
                 ],
               ),
@@ -294,13 +315,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Statistics
-  Widget buildStatistics() {
-    return const Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+  Widget buildStatistics(pages) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
@@ -313,12 +334,46 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          Gap(16),
-          Center(
-            child: CircularProgressIndicator(),
+        ),
+        const Gap(16),
+        SizedBox(
+          width: double.infinity,
+          height: 658,
+          child: Visibility(
+            visible: pages.isNotEmpty,
+            replacement: const Center(
+              child: CircularProgressIndicator(),
+            ),
+            child: PageView.builder(
+              controller: cropLineChartsPageController,
+              itemCount: pages.length,
+              itemBuilder: (_, index) {
+                return pages[index % pages.length];
+              },
+            ),
           ),
-        ],
-      ),
+        ),
+        if (pages.isNotEmpty && pages.length > 1)
+          Column(
+            children: [
+              const Gap(16),
+              Container(
+                alignment: Alignment.center,
+                child: SmoothPageIndicator(
+                  controller: cropLineChartsPageController,
+                  count: pages.length,
+                  effect: ExpandingDotsEffect(
+                    dotHeight: 16,
+                    dotWidth: 16,
+                    activeDotColor: MyApp.themeNotifier.value == ThemeMode.light
+                        ? const Color(0xFF202C26)
+                        : const Color(0xFFE3EDE7),
+                  ),
+                ),
+              ),
+            ],
+          ),
+      ],
     );
   }
 

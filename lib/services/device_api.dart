@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:cropsync/json/crop_chart.dart';
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/json/device_camera.dart';
+import 'package:cropsync/json/soil_data.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/api_utils.dart';
@@ -194,6 +196,38 @@ class DeviceApi {
       }
 
       return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> getCropChartData() async {
+    String jsonString = await rootBundle.loadString('assets/chart_data.json');
+    final data = json.decode(jsonString);
+
+    return cropChartFromJson(data);
+  }
+
+  static Future<dynamic> getLatestSoilData(String deviceId) async {
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
+
+    try {
+      final response = await dio.get(
+        '$apiUrl/user/device/soil/reading',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+        data: {
+          'deviceId': deviceId,
+        },
+      );
+
+      return soilDataFromJson(response.data);
+    } on DioException catch (e) {
+      logger.e(e.response?.data);
+
+      return null;
     }
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:badges/badges.dart' as badges;
+import 'package:cropsync/json/crop_chart.dart';
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/json/weather.dart';
+import 'package:cropsync/models/crop_chart_model.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/weather_model.dart';
@@ -97,6 +99,24 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  void cropCharts() async {
+    final cropCharts = await DeviceApi.getCropChartData();
+    if (cropCharts.runtimeType == CropChart) {
+      di<CropChartModel>().cropCharts = cropCharts;
+      logger.d('Fetched Crop Charts');
+    }
+
+    Timer.periodic(const Duration(minutes: 5), (timer) async {
+      if (!OtherVars().autoRefresh) return;
+
+      final cropCharts = await DeviceApi.getCropChartData();
+      if (cropCharts.runtimeType == CropChart) {
+        di<CropChartModel>().cropCharts = cropCharts;
+        logger.d('Fetched Crop Charts');
+      }
+    });
+  }
+
   @override
   void initState() {
     // If timers are not running, initialize them
@@ -104,6 +124,7 @@ class _MainScreenState extends State<MainScreen> {
       weather();
       deviceCamera();
       devices();
+      cropCharts();
     }
 
     super.initState();

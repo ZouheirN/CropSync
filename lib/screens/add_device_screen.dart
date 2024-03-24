@@ -6,7 +6,6 @@ import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:cropsync/main.dart';
@@ -286,7 +285,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
         ),
         const Gap(10),
         PrimaryTextField(
-          hintText: 'Device Code',
+          hintText: 'Enter Device Code',
           textController: deviceCodeController,
           keyboardType: TextInputType.number,
           validator: (value) {

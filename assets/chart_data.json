@@ -1,0 +1,63 @@
+{
+  "data": [
+    {
+      "deviceName": "Raspberry Pi Zero W",
+      "cropName": "Potato",
+      "location": "Saida, Lebanon",
+      "moisture": [
+        6,
+        5,
+        9,
+        0,
+        8,
+        4,
+        1
+      ],
+      "nitrogen": [
+        5,
+        3,
+        9,
+        4,
+        2,
+        7,
+        1
+      ],
+      "ph": [
+        8,
+        1,
+        6,
+        7,
+        3,
+        0,
+        9
+      ],
+      "phosphorus": [
+        8,
+        1,
+        9,
+        4,
+        6,
+        7,
+        2
+      ],
+      "potassium": [
+        9,
+        0,
+        1,
+        8,
+        4,
+        3,
+        7
+      ],
+      "temperature": [
+        8,
+        6,
+        5,
+        0,
+        7,
+        4,
+        2
+      ]
+    }
+  ]
+}
