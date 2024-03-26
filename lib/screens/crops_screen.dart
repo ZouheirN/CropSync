@@ -78,8 +78,7 @@ class _CropsScreenState extends State<CropsScreen> {
     super.dispose();
   }
 
-  SoilData fetchSoilDataForSpecificDevice(String deviceId) {
-    final soilData = di<LatestSoilDataModel>().soilData;
+  SoilData fetchSoilDataForSpecificDevice(String deviceId, soilData) {
     final index =
         soilData.indexWhere((element) => element.keys.first == deviceId);
 
@@ -93,6 +92,8 @@ class _CropsScreenState extends State<CropsScreen> {
   @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
+    final soilData = watchPropertyValue((LatestSoilDataModel s) => s.soilData);
+
     List<String?> cropNames =
         devices.map((device) => device.crop?.name).toList();
 
@@ -122,7 +123,8 @@ class _CropsScreenState extends State<CropsScreen> {
                     duration: const Duration(milliseconds: 375),
                     child: SlideAnimation(
                       child: FadeInAnimation(
-                        child: buildListTile(devices, cropNames, index),
+                        child:
+                            buildListTile(devices, cropNames, index, soilData),
                       ),
                     ),
                   );
@@ -136,7 +138,7 @@ class _CropsScreenState extends State<CropsScreen> {
     );
   }
 
-  Widget buildListTile(devices, cropNames, index) {
+  Widget buildListTile(devices, cropNames, index, soilData) {
     return Column(
       children: [
         ExpansionTileCard(
@@ -215,7 +217,7 @@ class _CropsScreenState extends State<CropsScreen> {
                 children: [
                   ListTile(
                     title: fetchSoilDataForSpecificDevice(
-                                    devices[index].deviceId)
+                                    devices[index].deviceId, soilData)
                                 .nitrogen ==
                             null
                         ? const Row(
@@ -230,7 +232,7 @@ class _CropsScreenState extends State<CropsScreen> {
                             ],
                           )
                         : Text(
-                            'Nitrogen: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).nitrogen!)}mg/kg'),
+                            'Nitrogen: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).nitrogen!)}mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -243,7 +245,7 @@ class _CropsScreenState extends State<CropsScreen> {
                   ),
                   ListTile(
                     title: fetchSoilDataForSpecificDevice(
-                                    devices[index].deviceId)
+                                    devices[index].deviceId, soilData)
                                 .phosphorus ==
                             null
                         ? const Row(
@@ -258,7 +260,7 @@ class _CropsScreenState extends State<CropsScreen> {
                             ],
                           )
                         : Text(
-                            'Phosphorus: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).phosphorus!)}mg/kg'),
+                            'Phosphorus: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).phosphorus!)}mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -271,7 +273,7 @@ class _CropsScreenState extends State<CropsScreen> {
                   ),
                   ListTile(
                     title: fetchSoilDataForSpecificDevice(
-                                    devices[index].deviceId)
+                                    devices[index].deviceId, soilData)
                                 .potassium ==
                             null
                         ? const Row(
@@ -286,7 +288,7 @@ class _CropsScreenState extends State<CropsScreen> {
                             ],
                           )
                         : Text(
-                            'Potassium: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).potassium!)}mg/kg'),
+                            'Potassium: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).potassium!)}mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -299,7 +301,7 @@ class _CropsScreenState extends State<CropsScreen> {
                   ),
                   ListTile(
                     title: fetchSoilDataForSpecificDevice(
-                                    devices[index].deviceId)
+                                    devices[index].deviceId, soilData)
                                 .temperature ==
                             null
                         ? const Row(
@@ -314,7 +316,7 @@ class _CropsScreenState extends State<CropsScreen> {
                             ],
                           )
                         : Text(
-                            'Temperature: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).temperature!)}°C'),
+                            'Temperature: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).temperature!)}°C'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -327,7 +329,7 @@ class _CropsScreenState extends State<CropsScreen> {
                   ),
                   ListTile(
                     title: fetchSoilDataForSpecificDevice(
-                                    devices[index].deviceId)
+                                    devices[index].deviceId, soilData)
                                 .ph ==
                             null
                         ? const Row(
@@ -342,7 +344,7 @@ class _CropsScreenState extends State<CropsScreen> {
                             ],
                           )
                         : Text(
-                            'pH: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).ph!)}'),
+                            'pH: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).ph!)}'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -355,7 +357,7 @@ class _CropsScreenState extends State<CropsScreen> {
                   ),
                   ListTile(
                     title: fetchSoilDataForSpecificDevice(
-                                    devices[index].deviceId)
+                                    devices[index].deviceId, soilData)
                                 .humidity ==
                             null
                         ? const Row(
@@ -370,7 +372,7 @@ class _CropsScreenState extends State<CropsScreen> {
                             ],
                           )
                         : Text(
-                            'Moisture: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId).humidity!)}%'),
+                            'Moisture: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).humidity!)}%'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -382,11 +384,12 @@ class _CropsScreenState extends State<CropsScreen> {
                     ),
                   ),
                   Text(
-                    fetchSoilDataForSpecificDevice(devices[index].deviceId)
+                    fetchSoilDataForSpecificDevice(
+                                    devices[index].deviceId, soilData)
                                 .sensorCollectionDate ==
                             null
                         ? ''
-                        : 'Date Collected: ${convertDateFormat(fetchSoilDataForSpecificDevice(devices[index].deviceId).sensorCollectionDate!.toString(), withTime: true)}',
+                        : 'Date Collected: ${convertDateFormat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).sensorCollectionDate!.toString(), withTime: true)}',
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                   ButtonBar(
