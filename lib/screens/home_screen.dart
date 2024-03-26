@@ -1,8 +1,14 @@
+import 'package:cropsync/json/crop_chart.dart';
+import 'package:cropsync/json/device.dart';
+import 'package:cropsync/json/device_camera.dart';
+import 'package:cropsync/json/weather.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/crop_chart_model.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/weather_model.dart';
+import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/services/weather_api.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/cards.dart';
@@ -27,6 +33,32 @@ class _HomeScreenState extends State<HomeScreen> {
       PageController(viewportFraction: 0.8, keepPage: true);
   final cropLineChartsPageController =
       PageController(viewportFraction: 0.8, keepPage: true);
+
+  Future refresh() async {
+    final devices = await DeviceApi.getDevices();
+    if (devices.runtimeType == List<Device>) {
+      di<DevicesModel>().devices = devices;
+      logger.d('Fetched Devices by Refresh');
+    }
+
+    final weatherData = await WeatherApi.getWeatherData();
+    if (weatherData.runtimeType == List<Weather>) {
+      di<WeatherModel>().weather = weatherData;
+      logger.d('Fetched Weather by Refresh');
+    }
+
+    final deviceCameraData = await DeviceApi.getDeviceCamera();
+    if (deviceCameraData.runtimeType == List<DeviceCamera>) {
+      di<DeviceCameraModel>().deviceCamera = deviceCameraData;
+      logger.d('Fetched Device Camera by Refresh');
+    }
+
+    final cropCharts = await DeviceApi.getCropChartData();
+    if (cropCharts.runtimeType == CropChart) {
+      di<CropChartModel>().cropCharts = cropCharts;
+      logger.d('Fetched Crop Charts by Refresh');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,29 +127,32 @@ class _HomeScreenState extends State<HomeScreen> {
       replacement: noDeviceAdded(),
       child: SafeArea(
         child: AnimationLimiter(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: AnimationConfiguration.toStaggeredList(
-                duration: const Duration(milliseconds: 375),
-                childAnimationBuilder: (widget) => SlideAnimation(
-                  horizontalOffset: 50.0,
-                  child: FadeInAnimation(
-                    child: widget,
+          child: RefreshIndicator(
+            onRefresh: refresh,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: AnimationConfiguration.toStaggeredList(
+                  duration: const Duration(milliseconds: 375),
+                  childAnimationBuilder: (widget) => SlideAnimation(
+                    horizontalOffset: 50.0,
+                    child: FadeInAnimation(
+                      child: widget,
+                    ),
                   ),
+                  children: [
+                    for (var item in homeListItems)
+                      if (item == 'Weather')
+                        buildWeather(weatherPages)
+                      else if (item == 'Alerts')
+                        buildAlerts(weatherAlerts)
+                      else if (item == 'Device Camera')
+                        buildDeviceCamera(deviceCameraPages)
+                      else if (item == 'Statistics')
+                        buildStatistics(cropLineChartsPages),
+                    const Gap(20),
+                  ],
                 ),
-                children: [
-                  for (var item in homeListItems)
-                    if (item == 'Weather')
-                      buildWeather(weatherPages)
-                    else if (item == 'Alerts')
-                      buildAlerts(weatherAlerts)
-                    else if (item == 'Device Camera')
-                      buildDeviceCamera(deviceCameraPages)
-                    else if (item == 'Statistics')
-                      buildStatistics(cropLineChartsPages),
-                  const Gap(20),
-                ],
               ),
             ),
           ),

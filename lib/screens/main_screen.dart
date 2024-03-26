@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:badges/badges.dart' as badges;
 import 'package:cropsync/json/crop_chart.dart';
 import 'package:cropsync/json/device.dart';
+import 'package:cropsync/json/device_camera.dart';
 import 'package:cropsync/json/weather.dart';
+import 'package:cropsync/main.dart';
 import 'package:cropsync/models/crop_chart_model.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
@@ -16,7 +18,6 @@ import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
-import 'package:cropsync/main.dart';
 import 'package:watch_it/watch_it.dart';
 
 import 'crops_screen.dart';
@@ -41,6 +42,8 @@ class _MainScreenState extends State<MainScreen> {
                   ? 3
                   : 4;
 
+  late DateTime exitTime;
+
   final screens = [
     const HomeScreen(),
     const CropsScreen(),
@@ -49,12 +52,13 @@ class _MainScreenState extends State<MainScreen> {
     const ProfileScreen(),
   ];
 
-  void weather() async {
+  void weather({bool onlyOnce = false}) async {
     final weatherData = await WeatherApi.getWeatherData();
     if (weatherData.runtimeType == List<Weather>) {
       di<WeatherModel>().weather = weatherData;
       logger.d('Fetched Weather');
     }
+    if (onlyOnce) return;
 
     Timer.periodic(const Duration(minutes: 15), (timer) async {
       if (!OtherVars().autoRefresh) return;
@@ -67,26 +71,32 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  void deviceCamera() async {
+  void deviceCamera({bool onlyOnce = false}) async {
     final deviceCameraData = await DeviceApi.getDeviceCamera();
-    di<DeviceCameraModel>().deviceCamera = deviceCameraData;
-    logger.d('Fetched Device Camera');
+    if (deviceCameraData.runtimeType == List<DeviceCamera>) {
+      di<DeviceCameraModel>().deviceCamera = deviceCameraData;
+      logger.d('Fetched Device Camera');
+    }
+    if (onlyOnce) return;
 
     Timer.periodic(const Duration(minutes: 20), (timer) async {
       if (!OtherVars().autoRefresh) return;
 
       final deviceCameraData = await DeviceApi.getDeviceCamera();
-      di<DeviceCameraModel>().deviceCamera = deviceCameraData;
-      logger.d('Fetched Device Camera');
+      if (deviceCameraData.runtimeType == List<DeviceCamera>) {
+        di<DeviceCameraModel>().deviceCamera = deviceCameraData;
+        logger.d('Fetched Device Camera');
+      }
     });
   }
 
-  void devices() async {
+  void devices({bool onlyOnce = false}) async {
     final devices = await DeviceApi.getDevices();
     if (devices.runtimeType == List<Device>) {
       di<DevicesModel>().devices = devices;
       logger.d('Fetched Devices');
     }
+    if (onlyOnce) return;
 
     Timer.periodic(const Duration(minutes: 1), (timer) async {
       if (!OtherVars().autoRefresh) return;
@@ -99,12 +109,13 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  void cropCharts() async {
+  void cropCharts({bool onlyOnce = false}) async {
     final cropCharts = await DeviceApi.getCropChartData();
     if (cropCharts.runtimeType == CropChart) {
       di<CropChartModel>().cropCharts = cropCharts;
       logger.d('Fetched Crop Charts');
     }
+    if (onlyOnce) return;
 
     Timer.periodic(const Duration(minutes: 5), (timer) async {
       if (!OtherVars().autoRefresh) return;
@@ -125,6 +136,7 @@ class _MainScreenState extends State<MainScreen> {
       deviceCamera();
       devices();
       cropCharts();
+      //userInfo(); todo
     }
 
     super.initState();
@@ -139,10 +151,21 @@ class _MainScreenState extends State<MainScreen> {
         if (event == FGBGType.background) {
           logger.d('Paused Fetching');
           OtherVars().autoRefresh = false;
+
+          // save exit time
+          exitTime = DateTime.now();
         } else {
           await Future.delayed(const Duration(seconds: 2));
           logger.d('Resumed Fetching');
           OtherVars().autoRefresh = true;
+
+          // check if 5 minutes have passed
+          if (DateTime.now().difference(exitTime).inMinutes >= 5) {
+            weather(onlyOnce: true);
+            deviceCamera(onlyOnce: true);
+            devices(onlyOnce: true);
+            cropCharts(onlyOnce: true);
+          }
         }
       },
       child: Scaffold(

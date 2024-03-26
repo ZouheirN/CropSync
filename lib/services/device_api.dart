@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cropsync/json/crop_chart.dart';
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/json/device_camera.dart';
+import 'package:cropsync/json/device_camera_history.dart';
 import 'package:cropsync/json/soil_data.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/services/user_token.dart';
@@ -122,11 +123,27 @@ class DeviceApi {
   }
 
   static Future<dynamic> getDeviceCamera() async {
-    String jsonString =
-        await rootBundle.loadString('assets/device_camera.json');
-    final data = json.decode(jsonString);
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
 
-    return deviceCameraFromJson(data);
+    try {
+      final response = await dio.get(
+        '$apiUrl/user/devices/image',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      logger.i(response.data);
+
+      return deviceCameraFromJson(response.data);
+    } on DioException catch (e) {
+      logger.e(e.response?.data);
+
+      return null;
+    }
   }
 
   static Future<dynamic> deleteDevice({required String deviceId}) async {
@@ -212,18 +229,43 @@ class DeviceApi {
 
     try {
       final response = await dio.get(
-        '$apiUrl/user/device/soil/reading',
+        '$apiUrl/user/$deviceId/soil/reading',
         options: Options(
           headers: {
             "Authorization": "Bearer $token",
           },
         ),
-        data: {
-          'deviceId': deviceId,
-        },
       );
 
       return soilDataFromJson(response.data);
+    } on DioException catch (e) {
+      logger.e(e.response?.data);
+
+      return null;
+    }
+  }
+
+  static Future<dynamic> getDeviceImages(String deviceId, int page) async {
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
+
+    try {
+      final response = await dio.get(
+        '$apiUrl/user/$deviceId/images?page=$page',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      logger.i(response.data['pagination']);
+
+      if (response.data['pagination']['totalPages'] < page) {
+        return ReturnTypes.endOfPages;
+      }
+
+      return deviceCameraHistoryFromJson(response.data);
     } on DioException catch (e) {
       logger.e(e.response?.data);
 

@@ -1,7 +1,12 @@
 import 'dart:convert';
 
 import 'package:cropsync/json/device_camera.dart';
+import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/utils/api_utils.dart';
+import 'package:cropsync/widgets/cards.dart';
+import 'package:cropsync/widgets/disease_picture.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
@@ -14,40 +19,65 @@ class DeviceCameraHistoryScreen extends StatefulWidget {
 }
 
 class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
-  var items = <String>[];
-  var isLoading = false;
+  DeviceCamera? deviceCamera;
+
+  var images = <String>[];
+  var dates = <DateTime>[];
+  int page = 1;
+
+  bool isLoading = false;
+  bool hasReachedMax = false;
 
   void fetchData() async {
     setState(() {
       isLoading = true;
     });
 
-    await Future.delayed(const Duration(seconds: 1));
+    final response =
+        await DeviceApi.getDeviceImages(deviceCamera!.deviceId!, page);
 
     if (!mounted) return;
 
-    setState(() {
-      isLoading = false;
-      items = List.generate(items.length + 10, (i) => 'Item $i');
+    if (response == ReturnTypes.endOfPages) {
+      setState(() {
+        hasReachedMax = true;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+        images.addAll(response!.images!);
+        dates.addAll(response.cameraCollectionDate!);
+        page++;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      final args =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      setState(() {
+        deviceCamera = args['deviceCamera'] as DeviceCamera;
+      });
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments as Map;
-    final DeviceCamera deviceCamera = arg['deviceCamera'];
-
     // todo add date range
 
     return Scaffold(
       appBar: AppBar(
-        title: FittedBox(
-            child: Text('${deviceCamera.deviceName!} Camera History')),
+        title: FittedBox(child: Text('${deviceCamera?.name!} Camera History')),
       ),
       body: InfiniteList(
-        itemCount: items.length,
+        itemCount: images.length,
         isLoading: isLoading,
         centerLoading: true,
+        hasReachedMax: hasReachedMax,
         onFetchData: fetchData,
         physics: const BouncingScrollPhysics(),
         loadingBuilder: (context) {
@@ -66,15 +96,29 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               alignment: Alignment.centerLeft,
               child: Text(
-                items[index],
+                convertDateFormat(dates[index].toString(), withTime: true),
                 style: const TextStyle(color: Colors.white),
               ),
             ),
-            content: Image.memory(
-              base64Decode(deviceCamera.image!),
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 200.0,
+            content: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HeroPhotoViewRouteWrapper(
+                      imageProvider: MemoryImage(
+                        base64Decode(images[index]),
+                      ),
+                    ),
+                  ),
+                );
+              },
+              child: Image.memory(
+                base64Decode(images[index]),
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 200.0,
+              ),
             ),
           );
         },

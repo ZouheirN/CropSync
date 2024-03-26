@@ -7,6 +7,7 @@ import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/latest_soil_data_model.dart';
 import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/cards.dart';
 import 'package:cropsync/widgets/dialogs.dart';
@@ -53,6 +54,8 @@ class _CropsScreenState extends State<CropsScreen> {
     }
 
     timer = Timer.periodic(const Duration(minutes: 1), (Timer t) {
+      if (!OtherVars().autoRefresh) return;
+
       // get each device id in a list
       final deviceIds =
           di<DevicesModel>().devices.map((e) => e.deviceId).toList();
@@ -90,9 +93,6 @@ class _CropsScreenState extends State<CropsScreen> {
   @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
-    final latestSoilData =
-        watchPropertyValue((LatestSoilDataModel l) => l.soilData.toList());
-
     List<String?> cropNames =
         devices.map((device) => device.crop?.name).toList();
 

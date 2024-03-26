@@ -1,40 +1,45 @@
+// To parse this JSON data, do
+//
+//     final deviceCamera = deviceCameraFromJson(jsonString);
+
 import 'dart:convert';
 
-List<DeviceCamera> deviceCameraFromJson(List<dynamic> json) =>
-    List<DeviceCamera>.from(json.map((x) => DeviceCamera.fromJson(x)));
+List<DeviceCamera> deviceCameraFromJson(List list) => List<DeviceCamera>.from(list.map((x) => DeviceCamera.fromJson(x)));
 
-String deviceCameraToJson(List<DeviceCamera> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String deviceCameraToJson(List<DeviceCamera> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class DeviceCamera {
-  int? deviceId;
-  String? deviceName;
+  String? deviceId;
+  String? name;
   String? location;
   String? cropName;
+  DateTime? cameraCollectionDate;
   String? image;
 
   DeviceCamera({
     this.deviceId,
-    this.deviceName,
+    this.name,
     this.location,
+    this.cropName,
+    this.cameraCollectionDate,
     this.image,
   });
 
-  DeviceCamera.fromJson(Map<String, dynamic> json) {
-    deviceId = json['deviceId'];
-    deviceName = json['deviceName'];
-    location = json['location'];
-    cropName = json['cropName'];
-    image = json['image'];
-  }
+  factory DeviceCamera.fromJson(Map<String, dynamic> json) => DeviceCamera(
+    deviceId: json["deviceId"],
+    name: json["name"],
+    location: json["location"],
+    cropName: json["cropName"],
+    cameraCollectionDate: json["cameraCollectionDate"] == null ? null : DateTime.parse(json["cameraCollectionDate"]),
+    image: json["image"],
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['deviceId'] = deviceId;
-    data['deviceName'] = deviceName;
-    data['location'] = location;
-    data['cropName'] = cropName;
-    data['image'] = image;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "deviceId": deviceId,
+    "name": name,
+    "location": location,
+    "cropName": cropName,
+    "cameraCollectionDate": cameraCollectionDate?.toIso8601String(),
+    "image": image,
+  };
 }

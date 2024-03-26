@@ -387,11 +387,33 @@ class DeviceCameraCard extends StatelessWidget {
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              child: Image.memory(
-                base64Decode(deviceCamera.image!),
-                fit: BoxFit.cover,
-                height: 200,
-                width: double.infinity,
+              child: Stack(
+                children: [
+                  Image.memory(
+                    base64Decode(deviceCamera.image!),
+                    fit: BoxFit.cover,
+                    height: 200,
+                    width: double.infinity,
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    child: Container(
+                      width: double.infinity,
+                      color: Colors.black54,
+                      child: Text(
+                        'Snapshot Time: ${convertDateFormat(
+                            deviceCamera.cameraCollectionDate.toString(),
+                            withTime: true)}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
             ListTile(
@@ -406,7 +428,7 @@ class DeviceCameraCard extends StatelessWidget {
                   Flexible(
                     child: AutoSizeText(
                       textAlign: TextAlign.center,
-                      deviceCamera.deviceName!,
+                      deviceCamera.name!,
                       maxLines: 1,
                       style: Theme.of(context).textTheme.titleMedium!,
                     ),
@@ -424,7 +446,7 @@ class DeviceCameraCard extends StatelessWidget {
                   Flexible(
                     child: AutoSizeText(
                       textAlign: TextAlign.center,
-                      deviceCamera.location!,
+                      deviceCamera.location ?? ''!,
                       maxLines: 1,
                       style: Theme.of(context).textTheme.titleMedium!,
                     ),
@@ -441,7 +463,7 @@ class DeviceCameraCard extends StatelessWidget {
                   Flexible(
                     child: AutoSizeText(
                       textAlign: TextAlign.center,
-                      deviceCamera.cropName!,
+                      deviceCamera.cropName ?? ''!,
                       maxLines: 1,
                       style: Theme.of(context).textTheme.titleSmall!,
                     ),
@@ -472,7 +494,8 @@ String convertDateFormat(String dateString, {bool withTime = false}) {
   if (withTime) {
     int hour = dateTime.hour;
     int minute = dateTime.minute;
-    formattedDate += ' - ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+    formattedDate +=
+        ' - ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
 
   return formattedDate;
