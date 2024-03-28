@@ -403,9 +403,7 @@ class DeviceCameraCard extends StatelessWidget {
                       width: double.infinity,
                       color: Colors.black54,
                       child: Text(
-                        'Snapshot Time: ${convertDateFormat(
-                            deviceCamera.cameraCollectionDate.toString(),
-                            withTime: true)}',
+                        'Snapshot Time: ${convertDateFormat(deviceCamera.cameraCollectionDate.toString(), withTime: true)}',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Colors.white,
@@ -554,6 +552,15 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
   bool showTemperature = true;
   bool showPh = true;
   bool showMoisture = true;
+
+  Set<String> selected = {
+    'nitrogen',
+    'phosphorus',
+    'potassium',
+    'temperature',
+    'ph',
+    'moisture'
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -743,119 +750,68 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                 ),
               ),
             ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Checkbox(
-                      value: showNitrogen,
-                      onChanged: (value) {
-                        setState(() {
-                          showNitrogen = value!;
-                        });
-                      },
-                    ),
-                    const Text(
-                      'Nitrogen',
-                      style: TextStyle(
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ],
+            const Gap(8),
+            SegmentedButton(
+              multiSelectionEnabled: true,
+              selected: selected,
+              showSelectedIcon: false,
+              emptySelectionAllowed: false,
+              onSelectionChanged: (selected) {
+                setState(() {
+                  this.selected = selected;
+                  showNitrogen = selected.contains('nitrogen');
+                  showPhosphorus = selected.contains('phosphorus');
+                  showPotassium = selected.contains('potassium');
+                  showTemperature = selected.contains('temperature');
+                  showPh = selected.contains('ph');
+                  showMoisture = selected.contains('moisture');
+                });
+              },
+              segments: <ButtonSegment<String>>[
+                ButtonSegment<String>(
+                  value: 'nitrogen',
+                  icon: Image.asset(
+                    'assets/icon/nitrogen.png',
+                    color: Colors.blue,
+                  ),
                 ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: showPhosphorus,
-                      onChanged: (value) {
-                        setState(() {
-                          showPhosphorus = value!;
-                        });
-                      },
-                    ),
-                    const Text(
-                      'Phosphorus',
-                      style: TextStyle(
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
+                ButtonSegment<String>(
+                  value: 'phosphorus',
+                  icon: Image.asset(
+                    'assets/icon/phosphorus.png',
+                    color: Colors.red,
+                  ),
                 ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: showPotassium,
-                      onChanged: (value) {
-                        setState(() {
-                          showPotassium = value!;
-                        });
-                      },
-                    ),
-                    const Text(
-                      'Potassium',
-                      style: TextStyle(
-                        color: Colors.green,
-                      ),
-                    ),
-                  ],
+                ButtonSegment<String>(
+                  value: 'potassium',
+                  icon: Image.asset(
+                    'assets/icon/potassium.png',
+                    color: Colors.green,
+                  ),
                 ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: showTemperature,
-                      onChanged: (value) {
-                        setState(() {
-                          showTemperature = value!;
-                        });
-                      },
-                    ),
-                    const Text(
-                      'Temperature',
-                      style: TextStyle(
-                        color: Colors.orange,
-                      ),
-                    ),
-                  ],
+                ButtonSegment<String>(
+                  value: 'temperature',
+                  icon: Image.asset(
+                    'assets/icon/temperature.png',
+                    color: Colors.orange,
+                  ),
                 ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: showPh,
-                      onChanged: (value) {
-                        setState(() {
-                          showPh = value!;
-                        });
-                      },
-                    ),
-                    const Text(
-                      'pH',
-                      style: TextStyle(
-                        color: Colors.purple,
-                      ),
-                    ),
-                  ],
+                ButtonSegment<String>(
+                  value: 'ph',
+                  icon: Image.asset(
+                    'assets/icon/ph.png',
+                    color: Colors.purple,
+                  ),
                 ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: showMoisture,
-                      onChanged: (value) {
-                        setState(() {
-                          showMoisture = value!;
-                        });
-                      },
-                    ),
-                    const Text(
-                      'Moisture',
-                      style: TextStyle(
-                        color: Colors.brown,
-                      ),
-                    ),
-                  ],
+                ButtonSegment<String>(
+                  value: 'moisture',
+                  icon: Image.asset(
+                    'assets/icon/moisture.png',
+                    color: Colors.brown,
+                  ),
                 ),
               ],
-            ),
+            )
           ],
         ),
       ),
