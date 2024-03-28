@@ -92,7 +92,7 @@ class _CropsScreenState extends State<CropsScreen> {
   @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
-    final soilData = watchPropertyValue((LatestSoilDataModel s) => s.soilData);
+    final soilData = watchPropertyValue((LatestSoilDataModel s) => s.soilData.toList());
 
     List<String?> cropNames =
         devices.map((device) => device.crop?.name).toList();

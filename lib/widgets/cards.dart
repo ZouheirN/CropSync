@@ -427,10 +427,11 @@ class DeviceCameraCard extends StatelessWidget {
                   const Gap(8),
                   Flexible(
                     child: AutoSizeText(
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.left,
                       deviceCamera.name!,
                       maxLines: 1,
                       style: Theme.of(context).textTheme.titleMedium!,
+                      minFontSize: 10,
                     ),
                   ),
                 ],
@@ -445,10 +446,11 @@ class DeviceCameraCard extends StatelessWidget {
                   const Gap(8),
                   Flexible(
                     child: AutoSizeText(
-                      textAlign: TextAlign.center,
-                      deviceCamera.location ?? ''!,
+                      textAlign: TextAlign.left,
+                      deviceCamera.location!,
                       maxLines: 1,
                       style: Theme.of(context).textTheme.titleMedium!,
+                      minFontSize: 10,
                     ),
                   ),
                 ],
@@ -463,9 +465,10 @@ class DeviceCameraCard extends StatelessWidget {
                   Flexible(
                     child: AutoSizeText(
                       textAlign: TextAlign.center,
-                      deviceCamera.cropName ?? ''!,
-                      maxLines: 1,
+                      deviceCamera.cropName!,
+                      maxLines: 2,
                       style: Theme.of(context).textTheme.titleSmall!,
+                      minFontSize: 10,
                     ),
                   ),
                 ],

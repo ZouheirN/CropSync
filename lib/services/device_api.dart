@@ -110,6 +110,8 @@ class DeviceApi {
       final devices = response.data['devices'];
       final List<Device> deviceList = [];
 
+      logger.i(devices);
+
       for (final device in devices) {
         deviceList.add(Device.fromJson(device));
       }
@@ -135,8 +137,6 @@ class DeviceApi {
           },
         ),
       );
-
-      logger.i(response.data);
 
       return deviceCameraFromJson(response.data);
     } on DioException catch (e) {
