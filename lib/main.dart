@@ -2,13 +2,13 @@ import 'package:cropsync/json/crop.dart';
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/json/user.dart';
+import 'package:cropsync/models/crop_chart_model.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/models/latest_soil_data_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
-import 'package:cropsync/models/crop_chart_model.dart';
 import 'package:cropsync/screens/account_information_screen.dart';
 import 'package:cropsync/screens/add_device_map_screen.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
@@ -28,6 +28,7 @@ import 'package:cropsync/screens/welcome_screen.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -106,6 +107,10 @@ Future<void> main() async {
     final startPage = userPrefsBox.get('startPage') as String;
     di<UserPrefs>().startPage = startPage;
   }
+
+  await SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp],
+  ); // To turn off landscape mode
 
   runApp(
     MyApp(
