@@ -232,7 +232,7 @@ class _CropsScreenState extends State<CropsScreen> {
                             ],
                           )
                         : Text(
-                            'Nitrogen: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).nitrogen!)}mg/kg'),
+                            'Nitrogen: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).nitrogen!)} mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -260,7 +260,7 @@ class _CropsScreenState extends State<CropsScreen> {
                             ],
                           )
                         : Text(
-                            'Phosphorus: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).phosphorus!)}mg/kg'),
+                            'Phosphorus: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).phosphorus!)} mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
@@ -288,7 +288,7 @@ class _CropsScreenState extends State<CropsScreen> {
                             ],
                           )
                         : Text(
-                            'Potassium: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).potassium!)}mg/kg'),
+                            'Potassium: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).potassium!)} mg/kg'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(

@@ -770,6 +770,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
               segments: <ButtonSegment<String>>[
                 ButtonSegment<String>(
                   value: 'nitrogen',
+                  tooltip: 'Nitrogen',
                   icon: Image.asset(
                     'assets/icon/nitrogen.png',
                     color: Colors.blue,
@@ -777,6 +778,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                 ),
                 ButtonSegment<String>(
                   value: 'phosphorus',
+                  tooltip: 'Phosphorus',
                   icon: Image.asset(
                     'assets/icon/phosphorus.png',
                     color: Colors.red,
@@ -784,6 +786,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                 ),
                 ButtonSegment<String>(
                   value: 'potassium',
+                  tooltip: 'Potassium',
                   icon: Image.asset(
                     'assets/icon/potassium.png',
                     color: Colors.green,
@@ -791,6 +794,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                 ),
                 ButtonSegment<String>(
                   value: 'temperature',
+                  tooltip: 'Temperature',
                   icon: Image.asset(
                     'assets/icon/temperature.png',
                     color: Colors.orange,
@@ -798,6 +802,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                 ),
                 ButtonSegment<String>(
                   value: 'ph',
+                  tooltip: 'pH',
                   icon: Image.asset(
                     'assets/icon/ph.png',
                     color: Colors.purple,
@@ -805,6 +810,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                 ),
                 ButtonSegment<String>(
                   value: 'moisture',
+                  tooltip: 'Moisture',
                   icon: Image.asset(
                     'assets/icon/moisture.png',
                     color: Colors.brown,
