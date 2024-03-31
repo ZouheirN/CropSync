@@ -149,9 +149,9 @@ class _CropsScreenState extends State<CropsScreen> {
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       CircularProgressIndicator(
                     value: downloadProgress.progress,
-                    color: MyApp.themeNotifier.value == ThemeMode.light
-                        ? Colors.black
-                        : Colors.white,
+                    // color: MyApp.themeNotifier.value == ThemeMode.light
+                    //     ? Colors.black
+                    //     : Colors.white,
                   ),
                   imageBuilder: (context, imageProvider) => Container(
                     width: 50.0,

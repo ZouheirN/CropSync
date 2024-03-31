@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/json/device_camera.dart';
 import 'package:cropsync/json/weather.dart';
 import 'package:cropsync/json/weather_forecast.dart';
+import 'package:cropsync/main.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -418,9 +419,12 @@ class DeviceCameraCard extends StatelessWidget {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(
+                  Icon(
                     FontAwesome.raspberry_pi_brand,
                     size: 20,
+                    color: MyApp.themeNotifier.value == ThemeMode.light
+                        ? Colors.black
+                        : Colors.white,
                   ),
                   const Gap(8),
                   Flexible(
@@ -437,9 +441,12 @@ class DeviceCameraCard extends StatelessWidget {
               subtitle: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(
+                  Icon(
                     FontAwesome.location_dot_solid,
                     size: 20,
+                    color: MyApp.themeNotifier.value == ThemeMode.light
+                        ? Colors.black
+                        : Colors.white,
                   ),
                   const Gap(8),
                   Flexible(
@@ -456,9 +463,12 @@ class DeviceCameraCard extends StatelessWidget {
               trailing: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.grass_rounded,
                     size: 20,
+                    color: MyApp.themeNotifier.value == ThemeMode.light
+                        ? Colors.black
+                        : Colors.white,
                   ),
                   Flexible(
                     child: AutoSizeText(
