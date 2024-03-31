@@ -340,17 +340,17 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                      'Soil Data: ${getLabelForId(devices[index].soilFrequency ?? 1)}'),
+                                      'Soil Data: ${getLabelForId(devices[index].soilFrequency!)}'),
                                   Text(
-                                      'Images: ${getLabelForId(devices[index].imageFrequency ?? 1)}'),
+                                      'Images: ${getLabelForId(devices[index].imageFrequency!)}'),
                                 ],
                               ),
                               onTap: () {
                                 setFrequency(
                                   context,
                                   devices[index],
-                                  devices[index].soilFrequency ?? 1,
-                                  devices[index].imageFrequency ?? 1,
+                                  devices[index].soilFrequency!,
+                                  devices[index].imageFrequency!,
                                 );
                               }),
                           ButtonBar(

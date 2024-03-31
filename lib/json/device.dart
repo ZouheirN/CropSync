@@ -50,6 +50,8 @@ class Device {
         name: json["name"],
         code: json["code"],
         crop: json["crop"] == null ? null : Crop.fromJson(json["crop"]),
+        soilFrequency: json["soilFrequency"],
+        imageFrequency: json["imageFrequency"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -59,5 +61,7 @@ class Device {
         "name": name,
         "code": code,
         "crop": crop?.toJson(),
+        "soilFrequency": soilFrequency,
+        "imageFrequency": imageFrequency,
       };
 }
