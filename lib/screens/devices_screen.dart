@@ -4,6 +4,7 @@ import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/local_device_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
+import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
@@ -108,37 +109,15 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
   void setFrequency(BuildContext context, Device device, int oldSoilFrequency,
       int oldImageFrequency) {
-    final Map<String, int> soilItems = {
-      'Every ${secondsToReadableText(300)}': 300,
-      'Every ${secondsToReadableText(600)}': 600,
-      'Every ${secondsToReadableText(900)}': 900,
-      'Every ${secondsToReadableText(1200)}': 1200,
-      'Every ${secondsToReadableText(1800)}': 1800,
-      'Every ${secondsToReadableText(3600)}': 3600,
-      'Every ${secondsToReadableText(7200)}': 7200,
-      'Every ${secondsToReadableText(14400)}': 14400,
-    };
+    final List<Map<String, dynamic>> frequency = OtherVars().frequency;
 
-    final Map<String, int> imageItems = {
-      'Every ${secondsToReadableText(600)}': 600,
-      'Every ${secondsToReadableText(1200)}': 1200,
-      'Every ${secondsToReadableText(1800)}': 1800,
-      'Every ${secondsToReadableText(3600)}': 3600,
-      'Every ${secondsToReadableText(7200)}': 7200,
-      'Every ${secondsToReadableText(14400)}': 14400,
-      'Every ${secondsToReadableText(21600)}': 21600,
-      'Every ${secondsToReadableText(28800)}': 28800,
-      'Every ${secondsToReadableText(36000)}': 36000,
-      'Every ${secondsToReadableText(43200)}': 43200,
-    };
+    var selectedSoilFrequency = frequency.firstWhere(
+        (element) => element['id'] == oldSoilFrequency,
+        orElse: () => frequency[0]);
 
-    var selectedSoilFrequency = soilItems.keys.firstWhere(
-        (key) => soilItems[key] == oldSoilFrequency,
-        orElse: () => 'Every 5 minutes');
-
-    var selectedImageFrequency = imageItems.keys.firstWhere(
-        (key) => imageItems[key] == oldImageFrequency,
-        orElse: () => 'Every 20 minutes');
+    var selectedImageFrequency = frequency.firstWhere(
+        (element) => element['id'] == oldImageFrequency,
+        orElse: () => frequency[0]);
 
     bool isLoading = false;
 
@@ -168,16 +147,17 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 ListTile(
                   title: const Text('Soil Data'),
                   trailing: DropdownButton(
-                    items: soilItems.keys.map((String value) {
+                    items: frequency.map((value) {
                       return DropdownMenuItem(
-                        value: value,
-                        child: Text(value),
+                        value: value['id'],
+                        child: Text(value['label']),
                       );
                     }).toList(),
-                    value: selectedSoilFrequency,
+                    value: selectedSoilFrequency['id'],
                     onChanged: (value) {
                       setState(() {
-                        selectedSoilFrequency = value!;
+                        selectedSoilFrequency = frequency
+                            .firstWhere((element) => element['id'] == value);
                       });
                     },
                   ),
@@ -186,16 +166,17 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 ListTile(
                   title: const Text('Images'),
                   trailing: DropdownButton(
-                    items: imageItems.keys.map((String value) {
+                    items: frequency.map((value) {
                       return DropdownMenuItem(
-                        value: value,
-                        child: Text(value),
+                        value: value['id'],
+                        child: Text(value['label']),
                       );
                     }).toList(),
-                    value: selectedImageFrequency,
+                    value: selectedImageFrequency['id'],
                     onChanged: (value) {
                       setState(() {
-                        selectedImageFrequency = value!;
+                        selectedImageFrequency = frequency
+                            .firstWhere((element) => element['id'] == value);
                       });
                     },
                   ),
@@ -209,42 +190,45 @@ class _DevicesScreenState extends State<DevicesScreen> {
                       isLoading = true;
                     });
 
-                    logger.d(
-                        'Soil Frequency: ${soilItems[selectedSoilFrequency]}');
-                    logger.d(
-                        'Image Frequency: ${imageItems[selectedImageFrequency]}');
+                    logger.d('Soil Frequency: ${selectedSoilFrequency['id']}');
+                    logger
+                        .d('Image Frequency: ${selectedImageFrequency['id']}');
 
-                    // set frequency on local device
-                    final response = await LocalDeviceApi.setFrequencies(
-                      deviceCode: device.code!,
-                      soilFrequency: soilItems[selectedSoilFrequency]!,
-                      imageFrequency: imageItems[selectedImageFrequency]!,
+                    // todo set on server
+                    final response = await DeviceApi.setDeviceFrequency(
+                      deviceId: device.deviceId!,
+                      soilFrequency: selectedSoilFrequency['id'],
+                      imageFrequency: selectedImageFrequency['id'],
                     );
+
+                    if (!context.mounted) return;
                     if (response == ReturnTypes.fail) {
-                      if (!context.mounted) return;
-                      setState(() {
-                        isLoading = false;
-                      });
-                      Dialogs.showErrorDialog('Error',
-                          'Could not connect to ${device.name}.', context);
-                      return;
-                    } else if (response == ReturnTypes.error) {
-                      if (!context.mounted) return;
                       setState(() {
                         isLoading = false;
                       });
                       Dialogs.showErrorDialog(
-                          'Error', 'An error occurred, try again', context);
+                          'Error', 'An error occurred, try again.', context);
+                      return;
+                    } else if (response == ReturnTypes.error) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                      Dialogs.showErrorDialog(
+                          'Error', 'An error occurred, try again.', context);
+                      return;
+                    } else if (response == ReturnTypes.invalidToken) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                      invalidTokenResponse(context);
                       return;
                     }
-
-                    // todo set on server
 
                     // update in local state
                     di<DevicesModel>().setFrequencies(
                       id: device.deviceId!,
-                      soilFrequency: soilItems[selectedSoilFrequency]!,
-                      imageFrequency: imageItems[selectedImageFrequency]!,
+                      soilFrequency: selectedSoilFrequency['id'],
+                      imageFrequency: selectedImageFrequency['id'],
                     );
 
                     setState(() {
@@ -253,6 +237,8 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
                     if (!context.mounted) return;
                     Navigator.pop(context);
+                    Dialogs.showSuccessDialog(
+                        'Success', 'Frequencies have been set for ${device.name}!', context);
                   },
                   icon: Icons.save_rounded,
                   text: 'Set Frequencies',
@@ -264,33 +250,6 @@ class _DevicesScreenState extends State<DevicesScreen> {
         );
       },
     );
-
-    // showMaterialScrollPicker(
-    //   context: context,
-    //   showDivider: false,
-    //   title: 'Set Soil Data Collection Frequency',
-    //   confirmText: 'Set',
-    //   items: items.keys.toList(),
-    //   selectedItem: selectedSoilFrequency,
-    //   onChanged: (value) async {
-    //     selectedSoilFrequency = value;
-    //
-    //     final response = await LocalDeviceApi.setSoilFrequency(
-    //         deviceCode: device.code!, soilFrequency: items[value]!);
-    //
-    //     if (!mounted) return;
-    //     if (response == ReturnTypes.fail || response == ReturnTypes.error) {
-    //       Dialogs.showErrorDialog(
-    //           'Error', 'An error occurred, try again', context);
-    //       return;
-    //     }
-    //
-    //     // todo update on server
-    //
-    //     // di<DevicesModel>()
-    //     //     .setSoilTime(id: device.deviceId!, soilTime: items[value]!);
-    //   },
-    // );
   }
 
   @override
@@ -381,25 +340,19 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                      'Soil Data: Every ${secondsToReadableText(devices[index].soilFrequency ?? 1)}'),
+                                      'Soil Data: ${getLabelForId(devices[index].soilFrequency ?? 1)}'),
                                   Text(
-                                      'Images: Every ${secondsToReadableText(devices[index].imageFrequency ?? 1200)}'),
+                                      'Images: ${getLabelForId(devices[index].imageFrequency ?? 1)}'),
                                 ],
                               ),
                               onTap: () {
                                 setFrequency(
-                                    context,
-                                    devices[index],
-                                    devices[index].soilFrequency ?? 300,
-                                    devices[index].imageFrequency ?? 1200);
-                              }
-                              // trailing: IconButton(
-                              //   onPressed: () {
-                              //
-                              //   },
-                              //   icon: const Icon(Icons.edit_rounded),
-                              // ),
-                              ),
+                                  context,
+                                  devices[index],
+                                  devices[index].soilFrequency ?? 1,
+                                  devices[index].imageFrequency ?? 1,
+                                );
+                              }),
                           ButtonBar(
                             alignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
@@ -465,45 +418,5 @@ class _DevicesScreenState extends State<DevicesScreen> {
         ),
       ),
     );
-  }
-}
-
-String secondsToReadableText(int seconds) {
-  if (seconds < 60) {
-    return '$seconds ${_pluralize(seconds, "second")}';
-  } else if (seconds < 3600) {
-    int minutes = (seconds / 60).floor();
-    int remainingSeconds = seconds % 60;
-    if (remainingSeconds == 0) {
-      return '$minutes ${_pluralize(minutes, "minute")}';
-    } else {
-      return '$minutes ${_pluralize(minutes, "minute")} $remainingSeconds ${_pluralize(remainingSeconds, "second")}';
-    }
-  } else if (seconds < 86400) {
-    int hours = (seconds / 3600).floor();
-    int remainingSeconds = seconds % 3600;
-    int minutes = (remainingSeconds / 60).floor();
-    if (minutes == 0) {
-      return '$hours ${_pluralize(hours, "hour")}';
-    } else {
-      return '$hours ${_pluralize(hours, "hour")} $minutes ${_pluralize(minutes, "minute")}';
-    }
-  } else {
-    int days = (seconds / 86400).floor();
-    int remainingSeconds = seconds % 86400;
-    int hours = (remainingSeconds / 3600).floor();
-    if (hours == 0) {
-      return '$days ${_pluralize(days, "day")}';
-    } else {
-      return '$days ${_pluralize(days, "day")} $hours ${_pluralize(hours, "hour")}';
-    }
-  }
-}
-
-String _pluralize(int count, String noun) {
-  if (count == 1) {
-    return noun;
-  } else {
-    return '${noun}s';
   }
 }

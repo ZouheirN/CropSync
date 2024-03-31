@@ -90,8 +90,8 @@ Future<void> main() async {
         location: device.location!,
         code: device.code!,
         crop: device.crop ?? Crop(),
-        soilFrequency: device.soilFrequency ?? 300,
-        imageFrequency: device.imageFrequency ?? 1200,
+        soilFrequency: device.soilFrequency ?? 1,
+        imageFrequency: device.imageFrequency ?? 1,
       );
     }
   }

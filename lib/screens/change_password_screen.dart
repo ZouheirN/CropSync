@@ -151,7 +151,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       ),
       body: Padding(
         padding:
-            const EdgeInsets.only(top: 50, bottom: 16, right: 16, left: 16),
+            const EdgeInsets.only(top: 16, bottom: 16, right: 16, left: 16),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,

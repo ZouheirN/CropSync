@@ -272,4 +272,42 @@ class DeviceApi {
       return null;
     }
   }
+
+  static Future<dynamic> setDeviceFrequency({
+    required int soilFrequency,
+    required int imageFrequency,
+    required String deviceId,
+  }) async {
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
+
+    try {
+      await dio.patch(
+        '$apiUrl/user/$deviceId/frequency',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+        data: {
+          'soilFrequency': soilFrequency,
+          'imageFrequency': imageFrequency,
+        },
+      );
+
+      return ReturnTypes.success;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+      logger.e(e.response?.data);
+
+      if (e.response?.data['error'] == "UnAuthorized Access!") {
+        return ReturnTypes.fail;
+      } else if (e.response?.data['error'] == "Expired token") {
+        return ReturnTypes.invalidToken;
+      }
+
+      return ReturnTypes.fail;
+    }
+  }
+
 }

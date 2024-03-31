@@ -5,6 +5,7 @@ import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/trefle_api.dart';
+import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/plants_list.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,19 @@ enum ReturnTypes {
   noDevices,
   invalidPassword,
   endOfPages,
+}
+
+String? getLabelForId(int id) {
+  final List<Map<String, dynamic>> frequency = OtherVars().frequency;
+
+  for (var item in frequency) {
+    if (item['id'] == id) {
+      return item['label'];
+    }
+  }
+
+  // Return null if id is not found
+  return null;
 }
 
 class PlantSearchDelegate extends SearchDelegate {
@@ -62,7 +76,8 @@ class PlantSearchDelegate extends SearchDelegate {
       return;
     } else if (response == ReturnTypes.error) {
       Navigator.pop(context);
-      Dialogs.showErrorDialog('Error', 'An error occurred, try again.', context);
+      Dialogs.showErrorDialog(
+          'Error', 'An error occurred, try again.', context);
       return;
     }
 
