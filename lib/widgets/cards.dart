@@ -390,28 +390,41 @@ class DeviceCameraCard extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  Image.memory(
-                    base64Decode(deviceCamera.image!),
-                    fit: BoxFit.cover,
-                    height: 200,
-                    width: double.infinity,
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    left: 0,
-                    child: Container(
+                  if (deviceCamera.image == null)
+                    SizedBox(
                       width: double.infinity,
-                      color: Colors.black54,
-                      child: Text(
-                        'Snapshot Time: ${convertDateFormat(deviceCamera.cameraCollectionDate.toString(), withTime: true)}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
+                      height: 200,
+                      child: Center(
+                        child: Text(
+                          'No Image Available',
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
+                    )
+                  else
+                    Image.memory(
+                      base64Decode(deviceCamera.image!),
+                      fit: BoxFit.cover,
+                      height: 200,
+                      width: double.infinity,
                     ),
-                  )
+                  if (deviceCamera.cameraCollectionDate != null)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      left: 0,
+                      child: Container(
+                        width: double.infinity,
+                        color: Colors.black54,
+                        child: Text(
+                          'Snapshot Time: ${convertDateFormat(deviceCamera.cameraCollectionDate.toString(), withTime: true)}',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    )
                 ],
               ),
             ),
@@ -531,24 +544,37 @@ class CropLineChartCard extends StatefulWidget {
   final String deviceName;
   final String cropName;
   final String location;
-  final List<double> nitrogen;
-  final List<double> phosphorus;
-  final List<double> potassium;
-  final List<double> temperature;
-  final List<double> ph;
-  final List<double> moisture;
+  final List<double> weeklyNitrogen;
+  final List<double> weeklyPhosphorus;
+  final List<double> weeklyPotassium;
+  final List<double> weeklyTemperature;
+  final List<double> weeklyPh;
+  final List<double> weeklyMoisture;
+
+  final List<double> monthlyNitrogen;
+  final List<double> monthlyPhosphorus;
+  final List<double> monthlyPotassium;
+  final List<double> monthlyTemperature;
+  final List<double> monthlyPh;
+  final List<double> monthlyMoisture;
 
   const CropLineChartCard({
     super.key,
-    required this.nitrogen,
-    required this.phosphorus,
-    required this.potassium,
-    required this.temperature,
-    required this.ph,
-    required this.moisture,
     required this.deviceName,
     required this.cropName,
     required this.location,
+    required this.weeklyNitrogen,
+    required this.weeklyPhosphorus,
+    required this.weeklyPotassium,
+    required this.weeklyTemperature,
+    required this.weeklyPh,
+    required this.weeklyMoisture,
+    required this.monthlyNitrogen,
+    required this.monthlyPhosphorus,
+    required this.monthlyPotassium,
+    required this.monthlyTemperature,
+    required this.monthlyPh,
+    required this.monthlyMoisture,
   });
 
   @override
@@ -643,120 +669,57 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
               style: Theme.of(context).textTheme.titleMedium!,
             ),
             SizedBox(
-              height: 270,
-              child: LineChart(
-                LineChartData(
-                  borderData: FlBorderData(
-                    show: true,
-                    border: const Border(
-                      // bottom: BorderSide(color: Colors.white, width: 2),
-                      bottom: BorderSide(color: Colors.transparent),
-                      left: BorderSide(color: Colors.white, width: 2),
-                      right: BorderSide(color: Colors.transparent),
-                      top: BorderSide(color: Colors.transparent),
+              height: 280,
+              child: DefaultTabController(
+                length: 2,
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: AppBar(
+                    backgroundColor: Colors.transparent,
+                    title: const TabBar(
+                      dividerColor: Colors.transparent,
+                      tabs: [
+                        Tab(text: 'Weekly'),
+                        Tab(text: 'Monthly'),
+                      ],
                     ),
                   ),
-                  minY: getMinimumValue(
-                      widget.nitrogen,
-                      widget.phosphorus,
-                      widget.potassium,
-                      widget.temperature,
-                      widget.ph,
-                      widget.moisture),
-                  maxY: getMaximumValue(
-                      widget.nitrogen,
-                      widget.phosphorus,
-                      widget.potassium,
-                      widget.temperature,
-                      widget.ph,
-                      widget.moisture),
-                  titlesData: const FlTitlesData(
-                      rightTitles: AxisTitles(axisNameWidget: Text('')),
-                      topTitles: AxisTitles(axisNameWidget: Text('')),
-                      bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                        showTitles: false,
-                      ))
-                      // bottomTitles: AxisTitles(
-                      //     sideTitles: SideTitles(
-                      //   showTitles: true,
-                      //   reservedSize: 24,
-                      //   getTitlesWidget: (value, titleMeta) {
-                      //     final day = DateTime.now()
-                      //         .subtract(Duration(days: (6 - value).toInt()))
-                      //         .day;
-                      //     return SideTitleWidget(
-                      //       axisSide: AxisSide.bottom,
-                      //       child: Text(day.toString()),
-                      //     );
-                      //   },
-                      // )),
-                      // rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      // topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      ),
-                  gridData: const FlGridData(show: false),
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: [
-                        for (var i = 0; i < widget.nitrogen.length; i++)
-                          FlSpot(i.toDouble(), widget.nitrogen[i].toDouble())
-                      ],
-                      isCurved: true,
-                      color: Colors.blue,
-                      show: showNitrogen,
-                      preventCurveOverShooting: true,
-                    ),
-                    LineChartBarData(
-                      spots: [
-                        for (var i = 0; i < widget.phosphorus.length; i++)
-                          FlSpot(i.toDouble(), widget.phosphorus[i].toDouble())
-                      ],
-                      isCurved: true,
-                      color: Colors.red,
-                      show: showPhosphorus,
-                      preventCurveOverShooting: true,
-                    ),
-                    LineChartBarData(
-                      spots: [
-                        for (var i = 0; i < widget.potassium.length; i++)
-                          FlSpot(i.toDouble(), widget.potassium[i].toDouble())
-                      ],
-                      isCurved: true,
-                      color: Colors.green,
-                      show: showPotassium,
-                      preventCurveOverShooting: true,
-                    ),
-                    LineChartBarData(
-                      spots: [
-                        for (var i = 0; i < widget.temperature.length; i++)
-                          FlSpot(i.toDouble(), widget.temperature[i].toDouble())
-                      ],
-                      isCurved: true,
-                      color: Colors.orange,
-                      show: showTemperature,
-                      preventCurveOverShooting: true,
-                    ),
-                    LineChartBarData(
-                      spots: [
-                        for (var i = 0; i < widget.ph.length; i++)
-                          FlSpot(i.toDouble(), widget.ph[i].toDouble())
-                      ],
-                      isCurved: true,
-                      color: Colors.purple,
-                      show: showPh,
-                      preventCurveOverShooting: true,
-                    ),
-                    LineChartBarData(
-                      spots: [
-                        for (var i = 0; i < widget.moisture.length; i++)
-                          FlSpot(i.toDouble(), widget.moisture[i].toDouble())
-                      ],
-                      isCurved: true,
-                      color: Colors.brown,
-                      show: showMoisture,
-                      preventCurveOverShooting: true,
-                    ),
-                  ],
+                  body: TabBarView(
+                    children: [
+                      if (widget.weeklyMoisture.isEmpty)
+                        Center(
+                          child: Text(
+                            'No data available',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        )
+                      else
+                        buildLineChart(
+                          moisture: widget.weeklyMoisture,
+                          nitrogen: widget.weeklyNitrogen,
+                          ph: widget.weeklyPh,
+                          phosphorus: widget.weeklyPhosphorus,
+                          potassium: widget.weeklyPotassium,
+                          temperature: widget.weeklyTemperature,
+                        ),
+                      if (widget.monthlyMoisture.isEmpty)
+                        Center(
+                          child: Text(
+                            'No data available',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        )
+                      else
+                        buildLineChart(
+                          moisture: widget.monthlyMoisture,
+                          nitrogen: widget.monthlyNitrogen,
+                          ph: widget.monthlyPh,
+                          phosphorus: widget.monthlyPhosphorus,
+                          potassium: widget.monthlyPotassium,
+                          temperature: widget.monthlyTemperature,
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -830,6 +793,115 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  LineChart buildLineChart(
+      {nitrogen, phosphorus, potassium, temperature, ph, moisture}) {
+    return LineChart(
+      LineChartData(
+        borderData: FlBorderData(
+          show: true,
+          border: const Border(
+            // bottom: BorderSide(color: Colors.white, width: 2),
+            bottom: BorderSide(color: Colors.transparent),
+            left: BorderSide(color: Colors.white, width: 2),
+            right: BorderSide(color: Colors.transparent),
+            top: BorderSide(color: Colors.transparent),
+          ),
+        ),
+        minY: getMinimumValue(
+            nitrogen, phosphorus, potassium, temperature, ph, moisture),
+        maxY: getMaximumValue(
+            nitrogen, phosphorus, potassium, temperature, ph, moisture),
+        titlesData: const FlTitlesData(
+            rightTitles: AxisTitles(axisNameWidget: Text('')),
+            topTitles: AxisTitles(axisNameWidget: Text('')),
+            bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+              showTitles: false,
+            ))
+            // bottomTitles: AxisTitles(
+            //     sideTitles: SideTitles(
+            //   showTitles: true,
+            //   reservedSize: 24,
+            //   getTitlesWidget: (value, titleMeta) {
+            //     final day = DateTime.now()
+            //         .subtract(Duration(days: (6 - value).toInt()))
+            //         .day;
+            //     return SideTitleWidget(
+            //       axisSide: AxisSide.bottom,
+            //       child: Text(day.toString()),
+            //     );
+            //   },
+            // )),
+            // rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            // topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            ),
+        gridData: const FlGridData(show: false),
+        lineBarsData: [
+          LineChartBarData(
+            spots: [
+              for (var i = 0; i < nitrogen.length; i++)
+                FlSpot(i.toDouble(), nitrogen[i].toDouble())
+            ],
+            isCurved: true,
+            color: Colors.blue,
+            show: showNitrogen,
+            preventCurveOverShooting: true,
+          ),
+          LineChartBarData(
+            spots: [
+              for (var i = 0; i < phosphorus.length; i++)
+                FlSpot(i.toDouble(), phosphorus[i].toDouble())
+            ],
+            isCurved: true,
+            color: Colors.red,
+            show: showPhosphorus,
+            preventCurveOverShooting: true,
+          ),
+          LineChartBarData(
+            spots: [
+              for (var i = 0; i < potassium.length; i++)
+                FlSpot(i.toDouble(), potassium[i].toDouble())
+            ],
+            isCurved: true,
+            color: Colors.green,
+            show: showPotassium,
+            preventCurveOverShooting: true,
+          ),
+          LineChartBarData(
+            spots: [
+              for (var i = 0; i < temperature.length; i++)
+                FlSpot(i.toDouble(), temperature[i].toDouble())
+            ],
+            isCurved: true,
+            color: Colors.orange,
+            show: showTemperature,
+            preventCurveOverShooting: true,
+          ),
+          LineChartBarData(
+            spots: [
+              for (var i = 0; i < ph.length; i++)
+                FlSpot(i.toDouble(), ph[i].toDouble())
+            ],
+            isCurved: true,
+            color: Colors.purple,
+            show: showPh,
+            preventCurveOverShooting: true,
+          ),
+          LineChartBarData(
+            spots: [
+              for (var i = 0; i < moisture.length; i++)
+                FlSpot(i.toDouble(), moisture[i].toDouble())
+            ],
+            isCurved: true,
+            color: Colors.brown,
+            show: showMoisture,
+            preventCurveOverShooting: true,
+          ),
+        ],
       ),
     );
   }

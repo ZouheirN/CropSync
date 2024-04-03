@@ -23,6 +23,7 @@ class Weather {
   double? humidity;
   double? cloud;
   double? feelslikeC;
+  Map<String, double>? airQuality;
 
   Weather({
     this.name,
@@ -37,6 +38,7 @@ class Weather {
     this.humidity,
     this.cloud,
     this.feelslikeC,
+    this.airQuality,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) => Weather(
@@ -54,6 +56,8 @@ class Weather {
         humidity: json["humidity"].toDouble(),
         cloud: json["cloud"].toDouble(),
         feelslikeC: json["feelslike_c"].toDouble(),
+        airQuality: Map.from(json["air_quality"]!)
+            .map((k, v) => MapEntry<String, double>(k, v?.toDouble())),
       );
 
   Map<String, dynamic> toJson() => {
@@ -69,6 +73,8 @@ class Weather {
         "humidity": humidity,
         "cloud": cloud,
         "feelslike_c": feelslikeC,
+        "air_quality": Map.from(airQuality!)
+            .map((k, v) => MapEntry<String, dynamic>(k, v)),
       };
 }
 

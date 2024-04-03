@@ -110,20 +110,32 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void cropCharts({bool onlyOnce = false}) async {
-    final cropCharts = await DeviceApi.getCropChartData();
-    if (cropCharts.runtimeType == CropChart) {
-      di<CropChartModel>().cropCharts = cropCharts;
-      logger.d('Fetched Crop Charts');
+    final weeklyCropCharts = await DeviceApi.getWeeklyCropChartData();
+    if (weeklyCropCharts.runtimeType == CropChart) {
+      di<CropChartModel>().weeklyCropCharts = weeklyCropCharts;
+      logger.d('Fetched Weekly Crop Charts');
+    }
+
+    final monthlyCropCharts = await DeviceApi.getMonthlyCropChartData();
+    if (monthlyCropCharts.runtimeType == CropChart) {
+      di<CropChartModel>().monthlyCropCharts = monthlyCropCharts;
+      logger.d('Fetched Monthly Crop Charts');
     }
     if (onlyOnce) return;
 
     Timer.periodic(const Duration(minutes: 5), (timer) async {
       if (!OtherVars().autoRefresh) return;
 
-      final cropCharts = await DeviceApi.getCropChartData();
-      if (cropCharts.runtimeType == CropChart) {
-        di<CropChartModel>().cropCharts = cropCharts;
-        logger.d('Fetched Crop Charts');
+      final weeklyCropCharts = await DeviceApi.getWeeklyCropChartData();
+      if (weeklyCropCharts.runtimeType == CropChart) {
+        di<CropChartModel>().weeklyCropCharts = weeklyCropCharts;
+        logger.d('Fetched Weekly Crop Charts');
+      }
+
+      final monthlyCropCharts = await DeviceApi.getMonthlyCropChartData();
+      if (monthlyCropCharts.runtimeType == CropChart) {
+        di<CropChartModel>().monthlyCropCharts = monthlyCropCharts;
+        logger.d('Fetched Monthly Crop Charts');
       }
     });
   }

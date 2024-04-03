@@ -214,11 +214,48 @@ class DeviceApi {
     }
   }
 
-  static Future<dynamic> getCropChartData() async {
-    String jsonString = await rootBundle.loadString('assets/chart_data.json');
-    final data = json.decode(jsonString);
+  static Future<dynamic> getWeeklyCropChartData() async {
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
 
-    return cropChartFromJson(data);
+    try {
+      final response = await dio.get(
+        '$apiUrl/user/device/soil/reading/weekly',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      return cropChartFromJson(response.data);
+    } on DioException catch (e) {
+      logger.e(e.response?.data);
+
+      return null;
+    }
+  }
+
+  static Future<dynamic> getMonthlyCropChartData() async {
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
+
+    try {
+      final response = await dio.get(
+        '$apiUrl/user/device/soil/reading/monthly',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      return cropChartFromJson(response.data);
+    } on DioException catch (e) {
+      logger.e(e.response?.data);
+
+      return null;
+    }
   }
 
   static Future<dynamic> getLatestSoilData(String deviceId) async {
@@ -238,7 +275,7 @@ class DeviceApi {
       return soilDataFromJson(response.data);
     } on DioException catch (e) {
       logger.e(e.response?.data);
-
+      // todo handle "error": "No readings collected"
       return null;
     }
   }

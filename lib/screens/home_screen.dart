@@ -9,6 +9,7 @@ import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/weather_api.dart';
+import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/cards.dart';
@@ -53,10 +54,16 @@ class _HomeScreenState extends State<HomeScreen> {
       logger.d('Fetched Device Camera by Refresh');
     }
 
-    final cropCharts = await DeviceApi.getCropChartData();
-    if (cropCharts.runtimeType == CropChart) {
-      di<CropChartModel>().cropCharts = cropCharts;
-      logger.d('Fetched Crop Charts by Refresh');
+    final weeklyCropCharts = await DeviceApi.getWeeklyCropChartData();
+    if (weeklyCropCharts.runtimeType == CropChart) {
+      di<CropChartModel>().weeklyCropCharts = weeklyCropCharts;
+      logger.d('Fetched Weekly Crop Charts by Refresh');
+    }
+
+    final monthlyCropCharts = await DeviceApi.getMonthlyCropChartData();
+    if (monthlyCropCharts.runtimeType == CropChart) {
+      di<CropChartModel>().monthlyCropCharts = monthlyCropCharts;
+      logger.d('Fetched Monthly Crop Charts by Refresh');
     }
   }
 
@@ -66,7 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final weather = watchPropertyValue((WeatherModel w) => w.weather.toList());
     final deviceCamera =
         watchPropertyValue((DeviceCameraModel dc) => dc.deviceCamera.toList());
-    final cropCharts = watchPropertyValue((CropChartModel cc) => cc.cropCharts);
+    final cropCharts = watch(di<CropChartModel>());
+    final weeklyCropCharts = cropCharts.weeklyCropCharts.data;
+    final monthlyCropCharts = cropCharts.monthlyCropCharts.data;
 
     final weatherPages = weather
         .map(
@@ -87,38 +96,57 @@ class _HomeScreenState extends State<HomeScreen> {
         )
         .toList();
 
-    final cropLineChartsPages = cropCharts.data == null
-        ? []
-        : cropCharts.data!
-            .map(
-              (e) => CropLineChartCard(
-                deviceName: e.deviceName!,
-                cropName: e.cropName!,
-                location: e.location!,
-                nitrogen: e.nitrogen!,
-                phosphorus: e.phosphorus!,
-                moisture: e.moisture!,
-                temperature: e.temperature!,
-                ph: e.ph!,
-                potassium: e.potassium!,
-              ),
-            )
-            .toList();
+    final cropLineChartsPages = [];
+    if (weeklyCropCharts != null && monthlyCropCharts != null) {
+      for (var i = 0; i < weeklyCropCharts.length; i++) {
+        cropLineChartsPages.add(
+          CropLineChartCard(
+            location: weeklyCropCharts[i].location!,
+            cropName: weeklyCropCharts[i].cropName!,
+            deviceName: weeklyCropCharts[i].deviceName!,
+            weeklyMoisture: weeklyCropCharts[i].moisture!,
+            weeklyNitrogen: weeklyCropCharts[i].nitrogen!,
+            weeklyPh: weeklyCropCharts[i].ph!,
+            weeklyPhosphorus: weeklyCropCharts[i].phosphorus!,
+            weeklyPotassium: weeklyCropCharts[i].potassium!,
+            weeklyTemperature: weeklyCropCharts[i].temperature!,
+            monthlyMoisture: monthlyCropCharts[i].moisture!,
+            monthlyNitrogen: monthlyCropCharts[i].nitrogen!,
+            monthlyPh: monthlyCropCharts[i].ph!,
+            monthlyPhosphorus: monthlyCropCharts[i].phosphorus!,
+            monthlyPotassium: monthlyCropCharts[i].potassium!,
+            monthlyTemperature: monthlyCropCharts[i].temperature!,
+          ),
+        );
+      }
+    }
 
-    // final weatherAlerts = weather
-    //     .map((e) {
-    //       if (e.alerts == null || e.alerts!.isEmpty) return null;
-    //       return {
-    //         'device': e.deviceName,
-    //         'location': e.location,
-    //         'alert': e.alerts,
-    //       };
-    //     })
-    //     .toList()
-    //     .where((element) => element != null)
-    //     .toList();
+    final weatherAlerts = weather
+        .map((e) {
+          if (e.airQuality == null || e.airQuality!.isEmpty) return null;
 
-    final weatherAlerts = List.generate(0, (index) => null);
+          // final alerts = e.alerts ?? [];
+          final alerts = [];
+
+          if (e.airQuality!['us-epa-index']! > 4) {
+            alerts.add(
+              'Air quality is ${e.airQuality!['us-epa-index']! == 4 ? 'unhealthy' : e.airQuality!['us-epa-index']! == 5 ? 'very unhealthy' : 'hazardous'}',
+            );
+          }
+
+          Future.delayed(Duration.zero, () async {
+            di<OtherVars>().showBadge = alerts.isNotEmpty;
+          });
+
+          return {
+            'device': e.name,
+            'location': e.location,
+            'alert': alerts.toList(),
+          };
+        })
+        .toList()
+        .where((element) => element != null)
+        .toList();
 
     final homeListItems = watchPropertyValue((UserPrefs u) => u.homeListItems);
 
@@ -241,6 +269,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Alerts
   Widget buildAlerts(List<Map<String, Object?>?> weatherAlerts) {
+    weatherAlerts.removeWhere(
+      (element) {
+        return (element!['alert'] as List<dynamic>).isEmpty;
+      },
+    );
+
     if (weatherAlerts.isEmpty) return const SizedBox.shrink();
 
     return Padding(
@@ -264,21 +298,16 @@ class _HomeScreenState extends State<HomeScreen> {
           for (var alert in weatherAlerts)
             ExpansionTileCard(
               title: Text(
-                  '${alert!['device']} (${(alert['alert'] as List<String>).length} ${(alert['alert'] as List<String>).length == 1 ? 'Alert' : 'Alerts'})'),
+                  '${alert!['device']} (${(alert['alert'] as List<dynamic>).length} ${(alert['alert'] as List<dynamic>).length == 1 ? 'Alert' : 'Alerts'})'),
+              subtitle: Text(alert['location'].toString()),
               children: [
-                ListTile(
-                  title: Text(alert['location'].toString()),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (var a in alert['alert'] as List<String>)
-                        Text(
-                          a,
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                    ],
+                for (var a in alert['alert'] as List<dynamic>)
+                  ListTile(
+                    title: Text(
+                      a,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   ),
-                ),
               ],
             ),
         ],
@@ -373,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const Gap(16),
         SizedBox(
           width: double.infinity,
-          height: 432,
+          height: 436,
           child: Visibility(
             visible: pages.isNotEmpty,
             replacement: const Center(
