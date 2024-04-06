@@ -23,13 +23,15 @@ class DeviceAdapter extends TypeAdapter<Device> {
       name: fields[3] as String?,
       code: fields[4] as String?,
       crop: fields[5] as Crop?,
+      soilFrequency: fields[6] as int?,
+      imageFrequency: fields[7] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Device obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.isConnected)
       ..writeByte(1)
@@ -41,7 +43,11 @@ class DeviceAdapter extends TypeAdapter<Device> {
       ..writeByte(4)
       ..write(obj.code)
       ..writeByte(5)
-      ..write(obj.crop);
+      ..write(obj.crop)
+      ..writeByte(6)
+      ..write(obj.soilFrequency)
+      ..writeByte(7)
+      ..write(obj.imageFrequency);
   }
 
   @override

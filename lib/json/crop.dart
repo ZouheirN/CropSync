@@ -14,19 +14,24 @@ class Crop {
   String? name;
   @HiveField(1)
   String? profile;
+  @HiveField(2)
+  String? status;
 
   Crop({
     this.name,
     this.profile,
+    this.status,
   });
 
   factory Crop.fromJson(Map<String, dynamic> json) => Crop(
         name: json["name"],
         profile: json["profile"],
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
         "name": name,
         "profile": profile,
+        "status": status,
       };
 }

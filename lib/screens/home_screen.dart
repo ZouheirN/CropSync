@@ -121,18 +121,32 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
-    final weatherAlerts = weather
+    final alerts = weather
         .map((e) {
           if (e.airQuality == null || e.airQuality!.isEmpty) return null;
 
           // final alerts = e.alerts ?? [];
           final alerts = [];
 
+          // air quality
           if (e.airQuality!['us-epa-index']! > 4) {
             alerts.add(
               'Air quality is ${e.airQuality!['us-epa-index']! == 4 ? 'unhealthy' : e.airQuality!['us-epa-index']! == 5 ? 'very unhealthy' : 'hazardous'}',
             );
           }
+
+          // crop status
+          final cropStatus = devices.map(
+            (c) {
+              if (c.crop == null || c.crop?.status == null) return null;
+
+              if (c.crop?.status?.toLowerCase() != 'healthy' && c.deviceId == e.deviceId) {
+                return '${c.crop?.name} is ${c.crop?.status}';
+              }
+            },
+          );
+
+          alerts.addAll(cropStatus.where((element) => element != null));
 
           Future.delayed(Duration.zero, () async {
             di<OtherVars>().showBadge = alerts.isNotEmpty;
@@ -173,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (item == 'Weather')
                         buildWeather(weatherPages)
                       else if (item == 'Alerts')
-                        buildAlerts(weatherAlerts)
+                        buildAlerts(alerts)
                       else if (item == 'Device Camera')
                         buildDeviceCamera(deviceCameraPages)
                       else if (item == 'Statistics')
@@ -402,7 +416,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const Gap(16),
         SizedBox(
           width: double.infinity,
-          height: 458,
+          height: 494,
           child: Visibility(
             visible: pages.isNotEmpty,
             replacement: const Center(

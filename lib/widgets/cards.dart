@@ -668,22 +668,24 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
               style: Theme.of(context).textTheme.titleLarge!,
             ),
             SizedBox(
-              height: 298,
+              height: 340,
               child: DefaultTabController(
                 length: 2,
                 child: Scaffold(
                   backgroundColor: Colors.transparent,
                   appBar: AppBar(
                     backgroundColor: Colors.transparent,
+                    toolbarHeight: 50,
                     title: const TabBar(
                       dividerColor: Colors.transparent,
                       tabs: [
-                        Tab(text: 'Weekly',),
+                        Tab(text: 'Weekly'),
                         Tab(text: 'Monthly'),
                       ],
                     ),
                   ),
                   body: TabBarView(
+                    physics: const NeverScrollableScrollPhysics(),
                     children: [
                       if (widget.weeklyMoisture.isEmpty)
                         Center(
@@ -722,7 +724,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                 ),
               ),
             ),
-            const Gap(8),
+            const Gap(2),
             SegmentedButton(
               multiSelectionEnabled: true,
               selected: selected,
@@ -796,15 +798,21 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
     );
   }
 
-  LineChart buildLineChart(
-      {nitrogen, phosphorus, potassium, temperature, ph, moisture}) {
+  LineChart buildLineChart({
+    nitrogen,
+    phosphorus,
+    potassium,
+    temperature,
+    ph,
+    moisture,
+  }) {
     return LineChart(
       LineChartData(
         borderData: FlBorderData(
           show: true,
           border: const Border(
-            // bottom: BorderSide(color: Colors.white, width: 2),
-            bottom: BorderSide(color: Colors.transparent),
+            bottom: BorderSide(color: Colors.white, width: 2),
+            // bottom: BorderSide(color: Colors.transparent),
             left: BorderSide(color: Colors.white, width: 2),
             right: BorderSide(color: Colors.transparent),
             top: BorderSide(color: Colors.transparent),
@@ -814,30 +822,40 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
             nitrogen, phosphorus, potassium, temperature, ph, moisture),
         maxY: getMaximumValue(
             nitrogen, phosphorus, potassium, temperature, ph, moisture),
-        titlesData: const FlTitlesData(
-            rightTitles: AxisTitles(axisNameWidget: Text('')),
-            topTitles: AxisTitles(axisNameWidget: Text('')),
-            bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-              showTitles: false,
-            ))
-            // bottomTitles: AxisTitles(
-            //     sideTitles: SideTitles(
+        titlesData: FlTitlesData(
+          rightTitles: const AxisTitles(axisNameWidget: Text('')),
+          topTitles: const AxisTitles(axisNameWidget: Text('')),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 38,
+              getTitlesWidget: (value, meta) {
+                return Text(
+                  value.toStringAsFixed(2),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                );
+              },
+            ),
+          ),
+          bottomTitles: const AxisTitles(
+            axisNameWidget: Text(''),
+            // sideTitles: SideTitles(
             //   showTitles: true,
             //   reservedSize: 24,
-            //   getTitlesWidget: (value, titleMeta) {
-            //     final day = DateTime.now()
-            //         .subtract(Duration(days: (6 - value).toInt()))
-            //         .day;
-            //     return SideTitleWidget(
-            //       axisSide: AxisSide.bottom,
-            //       child: Text(day.toString()),
-            //     );
+            //   getTitlesWidget: (value, meta) {
+            //     return const Text('');
             //   },
-            // )),
-            // rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            // topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            ),
+            // ),
+          ),
+        ),
+        lineTouchData: const LineTouchData(
+          touchTooltipData: LineTouchTooltipData(
+            fitInsideVertically: true,
+          )
+        ),
         gridData: const FlGridData(show: false),
         lineBarsData: [
           LineChartBarData(
