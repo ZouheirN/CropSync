@@ -402,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const Gap(16),
         SizedBox(
           width: double.infinity,
-          height: 436,
+          height: 458,
           child: Visibility(
             visible: pages.isNotEmpty,
             replacement: const Center(

@@ -272,10 +272,12 @@ class DeviceApi {
         ),
       );
 
+      logger.i(response.data);
+
       return soilDataFromJson(response.data);
     } on DioException catch (e) {
       logger.e(e.response?.data);
-      // todo handle "error": "No readings collected"
+
       return null;
     }
   }

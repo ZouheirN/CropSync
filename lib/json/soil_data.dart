@@ -18,6 +18,7 @@ class SoilData {
   double? ph;
   double? humidity;
   double? temperature;
+  double? rainfall;
 
   SoilData({
     this.deviceId,
@@ -29,6 +30,7 @@ class SoilData {
     this.ph,
     this.humidity,
     this.temperature,
+    this.rainfall,
   });
 
   factory SoilData.fromJson(Map<String, dynamic> json) => SoilData(
@@ -41,6 +43,7 @@ class SoilData {
     ph: json["ph"]?.toDouble(),
     humidity: json["humidity"]?.toDouble(),
     temperature: json["temperature"]?.toDouble(),
+    rainfall: json["rainfall"]?.toDouble(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -53,5 +56,6 @@ class SoilData {
     "ph": ph,
     "humidity": humidity,
     "temperature": temperature,
+    "rainfall": rainfall,
   };
 }

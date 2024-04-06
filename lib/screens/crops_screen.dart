@@ -92,7 +92,8 @@ class _CropsScreenState extends State<CropsScreen> {
   @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
-    final soilData = watchPropertyValue((LatestSoilDataModel s) => s.soilData.toList());
+    final soilData =
+        watchPropertyValue((LatestSoilDataModel s) => s.soilData.toList());
 
     List<String?> cropNames =
         devices.map((device) => device.crop?.name).toList();
@@ -148,11 +149,7 @@ class _CropsScreenState extends State<CropsScreen> {
                   imageUrl: devices[index].crop.profile,
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       CircularProgressIndicator(
-                    value: downloadProgress.progress,
-                    // color: MyApp.themeNotifier.value == ThemeMode.light
-                    //     ? Colors.black
-                    //     : Colors.white,
-                  ),
+                          value: downloadProgress.progress),
                   imageBuilder: (context, imageProvider) => Container(
                     width: 50.0,
                     height: 50.0,
@@ -179,7 +176,7 @@ class _CropsScreenState extends State<CropsScreen> {
               : Text('${devices[index].name} is not assigned to a crop'),
           children: [
             if (cropNames[index] == null)
-              ButtonBar(
+              OverflowBar(
                 alignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   TextButton(
@@ -383,6 +380,34 @@ class _CropsScreenState extends State<CropsScreen> {
                       ),
                     ),
                   ),
+                  ListTile(
+                    title: fetchSoilDataForSpecificDevice(
+                        devices[index].deviceId, soilData)
+                        .rainfall ==
+                        null
+                        ? const Row(
+                      children: [
+                        Text('Rainfall: '),
+                        Gap(5),
+                        SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(),
+                        ),
+                      ],
+                    )
+                        : Text(
+                        'Rainfall: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).rainfall!)}mm'),
+                    leading: SizedBox(
+                      height: 30,
+                      child: Image.asset(
+                        'assets/icon/rainfall.png',
+                        color: MyApp.themeNotifier.value == ThemeMode.light
+                            ? const Color(0xFF3F4642)
+                            : const Color(0xFFBEC6BF),
+                      ),
+                    ),
+                  ),
                   Text(
                     fetchSoilDataForSpecificDevice(
                                     devices[index].deviceId, soilData)
@@ -392,7 +417,7 @@ class _CropsScreenState extends State<CropsScreen> {
                         : 'Date Collected: ${convertDateFormat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).sensorCollectionDate!.toString(), withTime: true)}',
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
-                  ButtonBar(
+                  OverflowBar(
                     alignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       TextButton(

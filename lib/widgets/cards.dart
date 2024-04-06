@@ -396,7 +396,7 @@ class DeviceCameraCard extends StatelessWidget {
                       height: 200,
                       child: Center(
                         child: Text(
-                          'No Image Available',
+                          'No image available',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
@@ -550,7 +550,6 @@ class CropLineChartCard extends StatefulWidget {
   final List<double> weeklyTemperature;
   final List<double> weeklyPh;
   final List<double> weeklyMoisture;
-
   final List<double> monthlyNitrogen;
   final List<double> monthlyPhosphorus;
   final List<double> monthlyPotassium;
@@ -666,10 +665,10 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
             const Gap(2),
             Text(
               'Recent Soil Readings',
-              style: Theme.of(context).textTheme.titleMedium!,
+              style: Theme.of(context).textTheme.titleLarge!,
             ),
             SizedBox(
-              height: 280,
+              height: 298,
               child: DefaultTabController(
                 length: 2,
                 child: Scaffold(
@@ -679,7 +678,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                     title: const TabBar(
                       dividerColor: Colors.transparent,
                       tabs: [
-                        Tab(text: 'Weekly'),
+                        Tab(text: 'Weekly',),
                         Tab(text: 'Monthly'),
                       ],
                     ),

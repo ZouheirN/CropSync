@@ -25,8 +25,6 @@ class WeatherApi {
         ),
       );
 
-      logger.d(response.data);
-
       return weatherFromJson(response.data);
     } on DioException catch (e) {
       logger.e(e.response?.data);
