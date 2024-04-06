@@ -236,6 +236,10 @@ class _CropsScreenState extends State<CropsScreen> {
                       ),
                     ),
                   ),
+                  const Divider(
+                    endIndent: 8,
+                    indent: 8,
+                  ),
                   ListTile(
                     title: fetchSoilDataForSpecificDevice(
                                     devices[index].deviceId, soilData)
@@ -406,22 +410,22 @@ class _CropsScreenState extends State<CropsScreen> {
                   ),
                   ListTile(
                     title: fetchSoilDataForSpecificDevice(
-                        devices[index].deviceId, soilData)
-                        .rainfall ==
-                        null
+                                    devices[index].deviceId, soilData)
+                                .rainfall ==
+                            null
                         ? const Row(
-                      children: [
-                        Text('Rainfall: '),
-                        Gap(5),
-                        SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(),
-                        ),
-                      ],
-                    )
+                            children: [
+                              Text('Rainfall: '),
+                              Gap(5),
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          )
                         : Text(
-                        'Rainfall: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).rainfall!)}mm'),
+                            'Rainfall: ${formatFloat(fetchSoilDataForSpecificDevice(devices[index].deviceId, soilData).rainfall!)}mm'),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
