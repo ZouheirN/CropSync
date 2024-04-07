@@ -97,7 +97,10 @@ class _HomeScreenState extends State<HomeScreen> {
         .toList();
 
     final cropLineChartsPages = [];
-    if (weeklyCropCharts != null && monthlyCropCharts != null) {
+    if (weeklyCropCharts != null &&
+        monthlyCropCharts != null &&
+        weeklyCropCharts.isNotEmpty &&
+        monthlyCropCharts.isNotEmpty) {
       for (var i = 0; i < weeklyCropCharts.length; i++) {
         cropLineChartsPages.add(
           CropLineChartCard(
@@ -142,7 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
             (c) {
               if (c.crop == null || c.crop?.status == null) return null;
 
-              if (c.crop?.status?.toLowerCase() != 'healthy' && c.deviceId == e.deviceId) {
+              if (c.crop?.status?.toLowerCase() != 'healthy' &&
+                  c.deviceId == e.deviceId) {
                 return '${c.crop?.name} is ${c.crop?.status}.';
               }
             },
