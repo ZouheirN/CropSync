@@ -61,7 +61,15 @@ class PlantsList extends StatelessWidget {
                 ),
               ),
             ),
-            placeholder: (context, url) => const CircularProgressIndicator(),
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                SizedBox(
+              width: 100,
+              height: 200,
+              child: Center(
+                child:
+                    CircularProgressIndicator(value: downloadProgress.progress),
+              ),
+            ),
             errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
           title: Text(plants[index].commonName!),
