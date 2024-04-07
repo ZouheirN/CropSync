@@ -550,12 +550,14 @@ class CropLineChartCard extends StatefulWidget {
   final List<double> weeklyTemperature;
   final List<double> weeklyPh;
   final List<double> weeklyMoisture;
+  final List<DateTime> weeklyCollectionDates;
   final List<double> monthlyNitrogen;
   final List<double> monthlyPhosphorus;
   final List<double> monthlyPotassium;
   final List<double> monthlyTemperature;
   final List<double> monthlyPh;
   final List<double> monthlyMoisture;
+  final List<DateTime> monthlyCollectionDates;
 
   const CropLineChartCard({
     super.key,
@@ -573,7 +575,7 @@ class CropLineChartCard extends StatefulWidget {
     required this.monthlyPotassium,
     required this.monthlyTemperature,
     required this.monthlyPh,
-    required this.monthlyMoisture,
+    required this.monthlyMoisture, required this.weeklyCollectionDates, required this.monthlyCollectionDates,
   });
 
   @override
@@ -702,6 +704,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                           phosphorus: widget.weeklyPhosphorus,
                           potassium: widget.weeklyPotassium,
                           temperature: widget.weeklyTemperature,
+                          collectionDates: widget.weeklyCollectionDates,
                         ),
                       if (widget.monthlyMoisture.isEmpty)
                         Center(
@@ -718,6 +721,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                           phosphorus: widget.monthlyPhosphorus,
                           potassium: widget.monthlyPotassium,
                           temperature: widget.monthlyTemperature,
+                          collectionDates: widget.monthlyCollectionDates,
                         ),
                     ],
                   ),
@@ -805,6 +809,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
     temperature,
     ph,
     moisture,
+    collectionDates,
   }) {
     return LineChart(
       LineChartData(
@@ -840,15 +845,24 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
               },
             ),
           ),
-          bottomTitles: const AxisTitles(
-            axisNameWidget: Text(''),
-            // sideTitles: SideTitles(
-            //   showTitles: true,
-            //   reservedSize: 24,
-            //   getTitlesWidget: (value, meta) {
-            //     return const Text('');
-            //   },
-            // ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              // reservedSize: 38,
+              getTitlesWidget: (value, meta) {
+                DateTime dateTime = collectionDates[value.toInt()];
+                String month = dateTime.month.toString();
+                String day = dateTime.day.toString();
+
+                return Text(
+                  '$day/$month',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                );
+              },
+            ),
           ),
         ),
         lineTouchData: const LineTouchData(

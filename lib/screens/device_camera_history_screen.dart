@@ -1,7 +1,7 @@
-import 'dart:convert';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/json/device_camera.dart';
 import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/cards.dart';
 import 'package:cropsync/widgets/disease_picture.dart';
@@ -27,6 +27,8 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
 
   bool isLoading = false;
   bool hasReachedMax = false;
+
+  String token = '';
 
   void fetchData() async {
     setState(() {
@@ -62,6 +64,13 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
         deviceCamera = args['deviceCamera'] as DeviceCamera;
       });
     });
+
+    UserToken.getToken().then(
+      (value) {
+        token = value;
+      },
+    );
+
     super.initState();
   }
 
@@ -106,19 +115,31 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => HeroPhotoViewRouteWrapper(
-                      imageProvider: MemoryImage(
-                        base64Decode(images[index]),
-                      ),
+                      imageProvider: CachedNetworkImageProvider(images[index]),
                     ),
                   ),
                 );
               },
-              child: Image.memory(
-                base64Decode(images[index]),
+              child: CachedNetworkImage(
+                imageUrl: images[index],
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: 200.0,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                  child: CircularProgressIndicator(
+                      value: downloadProgress.progress),
+                ),
+                httpHeaders: {
+                  "Authorization": "Bearer $token",
+                },
               ),
+              // Image.memory(
+              //   base64Decode(images[index]),
+              //   fit: BoxFit.cover,
+              //   width: double.infinity,
+              //   height: 200.0,
+              // ),
             ),
           );
         },

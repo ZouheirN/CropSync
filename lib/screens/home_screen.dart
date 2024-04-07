@@ -110,12 +110,14 @@ class _HomeScreenState extends State<HomeScreen> {
             weeklyPhosphorus: weeklyCropCharts[i].phosphorus!,
             weeklyPotassium: weeklyCropCharts[i].potassium!,
             weeklyTemperature: weeklyCropCharts[i].temperature!,
+            weeklyCollectionDates: weeklyCropCharts[i].collectionDates!,
             monthlyMoisture: monthlyCropCharts[i].moisture!,
             monthlyNitrogen: monthlyCropCharts[i].nitrogen!,
             monthlyPh: monthlyCropCharts[i].ph!,
             monthlyPhosphorus: monthlyCropCharts[i].phosphorus!,
             monthlyPotassium: monthlyCropCharts[i].potassium!,
             monthlyTemperature: monthlyCropCharts[i].temperature!,
+            monthlyCollectionDates: monthlyCropCharts[i].collectionDates!,
           ),
         );
       }
@@ -141,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (c.crop == null || c.crop?.status == null) return null;
 
               if (c.crop?.status?.toLowerCase() != 'healthy' && c.deviceId == e.deviceId) {
-                return '${c.crop?.name} is ${c.crop?.status}';
+                return '${c.crop?.name} is ${c.crop?.status}.';
               }
             },
           );

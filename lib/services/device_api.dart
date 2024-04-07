@@ -296,10 +296,15 @@ class DeviceApi {
         ),
       );
 
-      logger.i(response.data['pagination']);
+      logger.i(response.data);
 
       if (response.data['pagination']['totalPages'] < page) {
         return ReturnTypes.endOfPages;
+      }
+
+      // add api url to the start of each image
+      for (var i = 0; i < response.data['images'].length; i++) {
+        response.data['images'][i] = '$apiUrl${response.data['images'][i]}';
       }
 
       return deviceCameraHistoryFromJson(response.data);
