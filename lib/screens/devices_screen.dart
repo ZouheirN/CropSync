@@ -376,16 +376,6 @@ class _DevicesScreenState extends State<DevicesScreen> {
                               ),
                               TextButton(
                                 onPressed: () async {
-                                  Navigator.of(context).pushNamed(
-                                    '/otp',
-                                    arguments: {
-                                      'email': "user",
-                                      'token': "oken",
-                                      'isNotVerifiedFromLogin': false,
-                                    },
-                                  );
-                                  
-                                  return;
                                   Dialogs.showLoadingDialog(
                                       'Getting Recommendation...', context);
 

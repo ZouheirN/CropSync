@@ -8,6 +8,7 @@ import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/services/weather_api.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/utils/user_prefs.dart';
@@ -34,6 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
       PageController(viewportFraction: 0.8, keepPage: true);
   final cropLineChartsPageController =
       PageController(viewportFraction: 0.8, keepPage: true);
+
+  String token = '';
 
   Future refresh() async {
     final devices = await DeviceApi.getDevices();
@@ -68,6 +71,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    UserToken.getToken().then(
+      (value) {
+        token = value;
+      },
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final devices = watchPropertyValue((DevicesModel d) => d.devices.toList());
     final weather = watchPropertyValue((WeatherModel w) => w.weather.toList());
@@ -92,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
           (e) => DeviceCameraCard(
             deviceCamera: e,
             context: context,
+            token: token,
           ),
         )
         .toList();
@@ -422,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const Gap(16),
         SizedBox(
           width: double.infinity,
-          height: 494,
+          height: 501,
           child: Visibility(
             visible: pages.isNotEmpty,
             replacement: const Center(

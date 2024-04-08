@@ -358,11 +358,13 @@ class WeatherForecastCard extends StatelessWidget {
 class DeviceCameraCard extends StatelessWidget {
   final DeviceCamera deviceCamera;
   final BuildContext context;
+  final String token;
 
   const DeviceCameraCard({
     super.key,
     required this.deviceCamera,
     required this.context,
+    required this.token,
   });
 
   @override
@@ -405,11 +407,15 @@ class DeviceCameraCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       height: 200,
                       width: double.infinity,
-                      progressIndicatorBuilder: (context, url, progress) => Center(
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          Center(
                         child: CircularProgressIndicator(
                           value: progress.progress,
                         ),
                       ),
+                      httpHeaders: {
+                        "Authorization": "Bearer $token",
+                      },
                     ),
                   if (deviceCamera.cameraCollectionDate != null)
                     Positioned(
@@ -838,9 +844,24 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              // interval: 10,
               reservedSize: 38,
               getTitlesWidget: (value, meta) {
+                if (selected.length == 1 ||
+                    value == meta.max ||
+                    value == meta.min) {
+                  if (selected.length == 1) {
+                    return Text(
+                      value.toStringAsFixed(2),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    );
+                  } else {
+                    return const Text('');
+                  }
+                }
+
                 return Text(
                   value.toStringAsFixed(2),
                   style: const TextStyle(
@@ -872,9 +893,10 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
           ),
         ),
         lineTouchData: const LineTouchData(
-            touchTooltipData: LineTouchTooltipData(
-          fitInsideVertically: true,
-        )),
+          touchTooltipData: LineTouchTooltipData(
+            fitInsideVertically: true,
+          ),
+        ),
         gridData: const FlGridData(show: false),
         lineBarsData: [
           LineChartBarData(

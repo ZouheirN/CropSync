@@ -7,6 +7,7 @@ import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/latest_soil_data_model.dart';
 import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/cards.dart';
@@ -196,7 +197,36 @@ class _CropsScreenState extends State<CropsScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      Dialogs.showLoadingDialog(
+                          'Getting Recommendation...', context);
+
+                      final response = await DeviceApi.getCropRecommendation(
+                          deviceId: devices[index].deviceId!);
+
+                      if (!mounted) return;
+                      if (response == ReturnTypes.fail) {
+                        Navigator.pop(context);
+                        Dialogs.showErrorDialog(
+                            'Error', 'An error occurred, try again.', context);
+                        return;
+                      } else if (response == ReturnTypes.error) {
+                        Navigator.pop(context);
+                        Dialogs.showErrorDialog(
+                            'Error', 'An error occurred, try again.', context);
+                        return;
+                      } else if (response == ReturnTypes.invalidToken) {
+                        Navigator.pop(context);
+                        invalidTokenResponse(context);
+                        return;
+                      }
+
+                      Navigator.pop(context);
+                      Dialogs.showInformationDialog(
+                          'Recommendation',
+                          response[0].toUpperCase() + response.substring(1),
+                          context);
+                    },
                     child: const Column(
                       children: <Widget>[
                         Icon(Icons.recommend_rounded),

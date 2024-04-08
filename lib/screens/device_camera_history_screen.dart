@@ -134,12 +134,6 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
                   "Authorization": "Bearer $token",
                 },
               ),
-              // Image.memory(
-              //   base64Decode(images[index]),
-              //   fit: BoxFit.cover,
-              //   width: double.infinity,
-              //   height: 200.0,
-              // ),
             ),
           );
         },
