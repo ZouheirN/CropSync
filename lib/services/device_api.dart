@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cropsync/json/crop_chart.dart';
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/json/device_camera.dart';
@@ -9,7 +7,6 @@ import 'package:cropsync/main.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DeviceApi {
@@ -135,6 +132,12 @@ class DeviceApi {
           },
         ),
       );
+
+      // add api url to the start of each image
+      for (var i = 0; i < response.data.length; i++) {
+        response.data[i]['recentLeafImage'] =
+            '$apiUrl${response.data[i]['recentLeafImage']}';
+      }
 
       return deviceCameraFromJson(response.data);
     } on DioException catch (e) {
@@ -350,4 +353,34 @@ class DeviceApi {
     }
   }
 
+  static Future<dynamic> getCropRecommendation({
+    required String deviceId,
+  }) async {
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
+
+    try {
+      final response = await dio.get(
+        '$apiUrl/user/$deviceId/recommend/crop',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      return response.data['result'];
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+      logger.e(e.response?.data);
+
+      if (e.response?.data['error'] == "UnAuthorized Access!") {
+        return ReturnTypes.fail;
+      } else if (e.response?.data['error'] == "Expired token") {
+        return ReturnTypes.invalidToken;
+      }
+
+      return ReturnTypes.fail;
+    }
+  }
 }

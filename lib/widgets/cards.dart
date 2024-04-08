@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/json/device_camera.dart';
@@ -390,7 +388,7 @@ class DeviceCameraCard extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  if (deviceCamera.image == null)
+                  if (deviceCamera.recentLeafImage == null)
                     SizedBox(
                       width: double.infinity,
                       height: 200,
@@ -402,11 +400,16 @@ class DeviceCameraCard extends StatelessWidget {
                       ),
                     )
                   else
-                    Image.memory(
-                      base64Decode(deviceCamera.image!),
+                    CachedNetworkImage(
+                      imageUrl: deviceCamera.recentLeafImage!,
                       fit: BoxFit.cover,
                       height: 200,
                       width: double.infinity,
+                      progressIndicatorBuilder: (context, url, progress) => Center(
+                        child: CircularProgressIndicator(
+                          value: progress.progress,
+                        ),
+                      ),
                     ),
                   if (deviceCamera.cameraCollectionDate != null)
                     Positioned(
@@ -575,7 +578,9 @@ class CropLineChartCard extends StatefulWidget {
     required this.monthlyPotassium,
     required this.monthlyTemperature,
     required this.monthlyPh,
-    required this.monthlyMoisture, required this.weeklyCollectionDates, required this.monthlyCollectionDates,
+    required this.monthlyMoisture,
+    required this.weeklyCollectionDates,
+    required this.monthlyCollectionDates,
   });
 
   @override
@@ -833,6 +838,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
+              // interval: 10,
               reservedSize: 38,
               getTitlesWidget: (value, meta) {
                 return Text(
@@ -866,10 +872,9 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
           ),
         ),
         lineTouchData: const LineTouchData(
-          touchTooltipData: LineTouchTooltipData(
-            fitInsideVertically: true,
-          )
-        ),
+            touchTooltipData: LineTouchTooltipData(
+          fitInsideVertically: true,
+        )),
         gridData: const FlGridData(show: false),
         lineBarsData: [
           LineChartBarData(

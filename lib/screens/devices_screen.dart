@@ -1,6 +1,7 @@
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
+import 'package:cropsync/screens/otp_screen.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/local_device_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
@@ -238,7 +239,9 @@ class _DevicesScreenState extends State<DevicesScreen> {
                     if (!context.mounted) return;
                     Navigator.pop(context);
                     Dialogs.showSuccessDialog(
-                        'Success', 'Frequencies have been set for ${device.name}!', context);
+                        'Success',
+                        'Frequencies have been set for ${device.name}!',
+                        context);
                   },
                   icon: Icons.save_rounded,
                   text: 'Set Frequencies',
@@ -353,7 +356,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                   devices[index].imageFrequency!,
                                 );
                               }),
-                          ButtonBar(
+                          OverflowBar(
                             alignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
                               TextButton(
@@ -372,7 +375,53 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                 ),
                               ),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  Navigator.of(context).pushNamed(
+                                    '/otp',
+                                    arguments: {
+                                      'email': "user",
+                                      'token': "oken",
+                                      'isNotVerifiedFromLogin': false,
+                                    },
+                                  );
+                                  
+                                  return;
+                                  Dialogs.showLoadingDialog(
+                                      'Getting Recommendation...', context);
+
+                                  final response =
+                                      await DeviceApi.getCropRecommendation(
+                                          deviceId: devices[index].deviceId!);
+
+                                  if (!context.mounted) return;
+                                  if (response == ReturnTypes.fail) {
+                                    Navigator.pop(context);
+                                    Dialogs.showErrorDialog(
+                                        'Error',
+                                        'An error occurred, try again.',
+                                        context);
+                                    return;
+                                  } else if (response == ReturnTypes.error) {
+                                    Navigator.pop(context);
+                                    Dialogs.showErrorDialog(
+                                        'Error',
+                                        'An error occurred, try again.',
+                                        context);
+                                    return;
+                                  } else if (response ==
+                                      ReturnTypes.invalidToken) {
+                                    Navigator.pop(context);
+                                    invalidTokenResponse(context);
+                                    return;
+                                  }
+
+                                  Navigator.pop(context);
+                                  Dialogs.showInformationDialog(
+                                      'Recommendation',
+                                      response[0].toUpperCase() +
+                                          response.substring(1),
+                                      context);
+                                },
                                 child: const Column(
                                   children: <Widget>[
                                     Icon(Icons.recommend_rounded),

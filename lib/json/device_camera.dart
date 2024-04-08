@@ -14,7 +14,7 @@ class DeviceCamera {
   String? location;
   String? cropName;
   DateTime? cameraCollectionDate;
-  String? image;
+  String? recentLeafImage;
 
   DeviceCamera({
     this.deviceId,
@@ -22,7 +22,7 @@ class DeviceCamera {
     this.location,
     this.cropName,
     this.cameraCollectionDate,
-    this.image,
+    this.recentLeafImage,
   });
 
   factory DeviceCamera.fromJson(Map<String, dynamic> json) => DeviceCamera(
@@ -31,7 +31,7 @@ class DeviceCamera {
     location: json["location"],
     cropName: json["cropName"],
     cameraCollectionDate: json["cameraCollectionDate"] == null ? null : DateTime.parse(json["cameraCollectionDate"]),
-    image: json["image"],
+    recentLeafImage: json["recentLeafImage"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -40,6 +40,6 @@ class DeviceCamera {
     "location": location,
     "cropName": cropName,
     "cameraCollectionDate": cameraCollectionDate?.toIso8601String(),
-    "image": image,
+    "recentLeafImage": recentLeafImage,
   };
 }
