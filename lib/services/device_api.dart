@@ -297,8 +297,6 @@ class DeviceApi {
         ),
       );
 
-      logger.i(response.data);
-
       if (response.data['pagination']['totalPages'] < page) {
         return ReturnTypes.endOfPages;
       }

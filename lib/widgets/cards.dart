@@ -826,12 +826,12 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
       LineChartData(
         borderData: FlBorderData(
           show: true,
-          border: const Border(
-            bottom: BorderSide(color: Colors.white, width: 2),
+          border: Border(
+            bottom: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light ? Colors.black : Colors.white, width: 2),
             // bottom: BorderSide(color: Colors.transparent),
-            left: BorderSide(color: Colors.white, width: 2),
-            right: BorderSide(color: Colors.transparent),
-            top: BorderSide(color: Colors.transparent),
+            left: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light ? Colors.black : Colors.white, width: 2),
+            right: const BorderSide(color: Colors.transparent),
+            top: const BorderSide(color: Colors.transparent),
           ),
         ),
         minY: getMinimumValue(
@@ -852,8 +852,8 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                   if (selected.length == 1) {
                     return Text(
                       value.toStringAsFixed(2),
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: MyApp.themeNotifier.value == ThemeMode.light ? Colors.black : Colors.white,
                         fontSize: 12,
                       ),
                     );
@@ -864,8 +864,8 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
 
                 return Text(
                   value.toStringAsFixed(2),
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: MyApp.themeNotifier.value == ThemeMode.light ? Colors.black : Colors.white,
                     fontSize: 12,
                   ),
                 );
@@ -883,8 +883,8 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
 
                 return Text(
                   '$day/$month',
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: MyApp.themeNotifier.value == ThemeMode.light ? Colors.black : Colors.white,
                     fontSize: 12,
                   ),
                 );
