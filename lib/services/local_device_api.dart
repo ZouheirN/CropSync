@@ -129,4 +129,51 @@ class LocalDeviceApi {
       return ReturnTypes.fail;
     }
   }
+
+  static Future<dynamic> startStreaming(String deviceCode, String ip) async {
+    try {
+      final ip = await getDeviceIp(deviceCode);
+
+      if (ip == '') {
+        return ReturnTypes.fail;
+      }
+
+      await dio.post(
+        'http://$ip:3000/start-streaming',
+        data: {
+          "ip": ip,
+        },
+      );
+
+      return ReturnTypes.success;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
+      logger.e(e.response?.data);
+
+      return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> stopStreaming(String deviceCode) async {
+    try {
+      final ip = await getDeviceIp(deviceCode);
+
+      if (ip == '') {
+        return ReturnTypes.fail;
+      }
+
+      await dio.post(
+        'http://$ip:3000/stop-streaming',
+      );
+
+      return ReturnTypes.success;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
+      logger.e(e.response?.data);
+
+      return ReturnTypes.fail;
+    }
+  }
 }
