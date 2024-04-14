@@ -59,17 +59,9 @@ class _QuickDiseaseDetectionScreenState
 
     // predict
     final base64Image = base64Encode(img.readAsBytesSync());
-    ResnetModelHelper().predict(base64Image).then(
-      (value) {
-        di<ImageModel>().setResult(
-          di<ImageModel>().images.length - 1,
-          value['prediction'],
-        );
-        di<ImageModel>().setInfo(
-          di<ImageModel>().images.length - 1,
-          'Confidence: ${value['confidence'].toStringAsFixed(2)}%',
-        );
-      },
+    ResnetModelHelper().predict(
+      base64Image,
+      di<ImageModel>().images.length - 1,
     );
   }
 
@@ -316,19 +308,9 @@ class _QuickDiseaseDetectionScreenState
                             style: TextStyle(color: Colors.black),
                           ),
                           onPressed: () {
-                            ResnetModelHelper()
-                                .predict(base64Encode(images[index].image))
-                                .then(
-                              (value) {
-                                di<ImageModel>().setResult(
-                                  index,
-                                  value['prediction'],
-                                );
-                                di<ImageModel>().setInfo(
-                                  index,
-                                  'Confidence: ${value['confidence'].toStringAsFixed(2)}%',
-                                );
-                              },
+                            ResnetModelHelper().predict(
+                              base64Encode(images[index].image),
+                              index,
                             );
 
                             // DiseaseApi.getDiseaseData(

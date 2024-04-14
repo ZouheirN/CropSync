@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cropsync/main.dart';
+import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:file_picker/file_picker.dart';
@@ -14,20 +15,37 @@ import 'package:watch_it/watch_it.dart';
 class ResnetModelHelper {
   Interpreter? interpreter;
 
-  Future<Map<String, dynamic>> predict(base64image) async {
+  Future<void> predict(base64image, int index) async {
+    di<ImageModel>().setResult(
+      index,
+      'Predicting...',
+    );
+    di<ImageModel>().setInfo(
+      index,
+      '',
+    );
+
     final InterpreterOptions options = InterpreterOptions();
     options.threads = 4;
+
+    IsolateInterpreter? isolateInterpreter;
 
     try {
       final dataFile = File(di<OtherVars>().resNetFilePath);
       interpreter = Interpreter.fromFile(dataFile, options: options);
+      isolateInterpreter =
+          await IsolateInterpreter.create(address: interpreter!.address);
     } catch (e) {
       di<OtherVars>().resNetFilePath = '';
 
-      return {
-        'prediction': 'Error loading model',
-        'confidence': 0,
-      };
+      di<ImageModel>().setResult(
+        index,
+        'Error loading model',
+      );
+      di<ImageModel>().setInfo(
+        index,
+        '',
+      );
     }
 
     var input = base64ImageToTensor(base64image);
@@ -36,7 +54,9 @@ class ResnetModelHelper {
 
     List<String> classLabels = ['diseased', 'healthy'];
 
-    interpreter!.run(input, output);
+    await Future.delayed(
+        const Duration(seconds: 1)); // bug from package, this is the fix
+    await isolateInterpreter?.run(input, output);
 
     // Get the predicted class index
     int predictedClassIndex = output[0][0] > output[0][1] ? 0 : 1;
@@ -48,10 +68,19 @@ class ResnetModelHelper {
 
     interpreter?.close();
 
-    return {
+    final results = {
       'prediction': predictedClassLabel,
       'confidence': output[0][predictedClassIndex] * 100,
     };
+
+    di<ImageModel>().setResult(
+      index,
+      results['prediction'],
+    );
+    di<ImageModel>().setInfo(
+      index,
+      'Confidence: ${results['confidence'].toStringAsFixed(2)}%',
+    );
   }
 
   List<List<List<List<double>>>> base64ImageToTensor(String base64Image) {
@@ -90,11 +119,7 @@ class ResnetModelHelper {
   }
 
   void loadModel(BuildContext context) async {
-    final result = await FilePicker.platform.pickFiles(
-      // allowedExtensions: ['tflite'],
-      type: FileType.any,
-      dialogTitle: 'Select the ResNet model file',
-    );
+    final result = await FilePicker.platform.pickFiles();
 
     if (result == null) return;
 
