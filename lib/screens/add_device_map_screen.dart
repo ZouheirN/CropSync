@@ -42,7 +42,7 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
     if (!serviceEnabled) {
       if (!mounted) return Future.error('Location services are disabled.');
       Dialogs.showErrorDialog('Location services are disabled',
-          'Please enable location services to continue.', context);
+          'Please enable location services to continue', context);
       setState(() {
         isLoading = false;
       });
@@ -55,7 +55,7 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
       if (permission == LocationPermission.denied) {
         if (!mounted) return Future.error('Location permissions are denied');
         Dialogs.showErrorDialog('Location permissions are denied',
-            'Please enable location permissions to continue.', context);
+            'Please enable location permissions to continue', context);
         setState(() {
           isLoading = false;
         });
@@ -69,7 +69,7 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
             'Location permissions are permanently denied, we cannot request permissions.');
       }
       Dialogs.showErrorDialog('Location permissions are permanently denied',
-          'Please enable location permissions to continue.', context);
+          'Please enable location permissions to continue', context);
       setState(() {
         isLoading = false;
       });
@@ -121,10 +121,10 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
       });
     } on Exception {
       if (!mounted) return;
-      Dialogs.showErrorDialog('Network Error', 'Please try again.', context);
+      Dialogs.showErrorDialog('Network Error', 'Please try again', context);
     } catch (e) {
       if (!mounted) return;
-      Dialogs.showErrorDialog('Unknown Error', 'Please try again.', context);
+      Dialogs.showErrorDialog('Unknown Error', 'Please try again', context);
     } finally {
       if (mounted) {
         setState(() {
@@ -246,11 +246,11 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
                     } on Exception {
                       if (!mounted) return;
                       Dialogs.showErrorDialog(
-                          'Network Error', 'Please try again.', context);
+                          'Network Error', 'Please try again', context);
                     } catch (e) {
                       if (!mounted) return;
                       Dialogs.showErrorDialog(
-                          'Unknown Error', 'Please try again.', context);
+                          'Unknown Error', 'Please try again', context);
                     } finally {
                       setState(() {
                         isLoading = false;

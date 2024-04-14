@@ -50,17 +50,17 @@ class _DevicesScreenState extends State<DevicesScreen> {
       if (result == ReturnTypes.fail) {
         Navigator.pop(context);
         Dialogs.showErrorDialog(
-            'Error', 'Could not connect to ${device.name}.', context);
+            'Error', 'Could not connect to ${device.name}', context);
         return;
       } else if (result == ReturnTypes.error) {
         Navigator.pop(context);
         Dialogs.showErrorDialog(
-            'Error', 'An error occurred, try again.', context);
+            'Error', 'An error occurred, try again', context);
         return;
       } else if (result == ReturnTypes.hasNotBeenConfigured) {
         Navigator.pop(context);
         Dialogs.showErrorDialog(
-            'Error', 'Device has not been configured.', context);
+            'Error', 'Device has not been configured', context);
         return;
       }
 
@@ -74,12 +74,12 @@ class _DevicesScreenState extends State<DevicesScreen> {
       if (globalResult == ReturnTypes.fail) {
         Navigator.pop(context);
         Dialogs.showErrorDialog(
-            'Error', 'An error occurred, try again.', context);
+            'Error', 'An error occurred, try again', context);
         return;
       } else if (globalResult == ReturnTypes.error) {
         Navigator.pop(context);
         Dialogs.showErrorDialog(
-            'Error', 'An error occurred, try again.', context);
+            'Error', 'An error occurred, try again', context);
         return;
       } else if (globalResult == ReturnTypes.invalidToken) {
         Navigator.pop(context);
@@ -208,14 +208,14 @@ class _DevicesScreenState extends State<DevicesScreen> {
                         isLoading = false;
                       });
                       Dialogs.showErrorDialog(
-                          'Error', 'An error occurred, try again.', context);
+                          'Error', 'An error occurred, try again', context);
                       return;
                     } else if (response == ReturnTypes.error) {
                       setState(() {
                         isLoading = false;
                       });
                       Dialogs.showErrorDialog(
-                          'Error', 'An error occurred, try again.', context);
+                          'Error', 'An error occurred, try again', context);
                       return;
                     } else if (response == ReturnTypes.invalidToken) {
                       setState(() {
@@ -389,14 +389,14 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                     Navigator.pop(context);
                                     Dialogs.showErrorDialog(
                                         'Error',
-                                        'An error occurred, try again.',
+                                        'An error occurred, try again',
                                         context);
                                     return;
                                   } else if (response == ReturnTypes.error) {
                                     Navigator.pop(context);
                                     Dialogs.showErrorDialog(
                                         'Error',
-                                        'An error occurred, try again.',
+                                        'An error occurred, try again',
                                         context);
                                     return;
                                   } else if (response ==

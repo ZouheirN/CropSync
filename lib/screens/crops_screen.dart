@@ -208,12 +208,12 @@ class _CropsScreenState extends State<CropsScreen> {
                       if (response == ReturnTypes.fail) {
                         Navigator.pop(context);
                         Dialogs.showErrorDialog(
-                            'Error', 'An error occurred, try again.', context);
+                            'Error', 'An error occurred, try again', context);
                         return;
                       } else if (response == ReturnTypes.error) {
                         Navigator.pop(context);
                         Dialogs.showErrorDialog(
-                            'Error', 'An error occurred, try again.', context);
+                            'Error', 'An error occurred, try again', context);
                         return;
                       } else if (response == ReturnTypes.invalidToken) {
                         Navigator.pop(context);

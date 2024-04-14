@@ -4,7 +4,9 @@ import 'dart:typed_data';
 
 import 'package:cropsync/main.dart';
 import 'package:cropsync/utils/other_variables.dart';
+import 'package:cropsync/widgets/dialogs.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:watch_it/watch_it.dart';
@@ -87,13 +89,28 @@ class ResnetModelHelper {
     return tensor;
   }
 
-  void loadModel() async {
-    final result = await FilePicker.platform.pickFiles();
+  void loadModel(BuildContext context) async {
+    final result = await FilePicker.platform.pickFiles(
+      // allowedExtensions: ['tflite'],
+      type: FileType.any,
+      dialogTitle: 'Select the ResNet model file',
+    );
 
-    if (result == null) return null;
+    if (result == null) return;
 
     final file = result.files.first;
 
+    // check if file extension is tflite
+    if (!file.name.endsWith('.tflite')) {
+      if (!context.mounted) return;
+      Dialogs.showErrorDialog(
+          'Invalid file format', 'Please select a .tflite file', context);
+      return;
+    }
+
     di<OtherVars>().resNetFilePath = file.path!;
+
+    if (!context.mounted) return;
+    Dialogs.showSuccessDialog('Success', 'Model loaded successfully', context);
   }
 }

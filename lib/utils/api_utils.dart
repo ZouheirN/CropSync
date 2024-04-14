@@ -15,7 +15,7 @@ void invalidTokenResponse(BuildContext context) {
   di<UserModel>().logout();
   Navigator.pushNamedAndRemoveUntil(context, '/welcome', (route) => false);
   Dialogs.showErrorDialog(
-      'Error', 'Your session has expired. Please log in again.', context);
+      'Error', 'Your session has expired, please log in again', context);
 }
 
 enum ReturnTypes {
@@ -72,12 +72,12 @@ class PlantSearchDelegate extends SearchDelegate {
     if (response == ReturnTypes.fail) {
       Navigator.pop(context);
       Dialogs.showErrorDialog(
-          'Error', 'Assigning crop failed, try again.', context);
+          'Error', 'Assigning crop failed, try again', context);
       return;
     } else if (response == ReturnTypes.error) {
       Navigator.pop(context);
       Dialogs.showErrorDialog(
-          'Error', 'An error occurred, try again.', context);
+          'Error', 'An error occurred, try again', context);
       return;
     }
 

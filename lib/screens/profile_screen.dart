@@ -51,10 +51,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (!mounted) return;
     if (result == ReturnTypes.fail) {
-      Dialogs.showErrorDialog('Error', 'An error occurred, try again.', context);
+      Dialogs.showErrorDialog('Error', 'An error occurred, try again', context);
       return;
     } else if (result == ReturnTypes.error) {
-      Dialogs.showErrorDialog('Error', 'An error occurred, try again.', context);
+      Dialogs.showErrorDialog('Error', 'An error occurred, try again', context);
       return;
     } else if (result == ReturnTypes.invalidToken) {
       invalidTokenResponse(context);
@@ -98,10 +98,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (!mounted) return;
     if (result == ReturnTypes.fail) {
-      Dialogs.showErrorDialog('Error', 'An error occurred, try again.', context);
+      Dialogs.showErrorDialog('Error', 'An error occurred, try again', context);
       return;
     } else if (result == ReturnTypes.error) {
-      Dialogs.showErrorDialog('Error', 'An error occurred, try again.', context);
+      Dialogs.showErrorDialog('Error', 'An error occurred, try again', context);
       return;
     } else if (result == ReturnTypes.invalidToken) {
       invalidTokenResponse(context);

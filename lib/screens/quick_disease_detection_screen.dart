@@ -187,9 +187,7 @@ class _QuickDiseaseDetectionScreenState
         actions: [
           IconButton(
             tooltip: resNetFilePath != '' ? 'Model Loaded' : 'Model Not Loaded',
-            onPressed: () {
-              ResnetModelHelper().loadModel();
-            },
+            onPressed: () => ResnetModelHelper().loadModel(context),
             icon: Brand(
               Brands.tensorflow,
               size: 30,
@@ -226,7 +224,8 @@ class _QuickDiseaseDetectionScreenState
                             text: 'Load Model File',
                             textColor: Colors.white,
                             backgroundColor: Theme.of(context).primaryColor,
-                            onPressed: ResnetModelHelper().loadModel,
+                            onPressed: () =>
+                                ResnetModelHelper().loadModel(context),
                           ),
                         ],
                       )
