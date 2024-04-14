@@ -1,16 +1,21 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/image_model.dart';
-import 'package:cropsync/services/disease_api.dart';
+import 'package:cropsync/services/resnet_model_helper.dart';
+import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/disease_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:gal/gal.dart';
 import 'package:gap/gap.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:watch_it/watch_it.dart';
@@ -47,9 +52,24 @@ class _QuickDiseaseDetectionScreenState
 //   index: di<ImageModel>().images.length - 1,
 // );
 
-    DiseaseApi.getDiseaseData(
-      img.readAsBytesSync(),
-      di<ImageModel>().images.length - 1,
+    // DiseaseApi.getDiseaseData(
+    //   img.readAsBytesSync(),
+    //   di<ImageModel>().images.length - 1,
+    // );
+
+    // predict
+    final base64Image = base64Encode(img.readAsBytesSync());
+    ResnetModelHelper().predict(base64Image).then(
+      (value) {
+        di<ImageModel>().setResult(
+          di<ImageModel>().images.length - 1,
+          value['prediction'],
+        );
+        di<ImageModel>().setInfo(
+          di<ImageModel>().images.length - 1,
+          'Confidence: ${value['confidence'].toStringAsFixed(2)}%',
+        );
+      },
     );
   }
 
@@ -157,6 +177,8 @@ class _QuickDiseaseDetectionScreenState
   Widget build(BuildContext context) {
     final dynamic images =
         watchPropertyValue((ImageModel m) => m.images.toList());
+    final resNetFilePath =
+        watchPropertyValue((OtherVars o) => o.resNetFilePath);
 
     return Scaffold(
       appBar: AppBar(
@@ -164,6 +186,21 @@ class _QuickDiseaseDetectionScreenState
         centerTitle: false,
         actions: [
           IconButton(
+            tooltip: resNetFilePath != '' ? 'Model Loaded' : 'Model Not Loaded',
+            onPressed: () {
+              ResnetModelHelper().loadModel();
+            },
+            icon: Brand(
+              Brands.tensorflow,
+              size: 30,
+              colorFilter: ColorFilter.mode(
+                resNetFilePath == '' ? Colors.red : Colors.green,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+          IconButton(
+            tooltip: 'Choose Picture',
             icon: const Icon(Icons.add_a_photo_rounded),
             onPressed: () {
               showSelectPhotoOptions(context);
@@ -174,12 +211,44 @@ class _QuickDiseaseDetectionScreenState
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: images.isEmpty
-            ? const Center(
-                child: Text(
-                  'Start by taking pictures of leaves to detect diseases.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
-                ),
+            ? Center(
+                child: resNetFilePath == ''
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'You need to load a model file to start predicting.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          const Gap(20),
+                          CommonButton(
+                            text: 'Load Model File',
+                            textColor: Colors.white,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            onPressed: ResnetModelHelper().loadModel,
+                          ),
+                        ],
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Model loaded.\nStart by taking pictures of leaves to detect diseases.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          const Gap(20),
+                          CommonButton(
+                            text: 'Choose Picture',
+                            textColor: Colors.white,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            onPressed: () {
+                              showSelectPhotoOptions(context);
+                            },
+                          ),
+                        ],
+                      ),
               )
             : Column(
                 children: [
@@ -239,28 +308,75 @@ class _QuickDiseaseDetectionScreenState
                           ),
                         ),
                         FocusedMenuItem(
-                          title: Text(
-                            images[index].result == 'Upload Failed' ||
-                                    images[index].result == 'Uploading...'
-                                ? 'Retry Upload'
-                                : 'Re-Upload',
-                            style: const TextStyle(color: Colors.black),
+                          title: const Text(
+                            'Retry',
+                            // images[index].result == 'Upload Failed' ||
+                            //         images[index].result == 'Uploading...'
+                            //     ? 'Retry Upload'
+                            //     : 'Re-Upload',
+                            style: TextStyle(color: Colors.black),
                           ),
                           onPressed: () {
-                            DiseaseApi.getDiseaseData(
-                              images[index].image,
-                              di<ImageModel>().images.length - 1,
+                            ResnetModelHelper()
+                                .predict(base64Encode(images[index].image))
+                                .then(
+                              (value) {
+                                di<ImageModel>().setResult(
+                                  index,
+                                  value['prediction'],
+                                );
+                                di<ImageModel>().setInfo(
+                                  index,
+                                  'Confidence: ${value['confidence'].toStringAsFixed(2)}%',
+                                );
+                              },
                             );
-// DiseaseApi.uploadDiseaseImage(
-//   image: base64Encode(images[index].image),
-//   index: index,
-// );
+
+                            // DiseaseApi.getDiseaseData(
+                            //   images[index].image,
+                            //   di<ImageModel>().images.length - 1,
+                            // );
+
+                            // DiseaseApi.uploadDiseaseImage(
+                            //   image: base64Encode(images[index].image),
+                            //   index: index,
+                            // );
                           },
                           backgroundColor: Colors.white,
                           trailingIcon: const Icon(
-                            Icons.file_upload_rounded,
+                            FontAwesome.rotate_solid,
                             color: Colors.black,
                           ),
+                        ),
+                        FocusedMenuItem(
+                          title: const Text(
+                            'Save to Gallery',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onPressed: () async {
+                            // Check for access permission
+                            final hasAccess = await Gal.hasAccess();
+
+                            if (!hasAccess) {
+                              await Gal.requestAccess();
+                            }
+
+                            await Gal.putImageBytes(
+                              images[index].image,
+                              name:
+                                  'disease_detection_${DateTime.now().millisecondsSinceEpoch}',
+                            );
+
+                            if (!mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Image saved to gallery'),
+                              ),
+                            );
+                          },
+                          backgroundColor: Colors.white,
+                          trailingIcon: const Icon(Icons.save_rounded,
+                              color: Colors.black),
                         ),
                         FocusedMenuItem(
                           title: const Text(
@@ -288,6 +404,7 @@ class _QuickDiseaseDetectionScreenState
                           ),
                         );
                       },
+                      animateMenuItems: false,
                       child: DiseasePicture(index: index),
                     ),
                   ),

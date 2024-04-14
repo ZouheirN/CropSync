@@ -97,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         di<UserModel>().user = user;
         if (!context.mounted) return;
-        OtherVars().autoRefresh = true;
+        di<OtherVars>().autoRefresh = true;
         Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       }
     }

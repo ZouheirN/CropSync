@@ -1,3 +1,4 @@
+import 'package:cropsync/main.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -28,4 +29,11 @@ class OtherVars extends ChangeNotifier {
     {'id': 6, 'label': 'Every 2 weeks', 'value': 1209600},
     {'id': 7, 'label': 'Every month', 'value': 2592000},
   ];
+
+  String get resNetFilePath => otherVarsBox.get('resNetFilePath') ?? '';
+
+  set resNetFilePath(String value) {
+    otherVarsBox.put('resNetFilePath', value);
+    notifyListeners();
+  }
 }

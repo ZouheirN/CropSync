@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               if (c.crop?.status?.toLowerCase() != 'healthy' &&
                   c.deviceId == e.deviceId) {
-                return '${c.crop?.name} is ${c.crop?.status}.';
+                return '${c.crop?.name} is ${c.crop?.status}';
               }
             },
           );

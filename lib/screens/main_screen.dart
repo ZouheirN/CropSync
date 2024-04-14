@@ -61,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
     if (onlyOnce) return;
 
     Timer.periodic(const Duration(minutes: 15), (timer) async {
-      if (!OtherVars().autoRefresh) return;
+      if (!di<OtherVars>().autoRefresh) return;
 
       final weatherData = await WeatherApi.getWeatherData();
       if (weatherData.runtimeType == List<Weather>) {
@@ -80,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
     if (onlyOnce) return;
 
     Timer.periodic(const Duration(minutes: 20), (timer) async {
-      if (!OtherVars().autoRefresh) return;
+      if (!di<OtherVars>().autoRefresh) return;
 
       final deviceCameraData = await DeviceApi.getDeviceCamera();
       if (deviceCameraData.runtimeType == List<DeviceCamera>) {
@@ -99,7 +99,7 @@ class _MainScreenState extends State<MainScreen> {
     if (onlyOnce) return;
 
     Timer.periodic(const Duration(minutes: 1), (timer) async {
-      if (!OtherVars().autoRefresh) return;
+      if (!di<OtherVars>().autoRefresh) return;
 
       final devices = await DeviceApi.getDevices();
       if (devices.runtimeType == List<Device>) {
@@ -124,7 +124,7 @@ class _MainScreenState extends State<MainScreen> {
     if (onlyOnce) return;
 
     Timer.periodic(const Duration(minutes: 5), (timer) async {
-      if (!OtherVars().autoRefresh) return;
+      if (!di<OtherVars>().autoRefresh) return;
 
       final weeklyCropCharts = await DeviceApi.getWeeklyCropChartData();
       if (weeklyCropCharts.runtimeType == CropChart) {
@@ -143,7 +143,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     // If timers are not running, initialize them
-    if (OtherVars().autoRefresh == true) {
+    if (di<OtherVars>().autoRefresh == true) {
       weather();
       deviceCamera();
       devices();
@@ -162,14 +162,14 @@ class _MainScreenState extends State<MainScreen> {
       onEvent: (event) async {
         if (event == FGBGType.background) {
           logger.d('Paused Fetching');
-          OtherVars().autoRefresh = false;
+          di<OtherVars>().autoRefresh = false;
 
           // save exit time
           exitTime = DateTime.now();
         } else {
           await Future.delayed(const Duration(seconds: 2));
           logger.d('Resumed Fetching');
-          OtherVars().autoRefresh = true;
+          di<OtherVars>().autoRefresh = true;
 
           // check if 5 minutes have passed
           if (DateTime.now().difference(exitTime).inMinutes >= 5) {

@@ -4,11 +4,11 @@ import 'package:cropsync/utils/other_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:watch_it/watch_it.dart';
 
 class UserModel extends ChangeNotifier {
   final userInfoBox = Hive.box('userInfo');
   final devicesBox = Hive.box('devices');
-
 
   User get user => _user;
 
@@ -35,7 +35,8 @@ class UserModel extends ChangeNotifier {
     );
     userInfoBox.delete('user');
     devicesBox.delete('devices');
-    OtherVars().autoRefresh = false;
+    di<OtherVars>().autoRefresh = false;
+    di<OtherVars>().showBadge = false;
     UserToken.deleteToken();
     notifyListeners();
   }

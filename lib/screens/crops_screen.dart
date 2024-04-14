@@ -55,7 +55,7 @@ class _CropsScreenState extends State<CropsScreen> {
     }
 
     timer = Timer.periodic(const Duration(minutes: 1), (Timer t) {
-      if (!OtherVars().autoRefresh) return;
+      if (!di<OtherVars>().autoRefresh) return;
 
       // get each device id in a list
       final deviceIds =

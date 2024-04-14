@@ -265,6 +265,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         centerTitle: false,
         actions: [
           IconButton(
+            tooltip: 'Add Device',
             onPressed: () => addDevice(context),
             icon: const Icon(Icons.add_rounded),
           ),

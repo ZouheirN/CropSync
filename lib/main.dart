@@ -63,13 +63,13 @@ Future<void> main() async {
   registerManagers();
 
   bool isUserLoggedIn = false;
-  OtherVars().autoRefresh = false;
+  di<OtherVars>().autoRefresh = false;
 
   // put user to state management
   if (userInfoBox.get('user') != null) {
     final user = userInfoBox.get('user') as User;
     di<UserModel>().user = user;
-    OtherVars().autoRefresh = true;
+    di<OtherVars>().autoRefresh = true;
     isUserLoggedIn = true;
   }
 
