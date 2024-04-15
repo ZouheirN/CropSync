@@ -33,8 +33,6 @@ class ResnetModelHelper {
     try {
       final dataFile = File(di<OtherVars>().resNetFilePath);
       interpreter = Interpreter.fromFile(dataFile, options: options);
-      isolateInterpreter =
-          await IsolateInterpreter.create(address: interpreter!.address);
     } catch (e) {
       di<OtherVars>().resNetFilePath = '';
 
@@ -46,9 +44,15 @@ class ResnetModelHelper {
         index,
         '',
       );
+      return;
     }
 
+    isolateInterpreter =
+        await IsolateInterpreter.create(address: interpreter!.address);
+
     var input = base64ImageToTensor(base64image);
+
+    logger.d(input[0][5][0]);
 
     var output = List.filled(1 * 2, 0).reshape([1, 2]);
 
@@ -56,7 +60,7 @@ class ResnetModelHelper {
 
     await Future.delayed(
         const Duration(seconds: 1)); // bug from package, this is the fix
-    await isolateInterpreter?.run(input, output);
+    await isolateInterpreter.run(input, output);
 
     // Get the predicted class index
     int predictedClassIndex = output[0][0] > output[0][1] ? 0 : 1;
@@ -82,6 +86,75 @@ class ResnetModelHelper {
       'Confidence: ${results['confidence'].toStringAsFixed(2)}%',
     );
   }
+
+  List<List<List<List<double>>>> preprocessInput(String base64Image) {
+    // Decode base64 image string
+    Uint8List decodedBytes = base64.decode(base64Image);
+
+    // Decode the image using Dart image package
+    img.Image image = img.decodeImage(decodedBytes)!;
+
+    // Resize image to 224x224
+    img.Image resizedImage = img.copyResize(image, width: 224, height: 224);
+
+    // Convert the resized image to a numpy array
+    List<List<List<double>>> numpyArray = [];
+    for (int y = 0; y < resizedImage.height; y++) {
+      List<List<double>> row = [];
+      for (int x = 0; x < resizedImage.width; x++) {
+        img.Pixel pixel = resizedImage.getPixel(x, y);
+        int r = pixel.r.toInt();
+        int g = pixel.g.toInt();
+        int b = pixel.b.toInt();
+        row.add([r.toDouble(), g.toDouble(), b.toDouble()]);
+      }
+      numpyArray.add(row);
+    }
+
+    // 'RGB'->'BGR'
+    for (var i = 0; i < numpyArray.length; i++) {
+      for (var j = 0; j < numpyArray[i].length; j++) {
+        numpyArray[i][j].insert(0, numpyArray[i][j].removeAt(2));
+      }
+    }
+
+    // Mean and std deviation
+    List<double> mean = [103.939, 116.779, 123.68];
+
+    // Zero-center by mean pixel
+    for (var i = 0; i < numpyArray.length; i++) {
+      for (var j = 0; j < numpyArray[i].length; j++) {
+        for (var k = 0; k < numpyArray[i][j].length; k++) {
+          numpyArray[i][j][k] -= mean[k];
+        }
+      }
+    }
+
+    // Add an extra dimension to match the (1, 224, 224, 3) shape
+    List<List<List<List<double>>>> result = [numpyArray];
+
+    return result;
+  }
+
+  // Float32List preprocessInput(Float32List imgArray) {
+  //   // 'RGB'->'BGR'
+  //   Float32List imgArrayBGR = Float32List(imgArray.length);
+  //   for (int i = 0; i < imgArray.length; i += 3) {
+  //     imgArrayBGR[i] = imgArray[i + 2];
+  //     imgArrayBGR[i + 1] = imgArray[i + 1];
+  //     imgArrayBGR[i + 2] = imgArray[i];
+  //   }
+  //   // Zero-center by mean pixel
+  //   double meanR = 103.939;
+  //   double meanG = 116.779;
+  //   double meanB = 123.68;
+  //   for (int i = 0; i < imgArrayBGR.length; i += 3) {
+  //     imgArrayBGR[i] -= meanR;
+  //     imgArrayBGR[i + 1] -= meanG;
+  //     imgArrayBGR[i + 2] -= meanB;
+  //   }
+  //   return imgArrayBGR;
+  // }
 
   List<List<List<List<double>>>> base64ImageToTensor(String base64Image) {
     // Decode the base64 string into bytes
