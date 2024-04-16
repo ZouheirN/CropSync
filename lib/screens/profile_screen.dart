@@ -169,7 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SecondaryButton(
                 onPressed: () => pickImage(ImageSource.camera),
                 icon: Icons.camera_alt_outlined,
-                text: 'Use a Camera',
+                text: 'Open Camera',
               ),
               const Gap(10),
               Row(

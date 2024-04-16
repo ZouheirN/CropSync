@@ -30,74 +30,6 @@ class QuickDiseaseDetectionScreen extends WatchingStatefulWidget {
 
 class _QuickDiseaseDetectionScreenState
     extends State<QuickDiseaseDetectionScreen> {
-  void pickImage(ImageSource source) async {
-    final image = await ImagePicker().pickImage(source: source);
-    if (image == null) return;
-
-    File? img = File(image.path);
-    img = await cropImage(imageFile: img);
-
-    if (img == null) return;
-
-    di<ImageModel>().addImage(ImageObject(
-      image: img.readAsBytesSync(),
-      result: '',
-      uploadProgress: 0,
-      info: '',
-    ));
-
-//todo send to server
-// final response = DiseaseApi.uploadDiseaseImage(
-//   image: base64Encode(img.readAsBytesSync()),
-//   index: di<ImageModel>().images.length - 1,
-// );
-
-    // DiseaseApi.getDiseaseData(
-    //   img.readAsBytesSync(),
-    //   di<ImageModel>().images.length - 1,
-    // );
-
-    // predict
-    final base64Image = base64Encode(img.readAsBytesSync());
-    ResnetModelHelper().predict(
-      base64Image,
-      di<ImageModel>().images.length - 1,
-    );
-  }
-
-  Future<File?> cropImage({required File imageFile}) async {
-    CroppedFile? croppedImage = await ImageCropper().cropImage(
-      sourcePath: imageFile.path,
-      aspectRatioPresets: const [
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9,
-      ],
-      compressQuality: 100,
-      uiSettings: [
-        AndroidUiSettings(
-          toolbarTitle: 'Crop Image',
-          toolbarColor: MyApp.themeNotifier.value == ThemeMode.light
-              ? Colors.white
-              : const Color(0xFF191C1B),
-          toolbarWidgetColor: MyApp.themeNotifier.value == ThemeMode.light
-              ? Colors.black
-              : Colors.white,
-          lockAspectRatio: false,
-        ),
-        IOSUiSettings(
-          title: 'Crop Image',
-          rotateButtonsHidden: true,
-          rotateClockwiseButtonHidden: true,
-          aspectRatioLockEnabled: false,
-        ),
-      ],
-    );
-    if (croppedImage == null) return null;
-    return File(croppedImage.path);
-  }
-
   void showSelectPhotoOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -118,7 +50,7 @@ class _QuickDiseaseDetectionScreenState
                 color: Colors.grey,
               ),
               SecondaryButton(
-                onPressed: () => pickImage(ImageSource.gallery),
+                onPressed: () => ResnetModelHelper().pickImage(ImageSource.gallery),
                 icon: Icons.image_rounded,
                 text: 'Browse Gallery',
               ),
@@ -154,9 +86,9 @@ class _QuickDiseaseDetectionScreenState
               ),
               const Gap(10),
               SecondaryButton(
-                onPressed: () => pickImage(ImageSource.camera),
+                onPressed: () => ResnetModelHelper().pickImage(ImageSource.camera),
                 icon: Icons.camera_alt_outlined,
-                text: 'Use a Camera',
+                text: 'Open Camera',
               ),
             ],
           ),

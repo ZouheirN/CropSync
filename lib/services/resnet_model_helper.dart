@@ -2,13 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cropsync/json/image.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/image_model.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -166,8 +169,9 @@ class ResnetModelHelper {
   //   return tensor;
   // }
 
-  double truncateToDecimalPlaces(num value, int fractionalDigits) => (value * pow(10,
-      fractionalDigits)).truncate() / pow(10, fractionalDigits);
+  double truncateToDecimalPlaces(num value, int fractionalDigits) =>
+      (value * pow(10, fractionalDigits)).truncate() /
+      pow(10, fractionalDigits);
 
   void loadModel(BuildContext context) async {
     final result = await FilePicker.platform.pickFiles();
@@ -188,5 +192,73 @@ class ResnetModelHelper {
 
     if (!context.mounted) return;
     Dialogs.showSuccessDialog('Success', 'Model loaded successfully', context);
+  }
+
+  void pickImage(ImageSource source) async {
+    final image = await ImagePicker().pickImage(source: source);
+    if (image == null) return;
+
+    File? img = File(image.path);
+    img = await cropImage(imageFile: img);
+
+    if (img == null) return;
+
+    di<ImageModel>().addImage(ImageObject(
+      image: img.readAsBytesSync(),
+      result: '',
+      uploadProgress: 0,
+      info: '',
+    ));
+
+    //todo send to server
+    // final response = DiseaseApi.uploadDiseaseImage(
+    //   image: base64Encode(img.readAsBytesSync()),
+    //   index: di<ImageModel>().images.length - 1,
+    // );
+
+    // DiseaseApi.getDiseaseData(
+    //   img.readAsBytesSync(),
+    //   di<ImageModel>().images.length - 1,
+    // );
+
+    // predict
+    final base64Image = base64Encode(img.readAsBytesSync());
+    ResnetModelHelper().predict(
+      base64Image,
+      di<ImageModel>().images.length - 1,
+    );
+  }
+
+  Future<File?> cropImage({required File imageFile}) async {
+    CroppedFile? croppedImage = await ImageCropper().cropImage(
+      sourcePath: imageFile.path,
+      aspectRatioPresets: const [
+        CropAspectRatioPreset.original,
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio4x3,
+        CropAspectRatioPreset.ratio16x9,
+      ],
+      compressQuality: 100,
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Crop Image',
+          toolbarColor: MyApp.themeNotifier.value == ThemeMode.light
+              ? Colors.white
+              : const Color(0xFF191C1B),
+          toolbarWidgetColor: MyApp.themeNotifier.value == ThemeMode.light
+              ? Colors.black
+              : Colors.white,
+          lockAspectRatio: false,
+        ),
+        IOSUiSettings(
+          title: 'Crop Image',
+          rotateButtonsHidden: true,
+          rotateClockwiseButtonHidden: true,
+          aspectRatioLockEnabled: false,
+        ),
+      ],
+    );
+    if (croppedImage == null) return null;
+    return File(croppedImage.path);
   }
 }

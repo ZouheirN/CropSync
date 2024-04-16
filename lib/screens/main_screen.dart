@@ -13,11 +13,14 @@ import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/profile_screen.dart';
 import 'package:cropsync/screens/quick_disease_detection_screen.dart';
 import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/services/resnet_model_helper.dart';
 import 'package:cropsync/services/weather_api.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'package:watch_it/watch_it.dart';
 
 import 'crops_screen.dart';
@@ -43,6 +46,8 @@ class _MainScreenState extends State<MainScreen> {
                   : 4;
 
   late DateTime exitTime;
+
+  final quickActions = QuickActions();
 
   final screens = [
     const HomeScreen(),
@@ -150,6 +155,22 @@ class _MainScreenState extends State<MainScreen> {
       cropCharts();
       //userInfo(); todo
     }
+
+    quickActions.setShortcutItems([
+      const ShortcutItem(
+        type: 'camera',
+        localizedTitle: 'Open Camera',
+        icon: 'icon_camera',
+      ),
+    ]);
+    quickActions.initialize((shortcutType) {
+      if (shortcutType == 'camera') {
+        setState(() => index = 2);
+
+        // open camera
+        ResnetModelHelper().pickImage(ImageSource.camera);
+      }
+    });
 
     super.initState();
   }
