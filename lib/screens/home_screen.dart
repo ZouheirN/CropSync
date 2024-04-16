@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
         cropLineChartsPages.add(
           CropLineChartCard(
             location: weeklyCropCharts[i].location!,
-            cropName: weeklyCropCharts[i].cropName!,
+            cropName: weeklyCropCharts[i].cropName ?? 'Unassigned Crop',
             deviceName: weeklyCropCharts[i].deviceName!,
             weeklyMoisture: weeklyCropCharts[i].moisture!,
             weeklyNitrogen: weeklyCropCharts[i].nitrogen!,

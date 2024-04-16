@@ -9,6 +9,7 @@ import 'package:cropsync/main.dart';
 import 'package:cropsync/models/crop_chart_model.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
+import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/profile_screen.dart';
 import 'package:cropsync/screens/quick_disease_detection_screen.dart';
@@ -165,6 +166,10 @@ class _MainScreenState extends State<MainScreen> {
     ]);
     quickActions.initialize((shortcutType) {
       if (shortcutType == 'camera') {
+        if (di<UserModel>().user.token == null) {
+          return;
+        }
+
         setState(() => index = 2);
 
         // open camera
