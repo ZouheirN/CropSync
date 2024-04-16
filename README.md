@@ -18,7 +18,7 @@
   <li>Access device camera and history</li>
   <li>Effortlessly assign crops to devices</li>
   <li>Simple addition and configuration of devices</li>
-  <li>Quickly diagnose plant diseases via photo analysis</li>
+  <li>Quickly diagnose plant diseases via integrated AI model</li>
 </ul>
 
 <h2 align="center">📋 Requirements</h2>
@@ -26,6 +26,7 @@
 - Backend Code API URL: [Repository](https://github.com/Ibrahim-Mneimneh/CropSync)
 - Google Generative AI API Key: [Get it here](https://makersuite.google.com/app/apikey)
 - Trefle API Key: [Get it here](https://trefle.io/)
+- Optional: ResNet50 TensorFlow Lite Model File (For Quick Disease Detection)
 
 
 <h2 align="center">🛠️ Installation Steps</h2>
