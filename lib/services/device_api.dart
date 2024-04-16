@@ -135,6 +135,8 @@ class DeviceApi {
 
       // add api url to the start of each image
       for (var i = 0; i < response.data.length; i++) {
+        if (response.data[i]['recentLeafImage'] == null) continue;
+
         response.data[i]['recentLeafImage'] =
             '$apiUrl${response.data[i]['recentLeafImage']}';
       }

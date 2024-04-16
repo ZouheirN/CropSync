@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
+import 'dart:math';
 
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/image_model.dart';
@@ -50,9 +50,8 @@ class ResnetModelHelper {
     isolateInterpreter =
         await IsolateInterpreter.create(address: interpreter!.address);
 
-    var input = base64ImageToTensor(base64image);
-
-    logger.d(input[0][5][0]);
+    // var input = base64ImageToTensor(base64image);
+    var input = preprocessInput(base64image);
 
     var output = List.filled(1 * 2, 0).reshape([1, 2]);
 
@@ -71,6 +70,7 @@ class ResnetModelHelper {
     logger.i("$output\nPredicted class: $predictedClassLabel");
 
     interpreter?.close();
+    isolateInterpreter.close();
 
     final results = {
       'prediction': predictedClassLabel,
@@ -83,113 +83,91 @@ class ResnetModelHelper {
     );
     di<ImageModel>().setInfo(
       index,
-      'Confidence: ${results['confidence'].toStringAsFixed(2)}%',
+      'Confidence: ${truncateToDecimalPlaces(results['confidence'], 2)}%',
     );
   }
 
   List<List<List<List<double>>>> preprocessInput(String base64Image) {
-    // Decode base64 image string
-    Uint8List decodedBytes = base64.decode(base64Image);
+    img.Image image = img.decodeImage(base64.decode(base64Image))!;
 
-    // Decode the image using Dart image package
-    img.Image image = img.decodeImage(decodedBytes)!;
+    image = img.copyResize(
+      image,
+      width: 224,
+      height: 224,
+      interpolation: img.Interpolation.average,
+    );
 
-    // Resize image to 224x224
-    img.Image resizedImage = img.copyResize(image, width: 224, height: 224);
+    // convert without normalization
+    List<List<List<double>>> input = List.generate(224, (y) {
+      return List.generate(224, (x) {
+        img.Pixel pixel = image.getPixel(x, y);
+        return [
+          pixel.r.toDouble(),
+          pixel.g.toDouble(),
+          pixel.b.toDouble(),
+        ];
+      });
+    });
 
-    // Convert the resized image to a numpy array
-    List<List<List<double>>> numpyArray = [];
-    for (int y = 0; y < resizedImage.height; y++) {
-      List<List<double>> row = [];
-      for (int x = 0; x < resizedImage.width; x++) {
-        img.Pixel pixel = resizedImage.getPixel(x, y);
-        int r = pixel.r.toInt();
-        int g = pixel.g.toInt();
-        int b = pixel.b.toInt();
-        row.add([r.toDouble(), g.toDouble(), b.toDouble()]);
+    // convert rgb to bgr
+    for (var i = 0; i < input.length; i++) {
+      for (var j = 0; j < input[i].length; j++) {
+        var temp = input[i][j][0];
+        input[i][j][0] = input[i][j][2];
+        input[i][j][2] = temp;
       }
-      numpyArray.add(row);
     }
-
-    // 'RGB'->'BGR'
-    for (var i = 0; i < numpyArray.length; i++) {
-      for (var j = 0; j < numpyArray[i].length; j++) {
-        numpyArray[i][j].insert(0, numpyArray[i][j].removeAt(2));
-      }
-    }
-
-    // Mean and std deviation
-    List<double> mean = [103.939, 116.779, 123.68];
 
     // Zero-center by mean pixel
-    for (var i = 0; i < numpyArray.length; i++) {
-      for (var j = 0; j < numpyArray[i].length; j++) {
-        for (var k = 0; k < numpyArray[i][j].length; k++) {
-          numpyArray[i][j][k] -= mean[k];
+    List<double> mean = [103.939, 116.779, 123.68];
+    for (var i = 0; i < input.length; i++) {
+      for (var j = 0; j < input[i].length; j++) {
+        for (var k = 0; k < input[i][j].length; k++) {
+          input[i][j][k] -= mean[k];
         }
       }
     }
 
-    // Add an extra dimension to match the (1, 224, 224, 3) shape
-    List<List<List<List<double>>>> result = [numpyArray];
-
-    return result;
+    return [input];
   }
 
-  // Float32List preprocessInput(Float32List imgArray) {
-  //   // 'RGB'->'BGR'
-  //   Float32List imgArrayBGR = Float32List(imgArray.length);
-  //   for (int i = 0; i < imgArray.length; i += 3) {
-  //     imgArrayBGR[i] = imgArray[i + 2];
-  //     imgArrayBGR[i + 1] = imgArray[i + 1];
-  //     imgArrayBGR[i + 2] = imgArray[i];
-  //   }
-  //   // Zero-center by mean pixel
-  //   double meanR = 103.939;
-  //   double meanG = 116.779;
-  //   double meanB = 123.68;
-  //   for (int i = 0; i < imgArrayBGR.length; i += 3) {
-  //     imgArrayBGR[i] -= meanR;
-  //     imgArrayBGR[i + 1] -= meanG;
-  //     imgArrayBGR[i + 2] -= meanB;
-  //   }
-  //   return imgArrayBGR;
+  // List<List<List<List<double>>>> base64ImageToTensor(String base64Image) {
+  //   // Decode the base64 string into bytes
+  //   Uint8List imageBytes = base64.decode(base64Image);
+  //
+  //   // Convert the bytes into an image
+  //   img.Image? image = img.decodeImage(imageBytes);
+  //
+  //   // Resize the image to match the input size required by the model
+  //   img.Image resizedImage = img.copyResize(image!, width: 224, height: 224);
+  //
+  //   // Caffe preprocessing: mean subtraction
+  //   // Precomputed mean values for RGB channels
+  //   double meanRed = 123.68;
+  //   double meanGreen = 116.779;
+  //   double meanBlue = 103.939;
+  //
+  //   // Normalize pixel values and convert to float32
+  //   List<List<List<double>>> normalizedImage = List.generate(224, (y) {
+  //     return List.generate(224, (x) {
+  //       // Get pixel values
+  //       img.Pixel pixel = resizedImage.getPixel(x, y);
+  //       // Extract RGB channels, normalize, and subtract mean
+  //       double red = (pixel.r - meanRed) / 255;
+  //       double green = (pixel.g - meanGreen) / 255;
+  //       double blue = (pixel.b - meanBlue) / 255;
+  //       return [red, green, blue];
+  //     });
+  //   });
+  //
+  //   // Expand dimensions to match the expected input shape [1, 224, 224, 3]
+  //   List<List<List<List<double>>>> tensor = [normalizedImage];
+  //
+  //   return tensor;
   // }
 
-  List<List<List<List<double>>>> base64ImageToTensor(String base64Image) {
-    // Decode the base64 string into bytes
-    Uint8List imageBytes = base64.decode(base64Image);
-
-    // Convert the bytes into an image
-    img.Image? image = img.decodeImage(imageBytes);
-
-    // Resize the image to match the input size required by the model
-    img.Image resizedImage = img.copyResize(image!, width: 224, height: 224);
-
-    // Caffe preprocessing: mean subtraction
-    // Precomputed mean values for RGB channels
-    double meanRed = 123.68;
-    double meanGreen = 116.779;
-    double meanBlue = 103.939;
-
-    // Normalize pixel values and convert to float32
-    List<List<List<double>>> normalizedImage = List.generate(224, (y) {
-      return List.generate(224, (x) {
-        // Get pixel values
-        img.Pixel pixel = resizedImage.getPixel(x, y);
-        // Extract RGB channels, normalize, and subtract mean
-        double red = (pixel.r - meanRed) / 255;
-        double green = (pixel.g - meanGreen) / 255;
-        double blue = (pixel.b - meanBlue) / 255;
-        return [red, green, blue];
-      });
-    });
-
-    // Expand dimensions to match the expected input shape [1, 224, 224, 3]
-    List<List<List<List<double>>>> tensor = [normalizedImage];
-
-    return tensor;
-  }
+  double truncateToDecimalPlaces(num value, int fractionalDigits) => (value * pow(10,
+      fractionalDigits)).truncate() / pow(10, fractionalDigits);
 
   void loadModel(BuildContext context) async {
     final result = await FilePicker.platform.pickFiles();

@@ -32,7 +32,7 @@ class _CropsScreenState extends State<CropsScreen> {
     final devices = await DeviceApi.getDevices();
     if (devices.runtimeType == List<Device>) {
       di<DevicesModel>().devices = devices;
-      logger.d('Fetched Devices by Refresh');
+      logger.t('Fetched Devices by Refresh');
     }
   }
 
@@ -49,7 +49,7 @@ class _CropsScreenState extends State<CropsScreen> {
       DeviceApi.getLatestSoilData(deviceId!).then((soilData) {
         if (soilData.runtimeType == SoilData) {
           di<LatestSoilDataModel>().setSoilData(soilData);
-          logger.d('Fetched Soil Data');
+          logger.t('Fetched Soil Data');
         }
       });
     }
@@ -66,7 +66,7 @@ class _CropsScreenState extends State<CropsScreen> {
         DeviceApi.getLatestSoilData(deviceId!).then((soilData) {
           if (soilData.runtimeType == SoilData) {
             di<LatestSoilDataModel>().setSoilData(soilData);
-            logger.d('Fetched Soil Data');
+            logger.t('Fetched Soil Data');
           }
         });
       }
@@ -498,6 +498,47 @@ class _CropsScreenState extends State<CropsScreen> {
                               padding: EdgeInsets.symmetric(vertical: 2.0),
                             ),
                             Text('Edit'),
+                          ],
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Dialogs.showLoadingDialog(
+                              'Getting Recommendation...', context);
+
+                          final response = await DeviceApi.getCropRecommendation(
+                              deviceId: devices[index].deviceId!);
+
+                          if (!mounted) return;
+                          if (response == ReturnTypes.fail) {
+                            Navigator.pop(context);
+                            Dialogs.showErrorDialog(
+                                'Error', 'An error occurred, try again', context);
+                            return;
+                          } else if (response == ReturnTypes.error) {
+                            Navigator.pop(context);
+                            Dialogs.showErrorDialog(
+                                'Error', 'An error occurred, try again', context);
+                            return;
+                          } else if (response == ReturnTypes.invalidToken) {
+                            Navigator.pop(context);
+                            invalidTokenResponse(context);
+                            return;
+                          }
+
+                          Navigator.pop(context);
+                          Dialogs.showInformationDialog(
+                              'Recommendation',
+                              response[0].toUpperCase() + response.substring(1),
+                              context);
+                        },
+                        child: const Column(
+                          children: <Widget>[
+                            Icon(Icons.recommend_rounded),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 2.0),
+                            ),
+                            Text('Recommend Crop'),
                           ],
                         ),
                       ),

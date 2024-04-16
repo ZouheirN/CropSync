@@ -396,7 +396,7 @@ class DeviceCameraCard extends StatelessWidget {
                       height: 200,
                       child: Center(
                         child: Text(
-                          'No image available',
+                          'No Image Available',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
@@ -407,6 +407,16 @@ class DeviceCameraCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       height: 200,
                       width: double.infinity,
+                      errorWidget: (context, url, error) {
+                        return const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.error_rounded,
+                            color: Colors.red,),
+                            Text('Error Getting Image', style: TextStyle(color: Colors.red))
+                          ],
+                        );
+                      },
                       progressIndicatorBuilder: (context, url, progress) =>
                           Center(
                         child: CircularProgressIndicator(
@@ -703,7 +713,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                       if (widget.weeklyMoisture.isEmpty)
                         Center(
                           child: Text(
-                            'No data available',
+                            'No Data Available',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         )
@@ -720,7 +730,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                       if (widget.monthlyMoisture.isEmpty)
                         Center(
                           child: Text(
-                            'No data available',
+                            'No Data Available',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         )

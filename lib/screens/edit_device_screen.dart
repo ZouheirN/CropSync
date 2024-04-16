@@ -77,7 +77,7 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
       WeatherApi.getWeatherData().then((value) {
         if (value.runtimeType == List<Weather>) {
           di<WeatherModel>().weather = value;
-          logger.d('Fetched Weather');
+          logger.t('Fetched Weather');
         }
       });
 

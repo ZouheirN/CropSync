@@ -1,7 +1,6 @@
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
-import 'package:cropsync/screens/otp_screen.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/local_device_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
@@ -104,7 +103,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
     final devices = await DeviceApi.getDevices();
     if (devices.runtimeType == List<Device>) {
       di<DevicesModel>().devices = devices;
-      logger.d('Fetched Devices by Refresh');
+      logger.t('Fetched Devices by Refresh');
     }
   }
 
@@ -372,55 +371,6 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                           EdgeInsets.symmetric(vertical: 2.0),
                                     ),
                                     Text('Edit'),
-                                  ],
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  Dialogs.showLoadingDialog(
-                                      'Getting Recommendation...', context);
-
-                                  final response =
-                                      await DeviceApi.getCropRecommendation(
-                                          deviceId: devices[index].deviceId!);
-
-                                  if (!context.mounted) return;
-                                  if (response == ReturnTypes.fail) {
-                                    Navigator.pop(context);
-                                    Dialogs.showErrorDialog(
-                                        'Error',
-                                        'An error occurred, try again',
-                                        context);
-                                    return;
-                                  } else if (response == ReturnTypes.error) {
-                                    Navigator.pop(context);
-                                    Dialogs.showErrorDialog(
-                                        'Error',
-                                        'An error occurred, try again',
-                                        context);
-                                    return;
-                                  } else if (response ==
-                                      ReturnTypes.invalidToken) {
-                                    Navigator.pop(context);
-                                    invalidTokenResponse(context);
-                                    return;
-                                  }
-
-                                  Navigator.pop(context);
-                                  Dialogs.showInformationDialog(
-                                      'Recommendation',
-                                      response[0].toUpperCase() +
-                                          response.substring(1),
-                                      context);
-                                },
-                                child: const Column(
-                                  children: <Widget>[
-                                    Icon(Icons.recommend_rounded),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 2.0),
-                                    ),
-                                    Text('Recommend Crop'),
                                   ],
                                 ),
                               ),

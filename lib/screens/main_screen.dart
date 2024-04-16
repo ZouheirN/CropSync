@@ -56,7 +56,7 @@ class _MainScreenState extends State<MainScreen> {
     final weatherData = await WeatherApi.getWeatherData();
     if (weatherData.runtimeType == List<Weather>) {
       di<WeatherModel>().weather = weatherData;
-      logger.d('Fetched Weather');
+      logger.t('Fetched Weather');
     }
     if (onlyOnce) return;
 
@@ -66,7 +66,7 @@ class _MainScreenState extends State<MainScreen> {
       final weatherData = await WeatherApi.getWeatherData();
       if (weatherData.runtimeType == List<Weather>) {
         di<WeatherModel>().weather = weatherData;
-        logger.d('Fetched Weather');
+        logger.t('Fetched Weather');
       }
     });
   }
@@ -75,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
     final deviceCameraData = await DeviceApi.getDeviceCamera();
     if (deviceCameraData.runtimeType == List<DeviceCamera>) {
       di<DeviceCameraModel>().deviceCamera = deviceCameraData;
-      logger.d('Fetched Device Camera');
+      logger.t('Fetched Device Camera');
     }
     if (onlyOnce) return;
 
@@ -85,7 +85,7 @@ class _MainScreenState extends State<MainScreen> {
       final deviceCameraData = await DeviceApi.getDeviceCamera();
       if (deviceCameraData.runtimeType == List<DeviceCamera>) {
         di<DeviceCameraModel>().deviceCamera = deviceCameraData;
-        logger.d('Fetched Device Camera');
+        logger.t('Fetched Device Camera');
       }
     });
   }
@@ -94,7 +94,7 @@ class _MainScreenState extends State<MainScreen> {
     final devices = await DeviceApi.getDevices();
     if (devices.runtimeType == List<Device>) {
       di<DevicesModel>().devices = devices;
-      logger.d('Fetched Devices');
+      logger.t('Fetched Devices');
     }
     if (onlyOnce) return;
 
@@ -104,7 +104,7 @@ class _MainScreenState extends State<MainScreen> {
       final devices = await DeviceApi.getDevices();
       if (devices.runtimeType == List<Device>) {
         di<DevicesModel>().devices = devices;
-        logger.d('Fetched Devices');
+        logger.t('Fetched Devices');
       }
     });
   }
@@ -113,13 +113,13 @@ class _MainScreenState extends State<MainScreen> {
     final weeklyCropCharts = await DeviceApi.getWeeklyCropChartData();
     if (weeklyCropCharts.runtimeType == CropChart) {
       di<CropChartModel>().weeklyCropCharts = weeklyCropCharts;
-      logger.d('Fetched Weekly Crop Charts');
+      logger.t('Fetched Weekly Crop Charts');
     }
 
     final monthlyCropCharts = await DeviceApi.getMonthlyCropChartData();
     if (monthlyCropCharts.runtimeType == CropChart) {
       di<CropChartModel>().monthlyCropCharts = monthlyCropCharts;
-      logger.d('Fetched Monthly Crop Charts');
+      logger.t('Fetched Monthly Crop Charts');
     }
     if (onlyOnce) return;
 
@@ -129,13 +129,13 @@ class _MainScreenState extends State<MainScreen> {
       final weeklyCropCharts = await DeviceApi.getWeeklyCropChartData();
       if (weeklyCropCharts.runtimeType == CropChart) {
         di<CropChartModel>().weeklyCropCharts = weeklyCropCharts;
-        logger.d('Fetched Weekly Crop Charts');
+        logger.t('Fetched Weekly Crop Charts');
       }
 
       final monthlyCropCharts = await DeviceApi.getMonthlyCropChartData();
       if (monthlyCropCharts.runtimeType == CropChart) {
         di<CropChartModel>().monthlyCropCharts = monthlyCropCharts;
-        logger.d('Fetched Monthly Crop Charts');
+        logger.t('Fetched Monthly Crop Charts');
       }
     });
   }

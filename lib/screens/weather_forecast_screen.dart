@@ -26,7 +26,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
   Future getData() async {
     final weatherForecast = await WeatherApi.getWeatherForecastData();
     if (weatherForecast.runtimeType == List<WeatherForecast>) {
-      logger.d('Fetched Weather Forecast');
+      logger.t('Fetched Weather Forecast');
       return weatherForecast;
     }
   }

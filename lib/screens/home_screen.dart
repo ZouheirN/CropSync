@@ -42,31 +42,31 @@ class _HomeScreenState extends State<HomeScreen> {
     final devices = await DeviceApi.getDevices();
     if (devices.runtimeType == List<Device>) {
       di<DevicesModel>().devices = devices;
-      logger.d('Fetched Devices by Refresh');
+      logger.t('Fetched Devices by Refresh');
     }
 
     final weatherData = await WeatherApi.getWeatherData();
     if (weatherData.runtimeType == List<Weather>) {
       di<WeatherModel>().weather = weatherData;
-      logger.d('Fetched Weather by Refresh');
+      logger.t('Fetched Weather by Refresh');
     }
 
     final deviceCameraData = await DeviceApi.getDeviceCamera();
     if (deviceCameraData.runtimeType == List<DeviceCamera>) {
       di<DeviceCameraModel>().deviceCamera = deviceCameraData;
-      logger.d('Fetched Device Camera by Refresh');
+      logger.t('Fetched Device Camera by Refresh');
     }
 
     final weeklyCropCharts = await DeviceApi.getWeeklyCropChartData();
     if (weeklyCropCharts.runtimeType == CropChart) {
       di<CropChartModel>().weeklyCropCharts = weeklyCropCharts;
-      logger.d('Fetched Weekly Crop Charts by Refresh');
+      logger.t('Fetched Weekly Crop Charts by Refresh');
     }
 
     final monthlyCropCharts = await DeviceApi.getMonthlyCropChartData();
     if (monthlyCropCharts.runtimeType == CropChart) {
       di<CropChartModel>().monthlyCropCharts = monthlyCropCharts;
-      logger.d('Fetched Monthly Crop Charts by Refresh');
+      logger.t('Fetched Monthly Crop Charts by Refresh');
     }
   }
 
