@@ -1,12 +1,10 @@
 import 'dart:convert';
 
 import 'package:cropsync/models/image_model.dart';
-import 'package:cropsync/utils/api_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:cropsync/main.dart';
 import 'package:watch_it/watch_it.dart';
 
 class DiseaseApi {
@@ -14,7 +12,8 @@ class DiseaseApi {
 
   static final apiUrl = dotenv.env['API_URL'];
 
-  static Future getDiseaseDataFromGemeni(Uint8List imageBytes, int index) async {
+  static Future getDiseaseDataFromGemeni(
+      Uint8List imageBytes, int index) async {
     di<ImageModel>().setResult(index, 'Processing...');
 
     final model = GenerativeModel(

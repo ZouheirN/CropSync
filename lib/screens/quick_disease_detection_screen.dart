@@ -139,47 +139,13 @@ class _QuickDiseaseDetectionScreenState
         child: images.isEmpty
             ? Center(
                 child: !isLocal
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    ? Stack(
                         children: [
-                          const Text(
-                            'Start by taking pictures of leaves to detect diseases using the Google Generative AI model.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          const Gap(20),
-                          CommonButton(
-                            text: 'Choose Picture',
-                            textColor: Colors.white,
-                            backgroundColor: Theme.of(context).primaryColor,
-                            onPressed: () => showSelectPhotoOptions(context),
-                          ),
-                        ],
-                      )
-                    : resNetFilePath == ''
-                        ? Column(
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Text(
-                                'You need to load a model file to start predicting.',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              const Gap(20),
-                              CommonButton(
-                                text: 'Load Model File',
-                                textColor: Colors.white,
-                                backgroundColor: Theme.of(context).primaryColor,
-                                onPressed: () =>
-                                    ResnetModelHelper().loadModel(context),
-                              ),
-                            ],
-                          )
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'Model loaded.\nStart by taking pictures of leaves to detect diseases.',
+                                'Start by taking pictures of leaves to detect diseases using the Google Generative AI model.',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 20),
                               ),
@@ -188,9 +154,78 @@ class _QuickDiseaseDetectionScreenState
                                 text: 'Choose Picture',
                                 textColor: Colors.white,
                                 backgroundColor: Theme.of(context).primaryColor,
-                                onPressed: () {
-                                  showSelectPhotoOptions(context);
-                                },
+                                onPressed: () =>
+                                    showSelectPhotoOptions(context),
+                              ),
+                            ],
+                          ),
+                          Positioned(
+                            child: Align(
+                              alignment: FractionalOffset.bottomCenter,
+                              child: buildSwitch(),
+                            ),
+                          ),
+                        ],
+                      )
+                    : resNetFilePath == ''
+                        ? Stack(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'You need to load a model file to start predicting.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  const Gap(20),
+                                  CommonButton(
+                                    text: 'Load Model File',
+                                    textColor: Colors.white,
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
+                                    onPressed: () =>
+                                        ResnetModelHelper().loadModel(context),
+                                  ),
+                                  buildSwitch(),
+                                ],
+                              ),
+                              Positioned(
+                                child: Align(
+                                  alignment: FractionalOffset.bottomCenter,
+                                  child: buildSwitch(),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Stack(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const Text(
+                                    'Model loaded.\nStart by taking pictures of leaves to detect diseases.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  const Gap(20),
+                                  CommonButton(
+                                    text: 'Choose Picture',
+                                    textColor: Colors.white,
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
+                                    onPressed: () {
+                                      showSelectPhotoOptions(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Positioned(
+                                child: Align(
+                                  alignment: FractionalOffset.bottomCenter,
+                                  child: buildSwitch(),
+                                ),
                               ),
                             ],
                           ),
@@ -198,29 +233,33 @@ class _QuickDiseaseDetectionScreenState
             : Column(
                 children: [
                   buildGrid(images),
+                  buildSwitch(),
                 ],
               ),
       ),
-      bottomSheet: Row(
-        children: [
-          const Expanded(
-            child: Text('Gemeni AI', textAlign: TextAlign.right),
+    );
+  }
+
+  Widget buildSwitch() {
+    return Row(
+      children: [
+        const Expanded(
+          child: Text('Gemeni AI', textAlign: TextAlign.right),
+        ),
+        Expanded(
+          child: Switch(
+            value: isLocal,
+            onChanged: (value) {
+              setState(() {
+                isLocal = value;
+              });
+            },
           ),
-          Expanded(
-            child: Switch(
-              value: isLocal,
-              onChanged: (value) {
-                setState(() {
-                  isLocal = value;
-                });
-              },
-            ),
-          ),
-          const Expanded(
-            child: Text('Local Model', textAlign: TextAlign.left),
-          ),
-        ],
-      ),
+        ),
+        const Expanded(
+          child: Text('Local Model', textAlign: TextAlign.left),
+        ),
+      ],
     );
   }
 
@@ -291,7 +330,7 @@ class _QuickDiseaseDetectionScreenState
                             } else {
                               DiseaseApi.getDiseaseDataFromGemeni(
                                 images[index].image,
-                                di<ImageModel>().images.length - 1,
+                                index,
                               );
                             }
                           },
