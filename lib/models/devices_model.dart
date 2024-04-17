@@ -1,7 +1,9 @@
 import 'package:cropsync/json/crop.dart';
 import 'package:cropsync/json/device.dart';
+import 'package:cropsync/models/weather_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:watch_it/watch_it.dart';
 
 class DevicesModel extends ChangeNotifier {
   final devicesBox = Hive.box('devices');
@@ -52,6 +54,8 @@ class DevicesModel extends ChangeNotifier {
     final isConnected = _devices[index].isConnected;
     final code = _devices[index].code;
     final crop = _devices[index].crop;
+    final soilFrequency = _devices[index].soilFrequency;
+    final imageFrequency = _devices[index].imageFrequency;
     _devices[index] = Device(
       deviceId: id,
       crop: crop,
@@ -59,6 +63,8 @@ class DevicesModel extends ChangeNotifier {
       isConnected: isConnected,
       location: location,
       code: code,
+      soilFrequency: soilFrequency,
+      imageFrequency: imageFrequency,
     );
     devicesBox.put('devices', _devices);
     notifyListeners();

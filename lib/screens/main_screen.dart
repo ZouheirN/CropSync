@@ -163,9 +163,14 @@ class _MainScreenState extends State<MainScreen> {
         localizedTitle: 'Open Camera',
         icon: 'icon_camera',
       ),
+      const ShortcutItem(
+        type: 'gemeni-camera',
+        localizedTitle: 'Open Camera with Gemeni AI',
+        icon: 'icon_gemeni',
+      ),
     ]);
     quickActions.initialize((shortcutType) {
-      if (shortcutType == 'camera') {
+      if (shortcutType == 'camera' || shortcutType == 'gemeni-camera') {
         if (di<UserModel>().user.token == null) {
           return;
         }
@@ -173,7 +178,8 @@ class _MainScreenState extends State<MainScreen> {
         setState(() => index = 2);
 
         // open camera
-        ResnetModelHelper().pickImage(ImageSource.camera);
+        ResnetModelHelper()
+            .pickImage(ImageSource.camera, isLocal: shortcutType == 'camera');
       }
     });
 

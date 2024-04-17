@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:cropsync/json/image.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/image_model.dart';
+import 'package:cropsync/services/disease_api.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:file_picker/file_picker.dart';
@@ -18,7 +19,10 @@ import 'package:watch_it/watch_it.dart';
 class ResnetModelHelper {
   Interpreter? interpreter;
 
-  Future<void> predict(base64image, int index) async {
+  Future<void> predict({
+    required base64image,
+    required int index,
+  }) async {
     di<ImageModel>().setResult(
       index,
       'Predicting...',
@@ -134,41 +138,6 @@ class ResnetModelHelper {
     return [input];
   }
 
-  // List<List<List<List<double>>>> base64ImageToTensor(String base64Image) {
-  //   // Decode the base64 string into bytes
-  //   Uint8List imageBytes = base64.decode(base64Image);
-  //
-  //   // Convert the bytes into an image
-  //   img.Image? image = img.decodeImage(imageBytes);
-  //
-  //   // Resize the image to match the input size required by the model
-  //   img.Image resizedImage = img.copyResize(image!, width: 224, height: 224);
-  //
-  //   // Caffe preprocessing: mean subtraction
-  //   // Precomputed mean values for RGB channels
-  //   double meanRed = 123.68;
-  //   double meanGreen = 116.779;
-  //   double meanBlue = 103.939;
-  //
-  //   // Normalize pixel values and convert to float32
-  //   List<List<List<double>>> normalizedImage = List.generate(224, (y) {
-  //     return List.generate(224, (x) {
-  //       // Get pixel values
-  //       img.Pixel pixel = resizedImage.getPixel(x, y);
-  //       // Extract RGB channels, normalize, and subtract mean
-  //       double red = (pixel.r - meanRed) / 255;
-  //       double green = (pixel.g - meanGreen) / 255;
-  //       double blue = (pixel.b - meanBlue) / 255;
-  //       return [red, green, blue];
-  //     });
-  //   });
-  //
-  //   // Expand dimensions to match the expected input shape [1, 224, 224, 3]
-  //   List<List<List<List<double>>>> tensor = [normalizedImage];
-  //
-  //   return tensor;
-  // }
-
   double truncateToDecimalPlaces(num value, int fractionalDigits) =>
       (value * pow(10, fractionalDigits)).truncate() /
       pow(10, fractionalDigits);
@@ -194,7 +163,7 @@ class ResnetModelHelper {
     Dialogs.showSuccessDialog('Success', 'Model loaded successfully', context);
   }
 
-  void pickImage(ImageSource source) async {
+  void pickImage(ImageSource source, {required bool isLocal}) async {
     final image = await ImagePicker().pickImage(source: source);
     if (image == null) return;
 
@@ -210,23 +179,18 @@ class ResnetModelHelper {
       info: '',
     ));
 
-    //todo send to server
-    // final response = DiseaseApi.uploadDiseaseImage(
-    //   image: base64Encode(img.readAsBytesSync()),
-    //   index: di<ImageModel>().images.length - 1,
-    // );
-
-    // DiseaseApi.getDiseaseData(
-    //   img.readAsBytesSync(),
-    //   di<ImageModel>().images.length - 1,
-    // );
-
-    // predict
-    final base64Image = base64Encode(img.readAsBytesSync());
-    ResnetModelHelper().predict(
-      base64Image,
-      di<ImageModel>().images.length - 1,
-    );
+    if (!isLocal) {
+      DiseaseApi.getDiseaseDataFromGemeni(
+        img.readAsBytesSync(),
+        di<ImageModel>().images.length - 1,
+      );
+    } else {
+      final base64Image = base64Encode(img.readAsBytesSync());
+      ResnetModelHelper().predict(
+        base64image: base64Image,
+        index: di<ImageModel>().images.length - 1,
+      );
+    }
   }
 
   Future<File?> cropImage({required File imageFile}) async {

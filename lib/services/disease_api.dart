@@ -14,35 +14,7 @@ class DiseaseApi {
 
   static final apiUrl = dotenv.env['API_URL'];
 
-  static Future<dynamic> uploadDiseaseImage({
-    required String image,
-    required int index,
-  }) async {
-    di<ImageModel>().setResult(index, 'Uploading...');
-
-    try {
-      await dio.post(
-        'https://httpbin.org/post',
-        data: {
-          'image': image,
-        },
-        onSendProgress: (int sent, int total) {
-          di<ImageModel>().setProgress(index, sent / total);
-
-          if (sent == total) {
-            di<ImageModel>().setResult(index, 'Processing...');
-          }
-        },
-      );
-    } on DioException catch (e) {
-      if (e.response == null) return ReturnTypes.error;
-
-      logger.e(e.response?.data);
-      di<ImageModel>().setResult(index, 'Upload Failed');
-    }
-  }
-
-  static Future getDiseaseData(Uint8List imageBytes, int index) async {
+  static Future getDiseaseDataFromGemeni(Uint8List imageBytes, int index) async {
     di<ImageModel>().setResult(index, 'Processing...');
 
     final model = GenerativeModel(

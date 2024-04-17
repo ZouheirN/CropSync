@@ -1,4 +1,9 @@
+import 'package:cropsync/json/crop_chart.dart';
+import 'package:cropsync/json/device_camera.dart';
 import 'package:cropsync/json/weather.dart';
+import 'package:cropsync/main.dart';
+import 'package:cropsync/models/crop_chart_model.dart';
+import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/services/device_api.dart';
@@ -7,11 +12,9 @@ import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
-import 'package:cropsync/main.dart';
 import 'package:watch_it/watch_it.dart';
 
 class EditDeviceScreen extends StatefulWidget {
@@ -74,12 +77,41 @@ class _EditDeviceScreenState extends State<EditDeviceScreen> {
       );
 
       // call other api
-      WeatherApi.getWeatherData().then((value) {
-        if (value.runtimeType == List<Weather>) {
-          di<WeatherModel>().weather = value;
-          logger.t('Fetched Weather');
-        }
-      });
+      WeatherApi.getWeatherData().then(
+        (value) {
+          if (value.runtimeType == List<Weather>) {
+            di<WeatherModel>().weather = value;
+            logger.t('Fetched Weather');
+          }
+        },
+      );
+
+      DeviceApi.getDeviceCamera().then(
+        (value) {
+          if (value.runtimeType == List<DeviceCamera>) {
+            di<DeviceCameraModel>().deviceCamera = value;
+            logger.t('Fetched Device Camera');
+          }
+        },
+      );
+
+      DeviceApi.getWeeklyCropChartData().then(
+        (value) {
+          if (value.runtimeType == CropChart) {
+            di<CropChartModel>().weeklyCropCharts = value;
+            logger.t('Fetched Weekly Crop Charts');
+          }
+        },
+      );
+
+      DeviceApi.getMonthlyCropChartData().then(
+        (value) {
+          if (value.runtimeType == CropChart) {
+            di<CropChartModel>().monthlyCropCharts = value;
+            logger.t('Fetched Monthly Crop Charts');
+          }
+        },
+      );
 
       if (!mounted) return;
       Navigator.pop(context);
