@@ -7,6 +7,7 @@ import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
+import 'package:cropsync/widgets/textfields.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -194,7 +195,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                     logger
                         .d('Image Frequency: ${selectedImageFrequency['id']}');
 
-                    // todo set on server
+                    // set on server
                     final response = await DeviceApi.setDeviceFrequency(
                       deviceId: device.deviceId!,
                       soilFrequency: selectedSoilFrequency['id'],
@@ -334,28 +335,44 @@ class _DevicesScreenState extends State<DevicesScreen> {
                             },
                           ),
                           ListTile(
-                              leading: const Icon(Bootstrap.database_fill_up),
-                              // leading: const Icon(Icons.cloud_upload_rounded),
-                              title: const Text(
-                                'Data Collection Frequency',
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      'Soil Data: ${getLabelForId(devices[index].soilFrequency!)}'),
-                                  Text(
-                                      'Images: ${getLabelForId(devices[index].imageFrequency!)}'),
-                                ],
-                              ),
-                              onTap: () {
-                                setFrequency(
-                                  context,
-                                  devices[index],
-                                  devices[index].soilFrequency!,
-                                  devices[index].imageFrequency!,
-                                );
-                              }),
+                            leading: const Icon(Bootstrap.database_fill_up),
+                            title: const Text(
+                              'Data Collection Frequency',
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    'Soil Data: ${getLabelForId(devices[index].soilFrequency!)}'),
+                                Text(
+                                    'Images: ${getLabelForId(devices[index].imageFrequency!)}'),
+                              ],
+                            ),
+                            onTap: () {
+                              setFrequency(
+                                context,
+                                devices[index],
+                                devices[index].soilFrequency!,
+                                devices[index].imageFrequency!,
+                              );
+                            },
+                          ),
+                          // ListTile(
+                          //   leading: const Icon(Icons.water_drop_rounded),
+                          //   title: const Text(
+                          //     'Water Crop',
+                          //   ),
+                          //
+                          //   // subtitle: Text(
+                          //   //     '${getLabelForId(devices[index].wateringFrequency!)}'),
+                          //   // onTap: () {
+                          //   //   setWateringFrequency(
+                          //   //     context,
+                          //   //     devices[index],
+                          //   //     devices[index].wateringFrequency!,
+                          //   //   );
+                          //   // },
+                          // ),
                           OverflowBar(
                             alignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[

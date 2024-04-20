@@ -85,6 +85,8 @@ dependencies:
   image: ^4.1.7
   gal: ^2.3.0
   quick_actions: ^1.0.7
+  onesignal_flutter: ^5.1.5
+  app_settings: ^5.1.1
 
 dev_dependencies:
   flutter_test:

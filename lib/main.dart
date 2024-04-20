@@ -6,6 +6,7 @@ import 'package:cropsync/models/crop_chart_model.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/image_model.dart';
+import 'package:cropsync/models/ip_cache_model.dart';
 import 'package:cropsync/models/latest_soil_data_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';
@@ -33,6 +34,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -42,6 +44,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load();
+
+  // OneSignal Initialization
+  OneSignal.Debug.setLogLevel(OSLogLevel.none);
+  OneSignal.initialize(dotenv.env['ONESIGNAL_APP_ID']!);
+  OneSignal.Notifications.requestPermission(true);
 
   await FlutterMapTileCaching.initialise();
   await FMTC.instance('mapStore').manage.createAsync();
@@ -220,4 +227,5 @@ void registerManagers() {
   di.registerSingleton<UserPrefs>(UserPrefs());
   di.registerSingleton<CropChartModel>(CropChartModel());
   di.registerSingleton<LatestSoilDataModel>(LatestSoilDataModel());
+  di.registerSingleton<IpCacheModel>(IpCacheModel());
 }

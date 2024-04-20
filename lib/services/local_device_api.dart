@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cropsync/main.dart';
+import 'package:cropsync/models/ip_cache_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:dio/dio.dart';
@@ -12,9 +13,11 @@ class LocalDeviceApi {
 
   static Future<String> getDeviceIp(String deviceCode) async {
     try {
-      // final addresses = await InternetAddress.lookup('cropsync-999');
-      // logger.i(addresses[0].address);
-      // return addresses[0].address;
+      // check if ip is cached, and if it is return it
+      final ipCache = di<IpCacheModel>().getIpCache(deviceCode);
+      if (ipCache != '') {
+        return ipCache;
+      }
 
       final discovery = await startDiscovery('_cropsync$deviceCode._tcp',
           ipLookupType: IpLookupType.v4);
@@ -22,8 +25,6 @@ class LocalDeviceApi {
       String ip = '';
 
       discovery.addListener(() {
-        // logger.i(utf8.decode(discovery.services.first.txt!['ip']!));
-        // ip = utf8.decode(discovery.services.first.txt!['ip']!);
         logger.i(discovery.services);
         ip = discovery.services.first.addresses!.first.address;
       });
@@ -40,6 +41,10 @@ class LocalDeviceApi {
       }
 
       discovery.dispose();
+
+      // cache the ip
+      di<IpCacheModel>().addIpCache(ip: ip, deviceId: deviceCode);
+
       return ip;
     } on SocketException catch (e) {
       logger.e(e);
@@ -130,7 +135,8 @@ class LocalDeviceApi {
     }
   }
 
-  static Future<dynamic> startStreaming(String deviceCode, String ip) async {
+  static Future<dynamic> startStreaming(
+      String deviceCode, String phoneIp) async {
     try {
       final ip = await getDeviceIp(deviceCode);
 
@@ -141,7 +147,7 @@ class LocalDeviceApi {
       await dio.post(
         'http://$ip:3000/start-streaming',
         data: {
-          "ip": ip,
+          "ip": phoneIp,
         },
       );
 
@@ -165,6 +171,31 @@ class LocalDeviceApi {
 
       await dio.post(
         'http://$ip:3000/stop-streaming',
+      );
+
+      return ReturnTypes.success;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+
+      logger.e(e.response?.data);
+
+      return ReturnTypes.fail;
+    }
+  }
+
+  static Future<dynamic> water(String deviceCode, int seconds) async {
+    try {
+      final ip = await getDeviceIp(deviceCode);
+
+      if (ip == '') {
+        return ReturnTypes.fail;
+      }
+
+      await dio.post(
+        'http://$ip:3000/water',
+        data: {
+          "seconds": seconds,
+        },
       );
 
       return ReturnTypes.success;

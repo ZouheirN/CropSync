@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:watch_it/watch_it.dart';
+import 'package:app_settings/app_settings.dart';
 
 class SettingsScreen extends WatchingStatefulWidget {
   const SettingsScreen({super.key});
@@ -93,7 +94,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final listItems = watchPropertyValue((UserPrefs u) => u.homeListItems);
-
     final startPage = watchPropertyValue((UserPrefs u) => u.startPage);
 
     return Scaffold(
@@ -147,6 +147,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
               itemCount: listItems.length,
             ),
+          ),
+          ListTile(
+            title: const Text('Open Notification Settings'),
+            onTap: () => AppSettings.openAppSettings(type: AppSettingsType.notification),
           ),
           const Gap(20),
           Text(

@@ -1,9 +1,11 @@
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/services/user_token.dart';
+import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:watch_it/watch_it.dart';
 
 class UserModel extends ChangeNotifier {
@@ -23,6 +25,7 @@ class UserModel extends ChangeNotifier {
     _user = user;
     userInfoBox.put('user', user);
     UserToken.setToken(user.token ?? "");
+    OneSignal.login(user.externalId ?? "");
     notifyListeners();
   }
 
@@ -38,6 +41,7 @@ class UserModel extends ChangeNotifier {
     di<OtherVars>().autoRefresh = false;
     di<OtherVars>().showBadge = false;
     UserToken.deleteToken();
+    OneSignal.logout();
     notifyListeners();
   }
 

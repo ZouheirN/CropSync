@@ -23,6 +23,8 @@ class User {
   String? email;
   @HiveField(6)
   bool? isVerified;
+  @HiveField(7)
+  String? externalId;
 
   User({
     this.token,
@@ -31,6 +33,7 @@ class User {
     this.fullName,
     this.email,
     this.isVerified,
+    this.externalId,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -42,6 +45,7 @@ class User {
         fullName: json["fullName"],
         email: json["email"],
         isVerified: json["isVerified"],
+    externalId: json["externalId"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -50,5 +54,6 @@ class User {
         "fullName": fullName,
         "email": email,
         "isVerified": isVerified,
+        "externalId": externalId,
       };
 }

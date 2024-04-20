@@ -189,8 +189,8 @@ class Dialogs {
                           return;
                         } else if (response == ReturnTypes.error) {
                           if (!context.mounted) return;
-                          showErrorDialog('Error',
-                              'An error occurred, try again', context);
+                          showErrorDialog(
+                              'Error', 'An error occurred, try again', context);
                           return;
                         }
 
@@ -210,5 +210,70 @@ class Dialogs {
         ),
       ),
     );
+  }
+
+  static Future<int> showWaterDialog(BuildContext context) async {
+    final formKey = GlobalKey<FormState>();
+
+    Completer<int> completer = Completer<int>();
+
+    int selectedSeconds = 1;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Water Crop', textAlign: TextAlign.center),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Select the amount of water to dispense"),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 150, // Adjust height as needed
+                child: ListWheelScrollView(
+                  itemExtent: 42,
+                  useMagnifier: true,
+                  magnification: 1.5,
+                  physics: const BouncingScrollPhysics(),
+                  children: List.generate(
+                    16, // Generate numbers from 0 to 60
+                    (index) => Center(child: Text('${(index + 1) * 30}ml')),
+                  ),
+                  onSelectedItemChanged: (index) {
+                    selectedSeconds = index + 1;
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  DialogButton(
+                    text: 'Cancel',
+                    color: Colors.red,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      completer.complete(-1);
+                    },
+                  ),
+                  DialogButton(
+                    text: 'Water',
+                    color: Colors.green,
+                    onPressed: () async {
+                      completer.complete(selectedSeconds);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+
+    return completer.future;
   }
 }

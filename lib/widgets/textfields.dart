@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PrimaryTextField extends StatefulWidget {
   final TextEditingController? textController;
@@ -12,6 +13,7 @@ class PrimaryTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final Function()? onEditingComplete;
   final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
 
   const PrimaryTextField({
     super.key,
@@ -24,7 +26,9 @@ class PrimaryTextField extends StatefulWidget {
     this.suffixIcon,
     this.autofillHints,
     this.textInputAction,
-    this.onEditingComplete, this.keyboardType,
+    this.onEditingComplete,
+    this.keyboardType,
+    this.inputFormatters,
   });
 
   @override
@@ -59,6 +63,7 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
       autofillHints: widget.autofillHints,
       textInputAction: widget.textInputAction,
       onEditingComplete: widget.onEditingComplete,
+      inputFormatters: widget.inputFormatters,
     );
   }
 }

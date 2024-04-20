@@ -7,11 +7,13 @@ import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/latest_soil_data_model.dart';
 import 'package:cropsync/services/device_api.dart';
+import 'package:cropsync/services/local_device_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/cards.dart';
 import 'package:cropsync/widgets/dialogs.dart';
+import 'package:cropsync/widgets/textfields.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -506,19 +508,20 @@ class _CropsScreenState extends State<CropsScreen> {
                           Dialogs.showLoadingDialog(
                               'Getting Recommendation...', context);
 
-                          final response = await DeviceApi.getCropRecommendation(
-                              deviceId: devices[index].deviceId!);
+                          final response =
+                              await DeviceApi.getCropRecommendation(
+                                  deviceId: devices[index].deviceId!);
 
                           if (!mounted) return;
                           if (response == ReturnTypes.fail) {
                             Navigator.pop(context);
-                            Dialogs.showErrorDialog(
-                                'Error', 'An error occurred, try again', context);
+                            Dialogs.showErrorDialog('Error',
+                                'An error occurred, try again', context);
                             return;
                           } else if (response == ReturnTypes.error) {
                             Navigator.pop(context);
-                            Dialogs.showErrorDialog(
-                                'Error', 'An error occurred, try again', context);
+                            Dialogs.showErrorDialog('Error',
+                                'An error occurred, try again', context);
                             return;
                           } else if (response == ReturnTypes.invalidToken) {
                             Navigator.pop(context);
@@ -543,22 +546,62 @@ class _CropsScreenState extends State<CropsScreen> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          Dialogs.showInformationDialog(
-                              'Information',
-                              'Nitrogen is used for plant growth and good green color.\nPhosphorus is used for root growth and flower and fruit development.\nPotassium is used for strong stem growth and movement of water in plants and food production.\nTemperature is the degree of hotness or coldness of a body or environment.\npH is a measure of how acidic/basic water is.\nMoisture is the presence of water in the soil.',
-                              context);
+                        onPressed: () async {
+                          // get input from user for seconds
+                          final seconds =
+                              await Dialogs.showWaterDialog(context);
+
+                          if (seconds == -1) return;
+
+                          logger.t('Watering for $seconds seconds');
+
+                          final response = await LocalDeviceApi.water(
+                              devices[index].code!, seconds);
+
+                          if (!mounted) return;
+                          if (response == ReturnTypes.success) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'Watering has started for ${seconds}s'),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'An error occurred, could not connect to device'),
+                              ),
+                            );
+                          }
                         },
                         child: const Column(
                           children: <Widget>[
-                            Icon(Icons.info_rounded),
+                            Icon(Icons.water_drop_rounded),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 2.0),
                             ),
-                            Text('Info'),
+                            Text('Water'),
                           ],
                         ),
                       ),
+                      // TextButton(
+                      //   onPressed: () {
+                      //     Dialogs.showInformationDialog(
+                      //         'Information',
+                      //         'Nitrogen is used for plant growth and good green color.\nPhosphorus is used for root growth and flower and fruit development.\nPotassium is used for strong stem growth and movement of water in plants and food production.\nTemperature is the degree of hotness or coldness of a body or environment.\npH is a measure of how acidic/basic water is.\nMoisture is the presence of water in the soil.',
+                      //         context);
+                      //   },
+                      //   child: const Column(
+                      //     children: <Widget>[
+                      //       Icon(Icons.info_rounded),
+                      //       Padding(
+                      //         padding: EdgeInsets.symmetric(vertical: 2.0),
+                      //       ),
+                      //       Text('Info'),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   )
                 ],

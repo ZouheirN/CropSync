@@ -57,22 +57,37 @@ class ResnetModelHelper {
     isolateInterpreter =
         await IsolateInterpreter.create(address: interpreter!.address);
 
-    // var input = base64ImageToTensor(base64image);
     var input = preprocessInput(base64image);
 
-    var output = List.filled(1 * 2, 0).reshape([1, 2]);
+    var output = List.filled(1 * 5, 0).reshape([1, 5]);
 
-    List<String> classLabels = ['diseased', 'healthy'];
+    List<String> classLabels = [
+      'Bacterial Spot',
+      'Early Blight',
+      'Healthy',
+      'Late Blight',
+      'Powdery Mildew'
+    ];
 
     await Future.delayed(
         const Duration(seconds: 1)); // bug from package, this is the fix
     await isolateInterpreter.run(input, output);
 
-    // Get the predicted class index
-    int predictedClassIndex = output[0][0] > output[0][1] ? 0 : 1;
+    // Extracting the inner list from the output
+    List<double> innerList = output[0];
 
-    // Get the predicted class label
-    String predictedClassLabel = classLabels[predictedClassIndex];
+    // Find the index of the maximum value in the inner list
+    int maxIndex = 0;
+    double maxValue = innerList[0];
+    for (int i = 1; i < innerList.length; i++) {
+      if (innerList[i] > maxValue) {
+        maxValue = innerList[i];
+        maxIndex = i;
+      }
+    }
+
+    // Retrieve the corresponding class label
+    String predictedClassLabel = classLabels[maxIndex];
 
     logger.i("$output\nPredicted class: $predictedClassLabel");
 
@@ -81,7 +96,7 @@ class ResnetModelHelper {
 
     final results = {
       'prediction': predictedClassLabel,
-      'confidence': output[0][predictedClassIndex] * 100,
+      'confidence': output[0][maxIndex] * 100,
     };
 
     di<ImageModel>().setResult(
@@ -94,7 +109,7 @@ class ResnetModelHelper {
     );
   }
 
-  List<List<List<List<double>>>> preprocessInput(String base64Image) {
+  List preprocessInput(String base64Image) {
     img.Image image = img.decodeImage(base64.decode(base64Image))!;
 
     image = img.copyResize(
@@ -116,6 +131,9 @@ class ResnetModelHelper {
       });
     });
 
+    // print first pixels
+    logger.i(input[0][0]);
+
     // convert rgb to bgr
     for (var i = 0; i < input.length; i++) {
       for (var j = 0; j < input[i].length; j++) {
@@ -135,7 +153,11 @@ class ResnetModelHelper {
       }
     }
 
-    return [input];
+    // print first pixels
+    logger.i("First Pixels after normalization: ${input[0][0]}");
+
+    // return as [1, 224, 224, 3]
+    return input.reshape([1, 224, 224, 3]);
   }
 
   double truncateToDecimalPlaces(num value, int fractionalDigits) =>

@@ -160,12 +160,12 @@ class _MainScreenState extends State<MainScreen> {
     quickActions.setShortcutItems([
       const ShortcutItem(
         type: 'camera',
-        localizedTitle: 'Open Camera',
+        localizedTitle: 'Camera',
         icon: 'icon_camera',
       ),
       const ShortcutItem(
         type: 'gemeni-camera',
-        localizedTitle: 'Open Camera with Gemeni AI',
+        localizedTitle: 'Camera (Gemeni AI)',
         icon: 'icon_gemeni',
       ),
     ]);
