@@ -239,7 +239,7 @@ class Dialogs {
                   physics: const BouncingScrollPhysics(),
                   children: List.generate(
                     16, // Generate numbers from 0 to 60
-                    (index) => Center(child: Text('${(index + 1) * 30}ml')),
+                    (index) => Center(child: Text('${(index + 1) * 30}ml (${index + 1}s)')),
                   ),
                   onSelectedItemChanged: (index) {
                     selectedSeconds = index + 1;

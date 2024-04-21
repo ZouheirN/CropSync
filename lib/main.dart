@@ -227,5 +227,4 @@ void registerManagers() {
   di.registerSingleton<UserPrefs>(UserPrefs());
   di.registerSingleton<CropChartModel>(CropChartModel());
   di.registerSingleton<LatestSoilDataModel>(LatestSoilDataModel());
-  di.registerSingleton<IpCacheModel>(IpCacheModel());
 }

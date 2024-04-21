@@ -37,6 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
       PageController(viewportFraction: 0.8, keepPage: true);
 
   String token = '';
+  bool isWeatherRefreshing = false;
+  bool isAlertsRefreshing = false;
+  bool isDeviceCameraRefreshing = false;
+  bool isStatisticsRefreshing = false;
 
   Future refresh() async {
     final devices = await DeviceApi.getDevices();
@@ -228,18 +232,46 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Weather',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              Icon(
-                Icons.wb_cloudy_rounded,
-                color: Colors.blue,
+              SizedBox(
+                width:35,
+                height: 35,
+                child: IconButton(
+                  icon: isWeatherRefreshing
+                      ? const CircularProgressIndicator(
+                          color: Colors.blue,
+                        )
+                      : const Icon(Icons.wb_cloudy_rounded),
+                  color: Colors.blue,
+                  onPressed: () {
+                    if (isWeatherRefreshing) return;
+
+                    setState(() {
+                      isWeatherRefreshing = true;
+                    });
+
+                    WeatherApi.getWeatherData().then(
+                      (weatherData) {
+                        if (weatherData.runtimeType == List<Weather>) {
+                          di<WeatherModel>().weather = weatherData;
+                          logger.t('Fetched Weather by Refresh');
+                        }
+
+                        setState(() {
+                          isWeatherRefreshing = false;
+                        });
+                      },
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -316,16 +348,53 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Alerts',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              Icon(
-                Icons.notifications_rounded,
-                color: Colors.red,
+              SizedBox(
+                width: 35,
+                height: 35,
+                child: IconButton(
+                  icon: isAlertsRefreshing
+                      ? const CircularProgressIndicator(
+                          color: Colors.red,
+                        )
+                      : const Icon(Icons.notifications_rounded),
+                  color: Colors.red,
+                  onPressed: () {
+                    if (isAlertsRefreshing) return;
+
+                    setState(() {
+                      isAlertsRefreshing = true;
+                    });
+
+                    WeatherApi.getWeatherData().then(
+                      (weatherData) {
+                        if (weatherData.runtimeType == List<Weather>) {
+                          di<WeatherModel>().weather = weatherData;
+                          logger.t('Fetched Weather by Refresh');
+                        }
+
+                        DeviceApi.getDevices().then(
+                          (devices) {
+                            if (devices.runtimeType == List<Device>) {
+                              di<DevicesModel>().devices = devices;
+                              logger.t('Fetched Devices by Refresh');
+                            }
+                          },
+                        );
+
+                        setState(() {
+                          isAlertsRefreshing = false;
+                        });
+                      },
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -354,18 +423,46 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Device Camera',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              Icon(
-                Icons.camera_alt_rounded,
-                color: Colors.green,
+              SizedBox(
+                width: 35,
+                height: 35,
+                child: IconButton(
+                  icon: isDeviceCameraRefreshing
+                      ? const CircularProgressIndicator(
+                    color: Colors.green,
+                  )
+                      : const Icon(Icons.camera_alt_rounded),
+                  color: Colors.green,
+                  onPressed: () {
+                    if (isDeviceCameraRefreshing) return;
+
+                    setState(() {
+                      isDeviceCameraRefreshing = true;
+                    });
+
+                    DeviceApi.getDeviceCamera().then(
+                      (deviceCameraData) {
+                        if (deviceCameraData.runtimeType == List<DeviceCamera>) {
+                          di<DeviceCameraModel>().deviceCamera = deviceCameraData;
+                          logger.t('Fetched Device Camera by Refresh');
+                        }
+
+                        setState(() {
+                          isDeviceCameraRefreshing = false;
+                        });
+                      },
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -417,18 +514,55 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Statistics',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              Icon(
-                Icons.bar_chart_rounded,
-                color: Colors.orange,
+              SizedBox(
+                width: 35,
+                height: 35,
+                child: IconButton(
+                  icon: isStatisticsRefreshing
+                      ? const CircularProgressIndicator(
+                    color: Colors.orange,
+                  )
+                      : const Icon(Icons.bar_chart_rounded),
+                  color: Colors.orange,
+                  onPressed: () {
+                    if (isStatisticsRefreshing) return;
+
+                    setState(() {
+                      isStatisticsRefreshing = true;
+                    });
+
+                    DeviceApi.getWeeklyCropChartData().then(
+                          (weeklyCropCharts) {
+                        if (weeklyCropCharts.runtimeType == CropChart) {
+                          di<CropChartModel>().weeklyCropCharts = weeklyCropCharts;
+                          logger.t('Fetched Weekly Crop Charts by Refresh');
+                        }
+
+                        DeviceApi.getMonthlyCropChartData().then(
+                              (monthlyCropCharts) {
+                            if (monthlyCropCharts.runtimeType == CropChart) {
+                              di<CropChartModel>().monthlyCropCharts = monthlyCropCharts;
+                              logger.t('Fetched Monthly Crop Charts by Refresh');
+                            }
+
+                            setState(() {
+                              isStatisticsRefreshing = false;
+                            });
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ],
           ),

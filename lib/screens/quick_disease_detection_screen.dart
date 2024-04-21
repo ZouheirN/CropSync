@@ -187,7 +187,6 @@ class _QuickDiseaseDetectionScreenState
                                     onPressed: () =>
                                         ResnetModelHelper().loadModel(context),
                                   ),
-                                  buildSwitch(),
                                 ],
                               ),
                               Positioned(

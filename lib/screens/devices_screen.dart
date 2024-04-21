@@ -238,10 +238,16 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
                     if (!context.mounted) return;
                     Navigator.pop(context);
-                    Dialogs.showSuccessDialog(
-                        'Success',
-                        'Frequencies have been set for ${device.name}!',
-                        context);
+                    // Dialogs.showSuccessDialog(
+                    //     'Success',
+                    //     'Frequencies have been set for ${device.name}!',
+                    //     context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                            'Frequencies have been set for ${device.name}'),
+                      ),
+                    );
                   },
                   icon: Icons.save_rounded,
                   text: 'Set Frequencies',

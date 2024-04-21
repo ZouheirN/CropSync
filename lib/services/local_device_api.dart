@@ -8,15 +8,19 @@ import 'package:dio/dio.dart';
 import 'package:nsd/nsd.dart';
 import 'package:watch_it/watch_it.dart';
 
+final ipCaches = IpCacheModel();
+
 class LocalDeviceApi {
   static final dio = Dio();
 
-  static Future<String> getDeviceIp(String deviceCode) async {
+  static Future<String> getDeviceIp(String deviceCode, {bool forceNewFetch = false}) async {
     try {
-      // check if ip is cached, and if it is return it
-      final ipCache = di<IpCacheModel>().getIpCache(deviceCode);
-      if (ipCache != '') {
-        return ipCache;
+      if (forceNewFetch == false) {
+        // check if ip is cached, and if it is return it
+        final ipCache = ipCaches.getIpCache(deviceCode);
+        if (ipCache != '') {
+          return ipCache;
+        }
       }
 
       final discovery = await startDiscovery('_cropsync$deviceCode._tcp',
@@ -43,7 +47,7 @@ class LocalDeviceApi {
       discovery.dispose();
 
       // cache the ip
-      di<IpCacheModel>().addIpCache(ip: ip, deviceId: deviceCode);
+      ipCaches.addIpCache(ip: ip, deviceId: deviceCode);
 
       return ip;
     } on SocketException catch (e) {
@@ -101,6 +105,8 @@ class LocalDeviceApi {
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
 
+      getDeviceIp(deviceCode, forceNewFetch: true);
+
       if (e.response?.statusCode == 404) {
         return ReturnTypes.hasNotBeenConfigured;
       } else if (e.response?.statusCode == 500) {
@@ -129,6 +135,8 @@ class LocalDeviceApi {
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
 
+      getDeviceIp(deviceCode, forceNewFetch: true);
+
       logger.e(e.response?.data);
 
       return ReturnTypes.fail;
@@ -155,6 +163,8 @@ class LocalDeviceApi {
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
 
+      getDeviceIp(deviceCode, forceNewFetch: true);
+
       logger.e(e.response?.data);
 
       return ReturnTypes.fail;
@@ -176,6 +186,8 @@ class LocalDeviceApi {
       return ReturnTypes.success;
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
+
+      getDeviceIp(deviceCode, forceNewFetch: true);
 
       logger.e(e.response?.data);
 
@@ -201,6 +213,8 @@ class LocalDeviceApi {
       return ReturnTypes.success;
     } on DioException catch (e) {
       if (e.response == null) return ReturnTypes.error;
+
+      getDeviceIp(deviceCode, forceNewFetch: true);
 
       logger.e(e.response?.data);
 

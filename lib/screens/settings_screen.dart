@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:watch_it/watch_it.dart';
-import 'package:app_settings/app_settings.dart';
 
 class SettingsScreen extends WatchingStatefulWidget {
   const SettingsScreen({super.key});
@@ -148,15 +148,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               itemCount: listItems.length,
             ),
           ),
-          ListTile(
-            title: const Text('Open Notification Settings'),
-            onTap: () => AppSettings.openAppSettings(type: AppSettingsType.notification),
-          ),
-          const Gap(20),
-          Text(
-            'Personalization',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          // const Gap(20),
+          // Text(
+          //   'Personalization',
+          //   style: Theme.of(context).textTheme.titleLarge,
+          // ),
           SwitchListTile(
             title: const Text('Dark Mode'),
             value: MyApp.themeNotifier.value == ThemeMode.dark,
@@ -168,6 +164,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     value ? ThemeMode.dark : ThemeMode.light;
               });
             },
+          ),
+          ListTile(
+            title: const Text('Open Notification Settings'),
+            onTap: () =>
+                AppSettings.openAppSettings(type: AppSettingsType.notification),
           ),
           const Gap(20),
           Text(
