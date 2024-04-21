@@ -45,7 +45,7 @@ class User {
         fullName: json["fullName"],
         email: json["email"],
         isVerified: json["isVerified"],
-    externalId: json["externalId"],
+        externalId: json["externalId"],
       );
 
   Map<String, dynamic> toJson() => {

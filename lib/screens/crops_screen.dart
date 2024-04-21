@@ -116,7 +116,7 @@ class _CropsScreenState extends State<CropsScreen> {
           centerTitle: false,
         ),
         body: Padding(
-          padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: AnimationLimiter(
             child: RefreshIndicator(
               onRefresh: refresh,

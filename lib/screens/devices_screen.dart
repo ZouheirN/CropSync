@@ -7,7 +7,6 @@ import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/dialogs.dart';
-import 'package:cropsync/widgets/textfields.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -278,7 +277,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: AnimationLimiter(
           child: RefreshIndicator(
             onRefresh: refresh,

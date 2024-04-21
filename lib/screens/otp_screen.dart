@@ -77,8 +77,8 @@ class _OTPScreenState extends State<OTPScreen> {
       }
 
       di<UserModel>().user = otpResult;
-      if (!context.mounted) return;
       di<OtherVars>().autoRefresh = true;
+      if (!context.mounted) return;
       Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
     }
   }

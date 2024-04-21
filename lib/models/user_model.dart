@@ -1,6 +1,5 @@
 import 'package:cropsync/json/user.dart';
 import 'package:cropsync/services/user_token.dart';
-import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +24,7 @@ class UserModel extends ChangeNotifier {
     _user = user;
     userInfoBox.put('user', user);
     UserToken.setToken(user.token ?? "");
-    OneSignal.login(user.externalId ?? "");
+    OneSignal.login(user.externalId!);
     notifyListeners();
   }
 
