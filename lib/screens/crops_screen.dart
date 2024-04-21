@@ -13,7 +13,6 @@ import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/cards.dart';
 import 'package:cropsync/widgets/dialogs.dart';
-import 'package:cropsync/widgets/textfields.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -30,6 +29,8 @@ class CropsScreen extends WatchingStatefulWidget {
 class _CropsScreenState extends State<CropsScreen> {
   Timer? timer;
 
+  Map<String, bool> isLoading = {};
+
   Future refresh() async {
     final devices = await DeviceApi.getDevices();
     if (devices.runtimeType == List<Device>) {
@@ -45,6 +46,11 @@ class _CropsScreenState extends State<CropsScreen> {
     // get each device id in a list
     final deviceIds =
         di<DevicesModel>().devices.map((e) => e.deviceId).toList();
+
+    // create an isLoading for each device
+    for (var deviceId in deviceIds) {
+      isLoading[deviceId!] = false;
+    }
 
     // get the latest soil data for each device
     for (var deviceId in deviceIds) {
@@ -191,9 +197,7 @@ class _CropsScreenState extends State<CropsScreen> {
                     child: const Column(
                       children: <Widget>[
                         Icon(Icons.grass_rounded),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 2.0),
-                        ),
+                        Gap(2),
                         Text('Assign Crop'),
                       ],
                     ),
@@ -232,9 +236,7 @@ class _CropsScreenState extends State<CropsScreen> {
                     child: const Column(
                       children: <Widget>[
                         Icon(Icons.recommend_rounded),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 2.0),
-                        ),
+                        Gap(2),
                         Text('Recommend Crop'),
                       ],
                     ),
@@ -267,10 +269,11 @@ class _CropsScreenState extends State<CropsScreen> {
                       child: Image.asset(
                         'assets/icon/warning.png',
                         color: devices[index].crop.status == 'Healthy'
-                            ? Colors.green : Colors.red,
-                            // : MyApp.themeNotifier.value == ThemeMode.light
-                            //     ? const Color(0xFF3F4642)
-                            //     : const Color(0xFFBEC6BF),
+                            ? Colors.green
+                            : Colors.red,
+                        // : MyApp.themeNotifier.value == ThemeMode.light
+                        //     ? const Color(0xFF3F4642)
+                        //     : const Color(0xFFBEC6BF),
                       ),
                     ),
                   ),
@@ -493,14 +496,16 @@ class _CropsScreenState extends State<CropsScreen> {
                             'device': devices[index],
                           });
                         },
-                        child: const Column(
-                          children: <Widget>[
-                            Icon(Icons.edit_rounded),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 2.0),
-                            ),
-                            Text('Edit'),
-                          ],
+                        child: const SizedBox(
+                          height: 50,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Icon(Icons.edit_rounded),
+                              Gap(2),
+                              Text('Edit'),
+                            ],
+                          ),
                         ),
                       ),
                       TextButton(
@@ -535,23 +540,33 @@ class _CropsScreenState extends State<CropsScreen> {
                               response[0].toUpperCase() + response.substring(1),
                               context);
                         },
-                        child: const Column(
-                          children: <Widget>[
-                            Icon(Icons.recommend_rounded),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 2.0),
-                            ),
-                            Text('Recommend Crop'),
-                          ],
+                        child: const SizedBox(
+                          height: 50,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Icon(Icons.recommend_rounded),
+                              Gap(2),
+                              Text('Recommend Crop'),
+                            ],
+                          ),
                         ),
                       ),
                       TextButton(
                         onPressed: () async {
+                          if (isLoading[devices[index].deviceId!] == true) {
+                            return;
+                          }
+
                           // get input from user for seconds
                           final seconds =
                               await Dialogs.showWaterDialog(context);
 
                           if (seconds == -1) return;
+
+                          setState(() {
+                            isLoading[devices[index].deviceId!] = true;
+                          });
 
                           logger.t('Watering for $seconds seconds');
 
@@ -574,15 +589,28 @@ class _CropsScreenState extends State<CropsScreen> {
                               ),
                             );
                           }
+
+                          setState(() {
+                            isLoading[devices[index].deviceId!] = false;
+                          });
                         },
-                        child: const Column(
-                          children: <Widget>[
-                            Icon(Icons.water_drop_rounded),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 2.0),
-                            ),
-                            Text('Water'),
-                          ],
+                        child: SizedBox(
+                          height: 50,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              if (isLoading[devices[index].deviceId!] == true)
+                                const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(),
+                                )
+                              else
+                                const Icon(Icons.water_drop_rounded),
+                              const Gap(2),
+                              const Text('Water'),
+                            ],
+                          ),
                         ),
                       ),
                       // TextButton(

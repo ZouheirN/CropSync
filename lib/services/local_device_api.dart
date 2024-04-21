@@ -38,7 +38,7 @@ class LocalDeviceApi {
       while (discovery.services.isEmpty) {
         await Future.delayed(const Duration(milliseconds: 200));
         timeout++;
-        if (timeout > 50) {
+        if (timeout > 75) {
           discovery.dispose();
           return '';
         }
