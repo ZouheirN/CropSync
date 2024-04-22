@@ -26,16 +26,16 @@ class WeatherCard extends StatelessWidget {
     return InkWell(
       onTap: isTappable
           ? () {
-        Navigator.pushNamed(
-          context,
-          '/weather-forecast',
-          arguments: {
-            'deviceId': weather.deviceId,
-            'deviceName': weather.name,
-            'deviceLocation': weather.location,
-          },
-        );
-      }
+              Navigator.pushNamed(
+                context,
+                '/weather-forecast',
+                arguments: {
+                  'deviceId': weather.deviceId,
+                  'deviceName': weather.name,
+                  'deviceLocation': weather.location,
+                },
+              );
+            }
           : null,
       borderRadius: BorderRadius.circular(16),
       child: Card(
@@ -61,10 +61,7 @@ class WeatherCard extends StatelessWidget {
                       textAlign: TextAlign.center,
                       weather.name!,
                       maxLines: 1,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleMedium!,
+                      style: Theme.of(context).textTheme.titleMedium!,
                     ),
                   ),
                 ],
@@ -83,10 +80,7 @@ class WeatherCard extends StatelessWidget {
                             textAlign: TextAlign.left,
                             weather.location!,
                             maxLines: 1,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleMedium!,
+                            style: Theme.of(context).textTheme.titleMedium!,
                           ),
                         ),
                       ],
@@ -102,17 +96,8 @@ class WeatherCard extends StatelessWidget {
                           child: AutoSizeText(
                             textAlign: TextAlign.left,
                             maxLines: 1,
-                            '${DateTime
-                                .now()
-                                .day}/${DateTime
-                                .now()
-                                .month}/${DateTime
-                                .now()
-                                .year}',
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleMedium!,
+                            '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+                            style: Theme.of(context).textTheme.titleMedium!,
                           ),
                         ),
                       ],
@@ -134,9 +119,9 @@ class WeatherCard extends StatelessWidget {
                           imageUrl: 'https:${weather.condition!.icon!}',
                           progressIndicatorBuilder:
                               (context, url, downloadProgress) =>
-                              CircularProgressIndicator(
-                                value: downloadProgress.progress,
-                              ),
+                                  CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                          ),
                           imageBuilder: (context, imageProvider) {
                             return Container(
                               width: 100.0,
@@ -153,10 +138,7 @@ class WeatherCard extends StatelessWidget {
                         Flexible(
                           child: AutoSizeText(
                             weather.condition!.text!,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleLarge,
+                            style: Theme.of(context).textTheme.titleLarge,
                             maxFontSize: 16,
                             textAlign: TextAlign.center,
                           ),
@@ -172,24 +154,22 @@ class WeatherCard extends StatelessWidget {
                         children: [
                           Text(
                             '${formatFloat(weather.tempC!)}°',
-                            style: Theme
-                                .of(context)
+                            style: Theme.of(context)
                                 .textTheme
                                 .titleLarge
                                 ?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 70,
-                            ),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 70,
+                                ),
                           ),
                           Text(
                             'Feels like ${formatFloat(weather.feelslikeC!)}°',
-                            style: Theme
-                                .of(context)
+                            style: Theme.of(context)
                                 .textTheme
                                 .titleLarge
                                 ?.copyWith(
-                              fontSize: 18,
-                            ),
+                                  fontSize: 18,
+                                ),
                           ),
                         ],
                       ),
@@ -269,10 +249,7 @@ class WeatherForecastCard extends StatelessWidget {
                 const Gap(8),
                 Text(
                   convertDateFormat(weather.date.toString().substring(0, 10)),
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleMedium!,
+                  style: Theme.of(context).textTheme.titleMedium!,
                 ),
               ],
             ),
@@ -289,9 +266,9 @@ class WeatherForecastCard extends StatelessWidget {
                         imageUrl: 'https:${weather.condition!.icon!}',
                         progressIndicatorBuilder:
                             (context, url, downloadProgress) =>
-                            CircularProgressIndicator(
-                              value: downloadProgress.progress,
-                            ),
+                                CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                        ),
                         imageBuilder: (context, imageProvider) {
                           return Container(
                             width: 100.0,
@@ -308,10 +285,7 @@ class WeatherForecastCard extends StatelessWidget {
                       Flexible(
                         child: AutoSizeText(
                           weather.condition!.text!,
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleLarge,
+                          style: Theme.of(context).textTheme.titleLarge,
                           maxFontSize: 16,
                           textAlign: TextAlign.center,
                         ),
@@ -327,14 +301,10 @@ class WeatherForecastCard extends StatelessWidget {
                         Text(
                           '${formatFloat(weather.avgtempC!)}°',
                           style:
-                          Theme
-                              .of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 70,
-                          ),
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 70,
+                                  ),
                           textAlign: TextAlign.right,
                         ),
                       ],
@@ -427,10 +397,7 @@ class DeviceCameraCard extends StatelessWidget {
                       child: Center(
                         child: Text(
                           'No Image Available',
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleMedium,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
                     )
@@ -455,10 +422,10 @@ class DeviceCameraCard extends StatelessWidget {
                       },
                       progressIndicatorBuilder: (context, url, progress) =>
                           Center(
-                            child: CircularProgressIndicator(
-                              value: progress.progress,
-                            ),
-                          ),
+                        child: CircularProgressIndicator(
+                          value: progress.progress,
+                        ),
+                      ),
                       httpHeaders: {
                         "Authorization": "Bearer $token",
                       },
@@ -472,9 +439,7 @@ class DeviceCameraCard extends StatelessWidget {
                         width: double.infinity,
                         color: Colors.black54,
                         child: Text(
-                          'Snapshot Time: ${convertDateFormat(deviceCamera
-                              .cameraCollectionDate.toString(),
-                              withTime: true)}',
+                          'Snapshot Time: ${convertDateFormat(deviceCamera.cameraCollectionDate.toString(), withTime: true)}',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -502,10 +467,7 @@ class DeviceCameraCard extends StatelessWidget {
                       textAlign: TextAlign.left,
                       deviceCamera.name!,
                       maxLines: 1,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleMedium!,
+                      style: Theme.of(context).textTheme.titleMedium!,
                       minFontSize: 10,
                     ),
                   ),
@@ -527,10 +489,7 @@ class DeviceCameraCard extends StatelessWidget {
                       textAlign: TextAlign.left,
                       deviceCamera.location!,
                       maxLines: 1,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleMedium!,
+                      style: Theme.of(context).textTheme.titleMedium!,
                       minFontSize: 10,
                     ),
                   ),
@@ -545,23 +504,19 @@ class DeviceCameraCard extends StatelessWidget {
                     color: deviceCamera.cropName == null
                         ? Colors.red
                         : MyApp.themeNotifier.value == ThemeMode.light
-                        ? Colors.black
-                        : Colors.white,
+                            ? Colors.black
+                            : Colors.white,
                   ),
                   Flexible(
                     child: AutoSizeText(
                       textAlign: TextAlign.center,
                       deviceCamera.cropName ?? 'Unassigned Crop',
                       maxLines: 2,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleSmall!
-                          .copyWith(
-                        color: deviceCamera.cropName == null
-                            ? Colors.red
-                            : null,
-                      ),
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                            color: deviceCamera.cropName == null
+                                ? Colors.red
+                                : null,
+                          ),
                       minFontSize: 10,
                     ),
                   ),
@@ -592,8 +547,7 @@ String convertDateFormat(String dateString, {bool withTime = false}) {
     int hour = dateTime.hour;
     int minute = dateTime.minute;
     formattedDate +=
-    ' - ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(
-        2, '0')}';
+        ' - ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
 
   return formattedDate;
@@ -605,7 +559,7 @@ String formatFloat(double number) {
     return number.toInt().toString(); // Return integer part as string
   } else {
     String formatted =
-    number.toStringAsFixed(2); // Return number with 2 decimal places
+        number.toStringAsFixed(2); // Return number with 2 decimal places
     if (formatted.contains('.')) {
       formatted = formatted.replaceAll(RegExp(r"([.]*0)(?!.*\d)"),
           ""); // Remove trailing zeros after decimal point
@@ -696,10 +650,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                     textAlign: TextAlign.center,
                     widget.deviceName,
                     maxLines: 1,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleMedium!,
+                    style: Theme.of(context).textTheme.titleMedium!,
                   ),
                 ),
               ],
@@ -718,10 +669,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                           textAlign: TextAlign.left,
                           widget.location,
                           maxLines: 1,
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleMedium!,
+                          style: Theme.of(context).textTheme.titleMedium!,
                         ),
                       ),
                     ],
@@ -731,22 +679,22 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Icon(Icons.grass_rounded, color: widget.cropName == "Unassigned Crop" ? Colors.red : null),
+                      Icon(Icons.grass_rounded,
+                          color: widget.cropName == "Unassigned Crop"
+                              ? Colors.red
+                              : null),
                       const Gap(8),
                       Flexible(
                         child: AutoSizeText(
                           textAlign: TextAlign.left,
                           maxLines: 1,
                           widget.cropName,
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
-                            color: widget.cropName == 'Unassigned Crop'
-                                ? Colors.red
-                                : null,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    color: widget.cropName == 'Unassigned Crop'
+                                        ? Colors.red
+                                        : null,
+                                  ),
                         ),
                       ),
                     ],
@@ -757,10 +705,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
             const Gap(2),
             Text(
               'Recent Soil Readings',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .titleLarge!,
+              style: Theme.of(context).textTheme.titleLarge!,
             ),
             SizedBox(
               height: 340,
@@ -786,10 +731,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                         Center(
                           child: Text(
                             'No Data Available',
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleMedium,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         )
                       else
@@ -806,10 +748,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                         Center(
                           child: Text(
                             'No Data Available',
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleMedium,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         )
                       else
@@ -942,22 +881,32 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
               showTitles: true,
               reservedSize: 38,
               getTitlesWidget: (value, meta) {
-                if (selected.length == 1 ||
-                    value == meta.max ||
-                    value == meta.min) {
-                  if (selected.length == 1) {
-                    return Text(
-                      value.toStringAsFixed(2),
-                      style: TextStyle(
-                        color: MyApp.themeNotifier.value == ThemeMode.light
-                            ? Colors.black
-                            : Colors.white,
-                        fontSize: 12,
-                      ),
-                    );
-                  } else {
-                    return const Text('');
-                  }
+                if (selected.length == 1) {
+                  return Text(
+                    value.toStringAsFixed(2),
+                    style: TextStyle(
+                      color: MyApp.themeNotifier.value == ThemeMode.light
+                          ? Colors.black
+                          : Colors.white,
+                      fontSize: 12,
+                    ),
+                  );
+                }
+
+                if (value == meta.max && value == meta.min) {
+                  return Text(
+                    value.toStringAsFixed(2),
+                    style: TextStyle(
+                      color: MyApp.themeNotifier.value == ThemeMode.light
+                          ? Colors.black
+                          : Colors.white,
+                      fontSize: 12,
+                    ),
+                  );
+                }
+
+                if (value == meta.max || value == meta.min) {
+                  return const Text('');
                 }
 
                 return Text(
@@ -975,19 +924,26 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              // reservedSize: 38,
+              reservedSize: 38,
               getTitlesWidget: (value, meta) {
+                // if (value == meta.max) {
+                //   return const Text('');
+                // }
+
                 DateTime dateTime = collectionDates[value.toInt()];
                 String month = dateTime.month.toString();
                 String day = dateTime.day.toString();
 
-                return Text(
-                  '$day/$month',
-                  style: TextStyle(
-                    color: MyApp.themeNotifier.value == ThemeMode.light
-                        ? Colors.black
-                        : Colors.white,
-                    fontSize: 12,
+                return RotatedBox(
+                  quarterTurns: 1,
+                  child: Text(
+                    ' $day/$month',
+                    style: TextStyle(
+                      color: MyApp.themeNotifier.value == ThemeMode.light
+                          ? Colors.black
+                          : Colors.white,
+                      fontSize: 12,
+                    ),
                   ),
                 );
               },
@@ -1066,7 +1022,8 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
     );
   }
 
-  getMinimumValue(List<double> nitrogen,
+  getMinimumValue(
+      List<double> nitrogen,
       List<double> phosphorus,
       List<double> potassium,
       List<double> temperature,
@@ -1098,7 +1055,8 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
     return values.reduce((value, element) => value < element ? value : element);
   }
 
-  double getMaximumValue(List<double> nitrogen,
+  double getMaximumValue(
+      List<double> nitrogen,
       List<double> phosphorus,
       List<double> potassium,
       List<double> temperature,
