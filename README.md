@@ -9,6 +9,10 @@
   </a>
 </div>
 
+<div align="center">
+  <a href="https://wakatime.com/badge/user/5a36320a-d953-4e8f-9cb9-ae08ea9dbf4a/project/018ced56-993a-482f-a0fd-a98cce92c732"><img src="https://wakatime.com/badge/user/5a36320a-d953-4e8f-9cb9-ae08ea9dbf4a/project/018ced56-993a-482f-a0fd-a98cce92c732.svg" alt="wakatime"></a>
+</div>
+
 <h2 align="center">🧐 Key Features</h2>
 
 <ul>
@@ -26,6 +30,7 @@
 - Backend Code API URL: [Repository](https://github.com/Ibrahim-Mneimneh/CropSync)
 - Google Generative AI API Key: [Get it here](https://makersuite.google.com/app/apikey)
 - Trefle API Key: [Get it here](https://trefle.io/)
+- OneSignal App ID: [Get it here](https://onesignal.com/mobile-push)
 - Optional: ResNet50 TensorFlow Lite Model File (For Quick Disease Detection)
 
 
@@ -38,7 +43,8 @@
   <li>Create a <code>.env</code> file in the root folder. Add your environmental variables in the format:
     <pre><code>API_URL=(your API URL, ensuring it ends with /api)
 GOOGLE_GENERATIVE_AI_API_KEY=(your API key)
-TREFLE_API_KEY=(your API Key)</code></pre>
+TREFLE_API_KEY=(your API Key)
+ONESIGNAL_APP_ID=(your App ID)</code></pre>
   </li>
   <li>Build and launch the application.</li>
 </ol>
