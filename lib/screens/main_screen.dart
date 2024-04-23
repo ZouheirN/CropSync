@@ -178,7 +178,7 @@ class _MainScreenState extends State<MainScreen> {
         setState(() => index = 2);
 
         // open camera
-        ResnetModelHelper()
+        ResNetModelHelper()
             .pickImage(ImageSource.camera, isLocal: shortcutType == 'camera');
       }
     });

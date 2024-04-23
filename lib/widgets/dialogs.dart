@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cropsync/main.dart';
+import 'package:cropsync/services/resnet_model_helper.dart';
 import 'package:cropsync/services/user_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/buttons.dart';
@@ -239,7 +240,8 @@ class Dialogs {
                   physics: const BouncingScrollPhysics(),
                   children: List.generate(
                     16, // Generate numbers from 0 to 60
-                    (index) => Center(child: Text('${(index + 1) * 30}ml (${index + 1}s)')),
+                    (index) => Center(
+                        child: Text('${(index + 1) * 30}ml (${index + 1}s)')),
                   ),
                   onSelectedItemChanged: (index) {
                     selectedSeconds = index + 1;
@@ -263,6 +265,73 @@ class Dialogs {
                     color: Colors.green,
                     onPressed: () async {
                       completer.complete(selectedSeconds);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+
+    return completer.future;
+  }
+
+  static Future<String> showChangePredictionDialog(BuildContext context) async {
+    final formKey = GlobalKey<FormState>();
+
+    Completer<String> completer = Completer<String>();
+
+    int selectedPrediction = 0;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Change Prediction', textAlign: TextAlign.center),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Select the actual prediction"),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 150, // Adjust height as needed
+                child: ListWheelScrollView(
+                  itemExtent: 42,
+                  useMagnifier: true,
+                  magnification: 1.5,
+                  physics: const BouncingScrollPhysics(),
+                  children: ResNetModelHelper().classLabels.map(
+                    (e) {
+                      return Center(child: Text(e));
+                    },
+                  ).toList(),
+                  onSelectedItemChanged: (index) {
+                    selectedPrediction = index;
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  DialogButton(
+                    text: 'Cancel',
+                    color: Colors.red,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      completer.complete("null");
+                    },
+                  ),
+                  DialogButton(
+                    text: 'Change',
+                    color: Colors.green,
+                    onPressed: () async {
+                      completer.complete(
+                          ResNetModelHelper().classLabels[selectedPrediction]);
                       Navigator.pop(context);
                     },
                   ),

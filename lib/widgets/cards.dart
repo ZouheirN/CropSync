@@ -884,6 +884,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                 if (selected.length == 1) {
                   return Text(
                     value.toStringAsFixed(2),
+                    maxLines: 1,
                     style: TextStyle(
                       color: MyApp.themeNotifier.value == ThemeMode.light
                           ? Colors.black
@@ -896,6 +897,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                 if (value == meta.max && value == meta.min) {
                   return Text(
                     value.toStringAsFixed(2),
+                    maxLines: 1,
                     style: TextStyle(
                       color: MyApp.themeNotifier.value == ThemeMode.light
                           ? Colors.black
@@ -911,6 +913,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
 
                 return Text(
                   value.toStringAsFixed(2),
+                  maxLines: 1,
                   style: TextStyle(
                     color: MyApp.themeNotifier.value == ThemeMode.light
                         ? Colors.black

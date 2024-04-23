@@ -48,7 +48,7 @@ class _QuickDiseaseDetectionScreenState
                 color: Colors.grey,
               ),
               SecondaryButton(
-                onPressed: () => ResnetModelHelper().pickImage(
+                onPressed: () => ResNetModelHelper().pickImage(
                   ImageSource.gallery,
                   isLocal: isLocal,
                 ),
@@ -87,7 +87,7 @@ class _QuickDiseaseDetectionScreenState
               ),
               const Gap(10),
               SecondaryButton(
-                onPressed: () => ResnetModelHelper().pickImage(
+                onPressed: () => ResNetModelHelper().pickImage(
                   ImageSource.camera,
                   isLocal: isLocal,
                 ),
@@ -115,7 +115,7 @@ class _QuickDiseaseDetectionScreenState
         actions: [
           IconButton(
             tooltip: resNetFilePath != '' ? 'Model Loaded' : 'Model Not Loaded',
-            onPressed: () => ResnetModelHelper().loadModel(context),
+            onPressed: () => ResNetModelHelper().loadModel(context),
             icon: Brand(
               Brands.tensorflow,
               size: 30,
@@ -185,7 +185,7 @@ class _QuickDiseaseDetectionScreenState
                                     backgroundColor:
                                         Theme.of(context).primaryColor,
                                     onPressed: () =>
-                                        ResnetModelHelper().loadModel(context),
+                                        ResNetModelHelper().loadModel(context),
                                   ),
                                 ],
                               ),
@@ -322,7 +322,7 @@ class _QuickDiseaseDetectionScreenState
                           ),
                           onPressed: () {
                             if (isLocal) {
-                              ResnetModelHelper().predict(
+                              ResNetModelHelper().predict(
                                 base64image: base64Encode(images[index].image),
                                 index: index,
                               );

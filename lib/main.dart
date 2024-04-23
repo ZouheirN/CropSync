@@ -6,7 +6,6 @@ import 'package:cropsync/models/crop_chart_model.dart';
 import 'package:cropsync/models/device_camera_model.dart';
 import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/models/image_model.dart';
-import 'package:cropsync/models/ip_cache_model.dart';
 import 'package:cropsync/models/latest_soil_data_model.dart';
 import 'package:cropsync/models/user_model.dart';
 import 'package:cropsync/models/weather_model.dart';

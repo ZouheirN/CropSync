@@ -16,8 +16,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:watch_it/watch_it.dart';
 
-class ResnetModelHelper {
+class ResNetModelHelper {
   Interpreter? interpreter;
+
+  List<String> classLabels = [
+    'Bacterial Spot',
+    'Early Blight',
+    'Healthy',
+    'Late Blight',
+    'Powdery Mildew'
+  ];
 
   Future<void> predict({
     required base64image,
@@ -60,14 +68,6 @@ class ResnetModelHelper {
     var input = preprocessInput(base64image);
 
     var output = List.filled(1 * 5, 0).reshape([1, 5]);
-
-    List<String> classLabels = [
-      'Bacterial Spot',
-      'Early Blight',
-      'Healthy',
-      'Late Blight',
-      'Powdery Mildew'
-    ];
 
     await Future.delayed(
         const Duration(seconds: 1)); // bug from package, this is the fix
@@ -208,7 +208,7 @@ class ResnetModelHelper {
       );
     } else {
       final base64Image = base64Encode(img.readAsBytesSync());
-      ResnetModelHelper().predict(
+      ResNetModelHelper().predict(
         base64image: base64Image,
         index: di<ImageModel>().images.length - 1,
       );

@@ -1,12 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/json/device_camera.dart';
+import 'package:cropsync/main.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/widgets/cards.dart';
+import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/disease_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:gal/gal.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
@@ -52,6 +56,64 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
         dates.addAll(response.cameraCollectionDate!);
         page++;
       });
+    }
+  }
+
+  Future<void> handlePopupMenuPress(String value, int index) async {
+    switch (value) {
+      case 'Save to Gallery':
+        // Check for access permission
+        final hasAccess = await Gal.hasAccess();
+
+        if (!hasAccess) {
+          await Gal.requestAccess();
+        }
+
+        final directory = await getExternalStorageDirectories(
+            type: StorageDirectory.pictures);
+
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Downloading image...'),
+          ),
+        );
+
+        // Download Image
+        final imagePath =
+            '${directory?.first.path}/${deviceCamera!.name}_${dates[index].millisecondsSinceEpoch}.jpg';
+        final response =
+            await DeviceApi.downloadImage(images[index], imagePath);
+
+        if (response != ReturnTypes.success) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Error download image'),
+            ),
+          );
+          return;
+        }
+
+        await Gal.putImage(imagePath);
+
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Image saved to gallery'),
+          ),
+        );
+        break;
+      case 'Change Prediction':
+        final newPrediction = await Dialogs.showChangePredictionDialog(context);
+
+        if (newPrediction == "null") {
+          return;
+        }
+
+        // todo change on server
+
+        break;
     }
   }
 
@@ -102,11 +164,34 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
             header: Container(
               height: 50.0,
               color: Colors.blueGrey[700],
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.only(left: 16.0),
               alignment: Alignment.centerLeft,
-              child: Text(
-                convertDateFormat(dates[index].toString(), withTime: true),
-                style: const TextStyle(color: Colors.white),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    convertDateFormat(dates[index].toString(), withTime: true),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  const Text(
+                    'Prediction',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  PopupMenuButton(
+                    onSelected: (String value) {
+                      handlePopupMenuPress(value, index);
+                    },
+                    itemBuilder: (context) {
+                      return {'Save to Gallery', 'Change Prediction'}
+                          .map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
+                  )
+                ],
               ),
             ),
             content: GestureDetector(
@@ -125,11 +210,12 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: 200.0,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Center(
-                  child: CircularProgressIndicator(
-                      value: downloadProgress.progress),
-                ),
+                progressIndicatorBuilder: (context, url, downloadProgress) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress),
+                  );
+                },
                 httpHeaders: {
                   "Authorization": "Bearer $token",
                 },

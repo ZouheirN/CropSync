@@ -259,21 +259,24 @@ class _CropsScreenState extends State<CropsScreen> {
                               ),
                             ],
                           )
-                        : Text('Condition: ${devices[index].crop.status}',
+                        : Text(
+                            'Condition: ${devices[index].crop.status}',
                             style: TextStyle(
                                 color: devices[index].crop.status == 'Healthy'
                                     ? Colors.green
-                                    : Colors.red)),
+                                    : Colors.red),
+                          ),
                     leading: SizedBox(
                       height: 30,
                       child: Image.asset(
                         'assets/icon/warning.png',
-                        color: devices[index].crop.status == 'Healthy'
-                            ? Colors.green
-                            : Colors.red,
-                        // : MyApp.themeNotifier.value == ThemeMode.light
-                        //     ? const Color(0xFF3F4642)
-                        //     : const Color(0xFFBEC6BF),
+                        color: devices[index].crop.status == null
+                            ? MyApp.themeNotifier.value == ThemeMode.light
+                                ? const Color(0xFF3F4642)
+                                : const Color(0xFFBEC6BF)
+                            : devices[index].crop.status == 'Healthy'
+                                ? Colors.green
+                                : Colors.red,
                       ),
                     ),
                   ),
