@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropsync/json/device_camera.dart';
-import 'package:cropsync/main.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/api_utils.dart';

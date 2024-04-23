@@ -12,7 +12,6 @@ import 'package:cropsync/widgets/dialogs.dart';
 import 'package:cropsync/widgets/textfields.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -96,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       } else {
         di<UserModel>().user = user;
-        if (!context.mounted) return;
+        if (!mounted) return;
         di<OtherVars>().autoRefresh = true;
         Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       }

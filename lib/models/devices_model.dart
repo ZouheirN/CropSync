@@ -1,9 +1,7 @@
 import 'package:cropsync/json/crop.dart';
 import 'package:cropsync/json/device.dart';
-import 'package:cropsync/models/weather_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:watch_it/watch_it.dart';
 
 class DevicesModel extends ChangeNotifier {
   final devicesBox = Hive.box('devices');

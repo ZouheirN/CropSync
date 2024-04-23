@@ -29,7 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     di<UserModel>().logout();
 
-    if (!mounted) return;
+    if (!context.mounted) return;
     Navigator.of(context).pushNamedAndRemoveUntil('/welcome', (route) => false);
   }
 

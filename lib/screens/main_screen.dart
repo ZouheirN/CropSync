@@ -48,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
 
   late DateTime exitTime;
 
-  final quickActions = QuickActions();
+  final quickActions = const QuickActions();
 
   final screens = [
     const HomeScreen(),

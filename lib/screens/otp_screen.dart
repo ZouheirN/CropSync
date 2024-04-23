@@ -40,7 +40,7 @@ class _OTPScreenState extends State<OTPScreen> {
         });
         return;
       } else if (otpResult == ReturnTypes.invalidToken) {
-        if (!context.mounted) return;
+        if (!mounted) return;
         invalidTokenResponse(context);
         return;
       } else if (otpResult == ReturnTypes.error) {
@@ -65,7 +65,7 @@ class _OTPScreenState extends State<OTPScreen> {
         });
         return;
       } else if (otpResult == ReturnTypes.invalidToken) {
-        if (!context.mounted) return;
+        if (!mounted) return;
         invalidTokenResponse(context);
         return;
       } else if (otpResult == ReturnTypes.error) {
@@ -78,7 +78,7 @@ class _OTPScreenState extends State<OTPScreen> {
 
       di<UserModel>().user = otpResult;
       di<OtherVars>().autoRefresh = true;
-      if (!context.mounted) return;
+      if (!mounted) return;
       Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
     }
   }
