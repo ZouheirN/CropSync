@@ -305,7 +305,8 @@ class DeviceApi {
 
       // add api url to the start of each image
       for (var i = 0; i < response.data['images'].length; i++) {
-        response.data['images'][i] = '$apiUrl${response.data['images'][i]}';
+        response.data['images'][i]['url'] =
+            '$apiUrl${response.data['images'][i]['url']}';
       }
 
       return deviceCameraHistoryFromJson(response.data);

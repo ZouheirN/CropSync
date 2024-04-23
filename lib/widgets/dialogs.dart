@@ -289,13 +289,13 @@ class Dialogs {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Change Prediction', textAlign: TextAlign.center),
+        title: const Text('Correct Prediction', textAlign: TextAlign.center),
         content: Form(
           key: formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text("Select the actual prediction"),
+              const Text("Select the correct prediction"),
               const SizedBox(height: 10),
               SizedBox(
                 height: 150, // Adjust height as needed
@@ -327,7 +327,7 @@ class Dialogs {
                     },
                   ),
                   DialogButton(
-                    text: 'Change',
+                    text: 'Correct',
                     color: Colors.green,
                     onPressed: () async {
                       completer.complete(

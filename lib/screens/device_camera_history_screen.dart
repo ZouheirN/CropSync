@@ -25,6 +25,7 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
   DeviceCamera? deviceCamera;
 
   var images = <String>[];
+  var status = <String>[];
   var dates = <DateTime>[];
   int page = 1;
 
@@ -42,7 +43,6 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
         await DeviceApi.getDeviceImages(deviceCamera!.deviceId!, page);
 
     if (!mounted) return;
-
     if (response == ReturnTypes.endOfPages) {
       setState(() {
         hasReachedMax = true;
@@ -51,7 +51,10 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
     } else {
       setState(() {
         isLoading = false;
-        images.addAll(response!.images!);
+        images.addAll(
+            List<String>.from(response.images!.map((e) => e.url!).toList()));
+        status.addAll(List<String>.from(
+            response.images!.map((e) => e.status ?? "").toList()));
         dates.addAll(response.cameraCollectionDate!);
         page++;
       });
@@ -103,7 +106,7 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
           ),
         );
         break;
-      case 'Change Prediction':
+      case 'Correct Prediction':
         final newPrediction = await Dialogs.showChangePredictionDialog(context);
 
         if (newPrediction == "null") {
@@ -172,16 +175,16 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
                     convertDateFormat(dates[index].toString(), withTime: true),
                     style: const TextStyle(color: Colors.white),
                   ),
-                  const Text(
-                    'Prediction',
-                    style: TextStyle(color: Colors.white),
+                  Text(
+                    status[index],
+                    style: const TextStyle(color: Colors.white),
                   ),
                   PopupMenuButton(
                     onSelected: (String value) {
                       handlePopupMenuPress(value, index);
                     },
                     itemBuilder: (context) {
-                      return {'Save to Gallery', 'Change Prediction'}
+                      return {'Save to Gallery', 'Correct Prediction'}
                           .map((String choice) {
                         return PopupMenuItem<String>(
                           value: choice,
