@@ -10,7 +10,6 @@ import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/services/weather_api.dart';
-import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/cards.dart';
@@ -144,47 +143,95 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
-    final alerts = weather
-        .map((e) {
-          if (e.airQuality == null || e.airQuality!.isEmpty) return null;
+    final Map<List<String>, List<Widget>> alerts = {};
+    final Map<String, int> alertsCountForEachDevice = {};
 
-          // final alerts = e.alerts ?? [];
-          final alerts = [];
+    // add device alerts to alerts
+    for (Device device in devices) {
+      if (device.crop?.alerts == null) continue;
 
-          // air quality
-          if (e.airQuality!['us-epa-index']! > 4) {
-            alerts.add(
-              'Air quality is ${e.airQuality!['us-epa-index']! == 4 ? 'unhealthy' : e.airQuality!['us-epa-index']! == 5 ? 'very unhealthy' : 'hazardous'}',
-            );
-          }
+      alerts[[device.name!, device.location!, device.deviceId!]] = [
+        // weather alerts
+        buildWeatherAlerts(device, weather, alertsCountForEachDevice),
 
-          // crop status
-          final cropStatus = devices.map(
-            (c) {
-              if (c.crop == null || c.crop?.status == null) return null;
+        // leaf alerts
+        buildLeafAlerts(device, alertsCountForEachDevice),
 
-              if (c.crop?.status?.toLowerCase() != 'healthy' &&
-                  c.deviceId == e.deviceId) {
-                return '${c.crop?.name} is ${c.crop?.status}';
-              }
-            },
-          );
+        // soil alerts
+        buildSoilAlerts(device, alertsCountForEachDevice),
+      ];
+    }
 
-          alerts.addAll(cropStatus.where((element) => element != null));
-
-          Future.delayed(Duration.zero, () async {
-            di<OtherVars>().showBadge = alerts.isNotEmpty;
-          });
-
-          return {
-            'device': e.name,
-            'location': e.location,
-            'alert': alerts.toList(),
-          };
-        })
-        .toList()
-        .where((element) => element != null)
-        .toList();
+    // final alerts = weather
+    //     .map((e) {
+    //       if (e.airQuality == null || e.airQuality!.isEmpty) return null;
+    //       final alerts = [];
+    //
+    //       // air quality
+    //       if (e.airQuality!['us-epa-index']! > 4) {
+    //         alerts.add(
+    //           'Air quality is ${e.airQuality!['us-epa-index']! == 4 ? 'unhealthy' : e.airQuality!['us-epa-index']! == 5 ? 'very unhealthy' : 'hazardous'}',
+    //         );
+    //       }
+    //
+    //       // crop alerts
+    //       final cropAlerts = devices.map(
+    //         (c) {
+    //           if (c.crop == null ||
+    //               c.crop!.alerts!.leaf!.status == null ||
+    //               c.crop!.alerts!.soil!.message == null) return null;
+    //
+    //           final a = [];
+    //
+    //           if (c.deviceId == e.deviceId) {
+    //             if (c.crop!.alerts!.leaf!.status!.toLowerCase() != 'healthy') {
+    //               a.add(
+    //                   '${c.crop!.name} Crop Condition: ${c.crop!.alerts!.leaf!.status}');
+    //             }
+    //
+    //             for (int i = 0;
+    //                 i < c.crop!.alerts!.leaf!.message!.length;
+    //                 i++) {
+    //               a.add(
+    //                 "Message: ${c.crop!.alerts!.leaf!.message.toString()}\n"
+    //                 "Action Required: ${c.crop!.alerts!.leaf!.action.toString()}",
+    //               );
+    //             }
+    //
+    //             for (int i = 0;
+    //                 i < c.crop!.alerts!.soil!.message!.length;
+    //                 i++) {
+    //               a.add(
+    //                 "Nutrient: ${c.crop!.alerts!.soil!.nutrient![i]}\n"
+    //                 "Message: ${c.crop!.alerts!.soil!.message![i]}\n"
+    //                 "Severity: ${c.crop!.alerts!.soil!.severity![i][0].toUpperCase() + c.crop!.alerts!.soil!.severity![i].substring(1)}\n"
+    //                 "Action Required: ${c.crop!.alerts!.soil!.action![i]}",
+    //               );
+    //             }
+    //
+    //             // put a new line between each alert
+    //             final stringAlert = a.join('\n\n');
+    //
+    //             return a.isEmpty ? null : stringAlert;
+    //           }
+    //         },
+    //       );
+    //
+    //       alerts.addAll(cropAlerts.where((element) => element != null));
+    //
+    //       Future.delayed(Duration.zero, () async {
+    //         di<OtherVars>().showBadge = alerts.isNotEmpty;
+    //       });
+    //
+    //       return {
+    //         'device': e.name,
+    //         'location': e.location,
+    //         'alert': alerts.toList(),
+    //       };
+    //     })
+    //     .toList()
+    //     .where((element) => element != null)
+    //     .toList();
 
     final homeListItems = watchPropertyValue((UserPrefs u) => u.homeListItems);
 
@@ -211,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (item == 'Weather')
                         buildWeather(weatherPages)
                       else if (item == 'Alerts')
-                        buildAlerts(alerts)
+                        buildAlerts(alerts, alertsCountForEachDevice)
                       else if (item == 'Device Camera')
                         buildDeviceCamera(deviceCameraPages)
                       else if (item == 'Statistics')
@@ -242,7 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               SizedBox(
-                width:35,
+                width: 35,
                 height: 35,
                 child: IconButton(
                   icon: isWeatherRefreshing
@@ -334,14 +381,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Alerts
-  Widget buildAlerts(List<Map<String, Object?>?> weatherAlerts) {
-    weatherAlerts.removeWhere(
-      (element) {
-        return (element!['alert'] as List<dynamic>).isEmpty;
-      },
-    );
-
-    if (weatherAlerts.isEmpty) return const SizedBox.shrink();
+  Widget buildAlerts(Map<List<String>, List<Widget>> alerts,
+      Map<String, int> alertsCountForEachDevice) {
+    if (alerts.isEmpty) return const SizedBox.shrink();
 
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
@@ -398,20 +440,27 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          for (var alert in weatherAlerts)
+          // for (var alert in weatherAlerts)
+          //   ExpansionTileCard(
+          //     title: Text(
+          //         '${alert!['device']} (${(alert['alert'] as List<dynamic>).length} ${(alert['alert'] as List<dynamic>).length == 1 ? 'Alert' : 'Alerts'})'),
+          //     subtitle: Text(alert['location'].toString()),
+          //     children: [
+          //       for (var a in alert['alert'] as List<dynamic>)
+          //         ListTile(
+          //           title: Text(
+          //             a,
+          //             style: const TextStyle(color: Colors.red),
+          //           ),
+          //         ),
+          //     ],
+          //   ),
+          for (var alert in alerts.entries)
             ExpansionTileCard(
               title: Text(
-                  '${alert!['device']} (${(alert['alert'] as List<dynamic>).length} ${(alert['alert'] as List<dynamic>).length == 1 ? 'Alert' : 'Alerts'})'),
-              subtitle: Text(alert['location'].toString()),
-              children: [
-                for (var a in alert['alert'] as List<dynamic>)
-                  ListTile(
-                    title: Text(
-                      a,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
-              ],
+                  '${alert.key[0]} (${alertsCountForEachDevice[alert.key[2]]} ${alertsCountForEachDevice[alert.key[2]] == 1 ? 'Alert' : 'Alerts'})'),
+              subtitle: Text(alert.key[1]),
+              children: alert.value,
             ),
         ],
       ),
@@ -438,8 +487,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: IconButton(
                   icon: isDeviceCameraRefreshing
                       ? const CircularProgressIndicator(
-                    color: Colors.green,
-                  )
+                          color: Colors.green,
+                        )
                       : const Icon(Icons.camera_alt_rounded),
                   color: Colors.green,
                   onPressed: () {
@@ -451,8 +500,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     DeviceApi.getDeviceCamera().then(
                       (deviceCameraData) {
-                        if (deviceCameraData.runtimeType == List<DeviceCamera>) {
-                          di<DeviceCameraModel>().deviceCamera = deviceCameraData;
+                        if (deviceCameraData.runtimeType ==
+                            List<DeviceCamera>) {
+                          di<DeviceCameraModel>().deviceCamera =
+                              deviceCameraData;
                           logger.t('Fetched Device Camera by Refresh');
                         }
 
@@ -529,8 +580,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: IconButton(
                   icon: isStatisticsRefreshing
                       ? const CircularProgressIndicator(
-                    color: Colors.orange,
-                  )
+                          color: Colors.orange,
+                        )
                       : const Icon(Icons.bar_chart_rounded),
                   color: Colors.orange,
                   onPressed: () {
@@ -541,17 +592,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     });
 
                     DeviceApi.getWeeklyCropChartData().then(
-                          (weeklyCropCharts) {
+                      (weeklyCropCharts) {
                         if (weeklyCropCharts.runtimeType == CropChart) {
-                          di<CropChartModel>().weeklyCropCharts = weeklyCropCharts;
+                          di<CropChartModel>().weeklyCropCharts =
+                              weeklyCropCharts;
                           logger.t('Fetched Weekly Crop Charts by Refresh');
                         }
 
                         DeviceApi.getMonthlyCropChartData().then(
-                              (monthlyCropCharts) {
+                          (monthlyCropCharts) {
                             if (monthlyCropCharts.runtimeType == CropChart) {
-                              di<CropChartModel>().monthlyCropCharts = monthlyCropCharts;
-                              logger.t('Fetched Monthly Crop Charts by Refresh');
+                              di<CropChartModel>().monthlyCropCharts =
+                                  monthlyCropCharts;
+                              logger
+                                  .t('Fetched Monthly Crop Charts by Refresh');
                             }
 
                             setState(() {
@@ -635,5 +689,165 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  // Function to handle leaf alerts
+  Widget buildLeafAlerts(
+      Device device, Map<String, int> alertsCountForEachDevice) {
+    if (device.crop?.alerts?.leaf == null ||
+        device.crop?.alerts?.leaf?.status == null) {
+      return const SizedBox.shrink(); // No leaf alerts, return an empty widget
+    }
+
+    // increment the alert count for each device
+    if (alertsCountForEachDevice[device.deviceId!] == null) {
+      alertsCountForEachDevice[device.deviceId!] = 1;
+    } else {
+      alertsCountForEachDevice[device.deviceId!] =
+          alertsCountForEachDevice[device.deviceId!]! + 1;
+    }
+
+    return ListTile(
+      title: Row(
+        children: [
+          const Text('Leaf Condition: '),
+          Text(
+            '${device.crop?.alerts?.leaf?.status}',
+            style: TextStyle(
+              color:
+                  device.crop?.alerts?.leaf?.status?.toLowerCase() == 'healthy'
+                      ? Colors.green
+                      : Colors.red,
+            ),
+          ),
+        ],
+      ),
+      subtitle: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // messages
+          if (device.crop?.alerts?.leaf?.message != null)
+            for (String message in device.crop!.alerts!.leaf!.message!)
+              Text(
+                  'Message${device.crop!.alerts!.leaf!.message!.indexOf(message) + 1 == 1 ? '' : device.crop!.alerts!.leaf!.message!.indexOf(message) + 1}: $message'),
+
+          // actions
+          if (device.crop?.alerts?.leaf?.action != null)
+            for (String action in device.crop!.alerts!.leaf!.action!)
+              Text('Action Required: $action'),
+        ],
+      ),
+    );
+  }
+
+  // Function to handle soil alerts
+  Widget buildSoilAlerts(
+      Device device, Map<String, int> alertsCountForEachDevice) {
+    if (device.crop?.alerts?.soil == null ||
+        device.crop?.alerts?.soil?.message == null) {
+      return const SizedBox.shrink(); // No soil alerts, return an empty widget
+    }
+
+    final widget = ListTile(
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (int i = 0; i < device.crop!.alerts!.soil!.message!.length; i++)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: SizedBox(
+                    height: 30,
+                    child: Image.asset(
+                      'assets/icon/${device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'ph' ? 'ph' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'humidity' ? 'moisture' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'nitrogen' ? 'nitrogen' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'phosphorus' ? 'phosphorus' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'potassium' ? 'potassium' : 'warning'}.png',
+                      color: MyApp.themeNotifier.value == ThemeMode.light
+                          ? const Color(0xFF3F4642)
+                          : const Color(0xFFBEC6BF),
+                    ),
+                  ),
+                  title: Text(
+                    device.crop!.alerts!.soil!.message![i],
+                  ),
+                  subtitle: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          'Severity: ${device.crop!.alerts!.soil!.severity![i][0].toUpperCase() + device.crop!.alerts!.soil!.severity![i].substring(1)}',
+                          style: TextStyle(
+                            color: device.crop!.alerts!.soil!.severity![i]
+                                        .toLowerCase() ==
+                                    'high'
+                                ? Colors.red
+                                : Colors.orange,
+                          )),
+                      Text(
+                        'Action Required: ${device.crop!.alerts!.soil!.action![i]}',
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+
+    // increment the alert count for each device based on how many soil alerts there are
+    if (alertsCountForEachDevice[device.deviceId!] == null) {
+      alertsCountForEachDevice[device.deviceId!] =
+          device.crop!.alerts!.soil!.message!.length;
+    } else {
+      alertsCountForEachDevice[device.deviceId!] =
+          alertsCountForEachDevice[device.deviceId]! +
+              device.crop!.alerts!.soil!.message!.length;
+    }
+
+    return widget;
+  }
+
+  Widget buildWeatherAlerts(Device device, List<Weather> weather,
+      Map<String, int> alertsCountForEachDevice) {
+    if (weather.isEmpty) return const SizedBox.shrink();
+
+    final weatherAlerts = weather
+        .where((element) => element.deviceId == device.deviceId)
+        .toList();
+
+
+    if (weatherAlerts.isEmpty || weatherAlerts[0].airQuality == null || weatherAlerts.first.airQuality!['us-epa-index']! < 4) {
+      return const SizedBox.shrink();
+    }
+
+    final widget = ListTile(
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (Weather w in weatherAlerts)
+            if (w.airQuality != null &&
+                w.airQuality!.isNotEmpty &&
+                w.airQuality!['us-epa-index']! > 4)
+              Text(
+                'Air Quality: ${w.airQuality!['us-epa-index']! == 4 ? 'Unhealthy' : w.airQuality!['us-epa-index']! == 5 ? 'Very Unhealthy' : 'Hazardous'}',
+              ),
+        ],
+      ),
+    );
+
+    // increment the alert count for each device based on how many weather alerts there are
+    if (alertsCountForEachDevice[device.deviceId!] == null) {
+      alertsCountForEachDevice[device.deviceId!] = weatherAlerts.length;
+    } else {
+      alertsCountForEachDevice[device.deviceId!] =
+          alertsCountForEachDevice[device.deviceId]! + weatherAlerts.length;
+    }
+
+    return widget;
   }
 }

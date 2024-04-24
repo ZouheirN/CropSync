@@ -59,6 +59,9 @@ Future<void> main() async {
   Hive.registerAdapter<ImageObject>(ImageObjectAdapter());
   Hive.registerAdapter<Device>(DeviceAdapter());
   Hive.registerAdapter<Crop>(CropAdapter());
+  Hive.registerAdapter<Alerts>(AlertsAdapter());
+  Hive.registerAdapter<Soil>(SoilAdapter());
+  Hive.registerAdapter<Leaf>(LeafAdapter());
 
   var userInfoBox = await Hive.openBox('userInfo');
   var userPrefsBox = await Hive.openBox('userPrefs');

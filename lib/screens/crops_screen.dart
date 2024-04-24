@@ -247,7 +247,7 @@ class _CropsScreenState extends State<CropsScreen> {
               Column(
                 children: [
                   ListTile(
-                    title: devices[index].crop.status == null
+                    title: devices[index].crop.alerts.leaf.status == null
                         ? const Row(
                             children: [
                               Text('Condition: '),
@@ -260,9 +260,10 @@ class _CropsScreenState extends State<CropsScreen> {
                             ],
                           )
                         : Text(
-                            'Condition: ${devices[index].crop.status}',
+                            'Condition: ${devices[index].crop.alerts.leaf.status}',
                             style: TextStyle(
-                                color: devices[index].crop.status == 'Healthy'
+                                color: devices[index].crop.alerts.leaf.status ==
+                                        'Healthy'
                                     ? Colors.green
                                     : Colors.red),
                           ),
@@ -270,11 +271,12 @@ class _CropsScreenState extends State<CropsScreen> {
                       height: 30,
                       child: Image.asset(
                         'assets/icon/warning.png',
-                        color: devices[index].crop.status == null
+                        color: devices[index].crop.alerts.leaf.status == null
                             ? MyApp.themeNotifier.value == ThemeMode.light
                                 ? const Color(0xFF3F4642)
                                 : const Color(0xFFBEC6BF)
-                            : devices[index].crop.status == 'Healthy'
+                            : devices[index].crop.alerts.leaf.status ==
+                                    'Healthy'
                                 ? Colors.green
                                 : Colors.red,
                       ),
