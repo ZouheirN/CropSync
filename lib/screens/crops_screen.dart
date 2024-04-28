@@ -250,7 +250,7 @@ class _CropsScreenState extends State<CropsScreen> {
                     title: devices[index].crop.alerts.leaf.status == null
                         ? const Row(
                             children: [
-                              Text('Condition: '),
+                              Text('Leaf Condition: '),
                               Gap(5),
                               SizedBox(
                                 width: 20,
@@ -260,7 +260,7 @@ class _CropsScreenState extends State<CropsScreen> {
                             ],
                           )
                         : Text(
-                            'Condition: ${devices[index].crop.alerts.leaf.status}',
+                            'Leaf Condition: ${devices[index].crop.alerts.leaf.status}',
                             style: TextStyle(
                                 color: devices[index].crop.alerts.leaf.status ==
                                         'Healthy'

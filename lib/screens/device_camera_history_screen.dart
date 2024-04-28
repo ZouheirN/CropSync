@@ -131,7 +131,9 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
 
     UserToken.getToken().then(
       (value) {
-        token = value;
+        setState(() {
+          token = value;
+        });
       },
     );
 

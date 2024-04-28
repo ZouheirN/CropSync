@@ -77,7 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     UserToken.getToken().then(
       (value) {
-        token = value;
+        setState(() {
+          token = value;
+        });
       },
     );
     super.initState();
@@ -92,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final cropCharts = watch(di<CropChartModel>());
     final weeklyCropCharts = cropCharts.weeklyCropCharts.data;
     final monthlyCropCharts = cropCharts.monthlyCropCharts.data;
+    final homeListItems = watchPropertyValue((UserPrefs u) => u.homeListItems);
 
     final weatherPages = weather
         .map(
@@ -161,79 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
         buildSoilAlerts(device, alertsCountForEachDevice),
       ];
     }
-
-    // final alerts = weather
-    //     .map((e) {
-    //       if (e.airQuality == null || e.airQuality!.isEmpty) return null;
-    //       final alerts = [];
-    //
-    //       // air quality
-    //       if (e.airQuality!['us-epa-index']! > 4) {
-    //         alerts.add(
-    //           'Air quality is ${e.airQuality!['us-epa-index']! == 4 ? 'unhealthy' : e.airQuality!['us-epa-index']! == 5 ? 'very unhealthy' : 'hazardous'}',
-    //         );
-    //       }
-    //
-    //       // crop alerts
-    //       final cropAlerts = devices.map(
-    //         (c) {
-    //           if (c.crop == null ||
-    //               c.crop!.alerts!.leaf!.status == null ||
-    //               c.crop!.alerts!.soil!.message == null) return null;
-    //
-    //           final a = [];
-    //
-    //           if (c.deviceId == e.deviceId) {
-    //             if (c.crop!.alerts!.leaf!.status!.toLowerCase() != 'healthy') {
-    //               a.add(
-    //                   '${c.crop!.name} Crop Condition: ${c.crop!.alerts!.leaf!.status}');
-    //             }
-    //
-    //             for (int i = 0;
-    //                 i < c.crop!.alerts!.leaf!.message!.length;
-    //                 i++) {
-    //               a.add(
-    //                 "Message: ${c.crop!.alerts!.leaf!.message.toString()}\n"
-    //                 "Action Required: ${c.crop!.alerts!.leaf!.action.toString()}",
-    //               );
-    //             }
-    //
-    //             for (int i = 0;
-    //                 i < c.crop!.alerts!.soil!.message!.length;
-    //                 i++) {
-    //               a.add(
-    //                 "Nutrient: ${c.crop!.alerts!.soil!.nutrient![i]}\n"
-    //                 "Message: ${c.crop!.alerts!.soil!.message![i]}\n"
-    //                 "Severity: ${c.crop!.alerts!.soil!.severity![i][0].toUpperCase() + c.crop!.alerts!.soil!.severity![i].substring(1)}\n"
-    //                 "Action Required: ${c.crop!.alerts!.soil!.action![i]}",
-    //               );
-    //             }
-    //
-    //             // put a new line between each alert
-    //             final stringAlert = a.join('\n\n');
-    //
-    //             return a.isEmpty ? null : stringAlert;
-    //           }
-    //         },
-    //       );
-    //
-    //       alerts.addAll(cropAlerts.where((element) => element != null));
-    //
-    //       Future.delayed(Duration.zero, () async {
-    //         di<OtherVars>().showBadge = alerts.isNotEmpty;
-    //       });
-    //
-    //       return {
-    //         'device': e.name,
-    //         'location': e.location,
-    //         'alert': alerts.toList(),
-    //       };
-    //     })
-    //     .toList()
-    //     .where((element) => element != null)
-    //     .toList();
-
-    final homeListItems = watchPropertyValue((UserPrefs u) => u.homeListItems);
 
     return Visibility(
       visible: devices.isNotEmpty,
@@ -699,6 +629,11 @@ class _HomeScreenState extends State<HomeScreen> {
       return const SizedBox.shrink(); // No leaf alerts, return an empty widget
     }
 
+    // if leaf is healthy, return empty widget
+    if (device.crop?.alerts?.leaf?.status?.toLowerCase() == 'healthy') {
+      return const SizedBox.shrink();
+    }
+
     // increment the alert count for each device
     if (alertsCountForEachDevice[device.deviceId!] == null) {
       alertsCountForEachDevice[device.deviceId!] = 1;
@@ -713,31 +648,31 @@ class _HomeScreenState extends State<HomeScreen> {
           const Text('Leaf Condition: '),
           Text(
             '${device.crop?.alerts?.leaf?.status}',
-            style: TextStyle(
-              color:
-                  device.crop?.alerts?.leaf?.status?.toLowerCase() == 'healthy'
-                      ? Colors.green
-                      : Colors.red,
+            style: const TextStyle(
+              color: Colors.red,
             ),
           ),
         ],
       ),
-      subtitle: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // messages
-          if (device.crop?.alerts?.leaf?.message != null)
-            for (String message in device.crop!.alerts!.leaf!.message!)
-              Text(
-                  'Message${device.crop!.alerts!.leaf!.message!.indexOf(message) + 1 == 1 ? '' : device.crop!.alerts!.leaf!.message!.indexOf(message) + 1}: $message'),
+      subtitle: device.crop?.alerts?.leaf?.message == [] ||
+              device.crop?.alerts?.leaf?.action == []
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // messages
+                if (device.crop?.alerts?.leaf?.message != null)
+                  for (String message in device.crop!.alerts!.leaf!.message!)
+                    Text(
+                        'Message${device.crop!.alerts!.leaf!.message!.indexOf(message) + 1 == 1 ? '' : device.crop!.alerts!.leaf!.message!.indexOf(message) + 1}: $message'),
 
-          // actions
-          if (device.crop?.alerts?.leaf?.action != null)
-            for (String action in device.crop!.alerts!.leaf!.action!)
-              Text('Action Required: $action'),
-        ],
-      ),
+                // actions
+                if (device.crop?.alerts?.leaf?.action != null)
+                  for (String action in device.crop!.alerts!.leaf!.action!)
+                    Text('Action Required: $action'),
+              ],
+            )
+          : null,
     );
   }
 
@@ -764,7 +699,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   leading: SizedBox(
                     height: 30,
                     child: Image.asset(
-                      'assets/icon/${device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'ph' ? 'ph' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'humidity' ? 'moisture' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'nitrogen' ? 'nitrogen' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'phosphorus' ? 'phosphorus' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'potassium' ? 'potassium' : 'warning'}.png',
+                      'assets/icon/${device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'ph' ? 'ph' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'humidity' ? 'moisture' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'nitrogen' ? 'nitrogen' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'phosphorus' || device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'phosphorous' ? 'phosphorus' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'potassium' ? 'potassium' : 'warning'}.png',
                       color: MyApp.themeNotifier.value == ThemeMode.light
                           ? const Color(0xFF3F4642)
                           : const Color(0xFFBEC6BF),
@@ -819,8 +754,9 @@ class _HomeScreenState extends State<HomeScreen> {
         .where((element) => element.deviceId == device.deviceId)
         .toList();
 
-
-    if (weatherAlerts.isEmpty || weatherAlerts[0].airQuality == null || weatherAlerts.first.airQuality!['us-epa-index']! < 4) {
+    if (weatherAlerts.isEmpty ||
+        weatherAlerts[0].airQuality == null ||
+        weatherAlerts.first.airQuality!['us-epa-index']! < 4) {
       return const SizedBox.shrink();
     }
 

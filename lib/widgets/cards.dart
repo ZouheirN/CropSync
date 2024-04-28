@@ -938,7 +938,7 @@ class _CropLineChartCardState extends State<CropLineChartCard> {
                 String day = dateTime.day.toString();
 
                 return RotatedBox(
-                  quarterTurns: 1,
+                  quarterTurns: 3,
                   child: Text(
                     ' $day/$month',
                     style: TextStyle(
