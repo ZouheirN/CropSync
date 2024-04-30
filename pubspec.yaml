@@ -74,8 +74,6 @@ dependencies:
   shimmer: ^3.0.0
   google_generative_ai: ^0.2.1
   hyper_effects: ^0.2.3
-  arrow_pad: ^0.2.0
-  web_socket_channel: ^2.4.4
   nsd: ^3.0.0
   flutter_vlc_player: ^7.4.1
   page_transition: ^2.1.0

@@ -1,6 +1,7 @@
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
+import 'package:cropsync/screens/camera_control_screen.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/local_device_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
@@ -10,6 +11,7 @@ import 'package:cropsync/widgets/dialogs.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:gap/gap.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:watch_it/watch_it.dart';
@@ -22,6 +24,15 @@ class DevicesScreen extends WatchingStatefulWidget {
 }
 
 class _DevicesScreenState extends State<DevicesScreen> {
+  final VlcPlayerController videoPlayerController = VlcPlayerController.network(
+    'udp://@:8888',
+    options: VlcPlayerOptions(
+      extras: [
+        '--demux=h264',
+      ],
+    ),
+  );
+
   void addDevice(BuildContext context) {
     Navigator.of(context).pushNamed('/add-device');
   }
@@ -327,18 +338,34 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                   )
                                 : null,
                           ),
-                          ListTile(
-                            leading: const Icon(Icons.camera_rounded),
-                            title: const Text(
-                              'Control Camera',
+                          Theme(
+                            data: Theme.of(context)
+                                .copyWith(dividerColor: Colors.transparent),
+                            child: ExpansionTile(
+                              leading: const Icon(Icons.camera_rounded),
+                              title: const Text(
+                                'View Camera',
+                              ),
+                              children: [
+                                CameraControlScreen(device: devices[index])
+                              ],
                             ),
-                            onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed('/camera-control', arguments: {
-                                'device': devices[index],
-                              });
-                            },
                           ),
+                          // ListTile(
+                          //   leading: const Icon(Icons.camera_rounded),
+                          //   title: const Text(
+                          //     'View Camera',
+                          //   ),
+                          //   onTap: () {
+                          //     showModalBottomSheet(
+                          //       context: context,
+                          //       builder: (context) {
+                          //         return CameraControlScreen(
+                          //             device: devices[index]);
+                          //       },
+                          //     );
+                          //   },
+                          // ),
                           ListTile(
                             leading: const Icon(Bootstrap.database_fill_up),
                             title: const Text(

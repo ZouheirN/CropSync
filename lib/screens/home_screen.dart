@@ -77,9 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     UserToken.getToken().then(
       (value) {
-        setState(() {
           token = value;
-        });
       },
     );
     super.initState();

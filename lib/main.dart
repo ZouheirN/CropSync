@@ -190,7 +190,6 @@ class MyApp extends StatelessWidget {
                 const DeviceCameraHistoryScreen(),
             '/weather-forecast': (context) => const WeatherForecastScreen(),
             '/settings': (context) => const SettingsScreen(),
-            '/camera-control': (context) => const CameraControlScreen(),
             '/set-crop': (context) => const SetCropScreen(),
           },
           onGenerateRoute: (settings) {
