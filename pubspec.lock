@@ -41,14 +41,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.2"
-  arrow_pad:
-    dependency: "direct main"
-    description:
-      name: arrow_pad
-      sha256: "1518d5b2840bb2c5a8ccd1f813b801fa116bd2f54f70f3e8f725a2ccb298f55e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   async:
     dependency: transitive
     description:
@@ -1694,7 +1686,7 @@ packages:
     source: hosted
     version: "0.5.0"
   web_socket_channel:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: web_socket_channel
       sha256: "1d8e795e2a8b3730c41b8a98a2dff2e0fb57ae6f0764a1c46ec5915387d257b2"

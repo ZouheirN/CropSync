@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     UserToken.getToken().then(
       (value) {
-          token = value;
+        token = value;
       },
     );
     super.initState();
@@ -697,7 +697,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   leading: SizedBox(
                     height: 30,
                     child: Image.asset(
-                      'assets/icon/${device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'ph' ? 'ph' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'humidity' ? 'moisture' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'nitrogen' ? 'nitrogen' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'phosphorus' || device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'phosphorous' ? 'phosphorus' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'potassium' ? 'potassium' : 'warning'}.png',
+                      'assets/icon/${device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'ph' ? 'ph' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'humidity' || device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'moisture' ? 'moisture' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'nitrogen' ? 'nitrogen' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'phosphorus' || device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'phosphorous' ? 'phosphorus' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'potassium' ? 'potassium' : device.crop!.alerts!.soil!.nutrient![i].toLowerCase() == 'temperature' ? 'temperature' : 'warning'}.png',
                       color: MyApp.themeNotifier.value == ThemeMode.light
                           ? const Color(0xFF3F4642)
                           : const Color(0xFFBEC6BF),

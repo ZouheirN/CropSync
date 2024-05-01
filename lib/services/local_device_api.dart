@@ -13,7 +13,8 @@ final ipCaches = IpCacheModel();
 class LocalDeviceApi {
   static final dio = Dio();
 
-  static Future<String> getDeviceIp(String deviceCode, {bool forceNewFetch = false}) async {
+  static Future<String> getDeviceIp(String deviceCode,
+      {bool forceNewFetch = false}) async {
     try {
       if (forceNewFetch == false) {
         // check if ip is cached, and if it is return it

@@ -12,7 +12,6 @@ import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/screens/account_information_screen.dart';
 import 'package:cropsync/screens/add_device_map_screen.dart';
 import 'package:cropsync/screens/add_device_screen.dart';
-import 'package:cropsync/screens/camera_control_screen.dart';
 import 'package:cropsync/screens/change_password_screen.dart';
 import 'package:cropsync/screens/device_camera_history_screen.dart';
 import 'package:cropsync/screens/edit_device_screen.dart';

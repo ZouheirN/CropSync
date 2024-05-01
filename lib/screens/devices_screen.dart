@@ -1,12 +1,12 @@
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/main.dart';
 import 'package:cropsync/models/devices_model.dart';
-import 'package:cropsync/screens/camera_control_screen.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/local_device_api.dart';
 import 'package:cropsync/utils/api_utils.dart';
 import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/widgets/buttons.dart';
+import 'package:cropsync/widgets/camera_live_feed.dart';
 import 'package:cropsync/widgets/dialogs.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
@@ -347,25 +347,10 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                 'View Camera',
                               ),
                               children: [
-                                CameraControlScreen(device: devices[index])
+                                CameraLiveFeed(device: devices[index])
                               ],
                             ),
                           ),
-                          // ListTile(
-                          //   leading: const Icon(Icons.camera_rounded),
-                          //   title: const Text(
-                          //     'View Camera',
-                          //   ),
-                          //   onTap: () {
-                          //     showModalBottomSheet(
-                          //       context: context,
-                          //       builder: (context) {
-                          //         return CameraControlScreen(
-                          //             device: devices[index]);
-                          //       },
-                          //     );
-                          //   },
-                          // ),
                           ListTile(
                             leading: const Icon(Bootstrap.database_fill_up),
                             title: const Text(

@@ -1,22 +1,21 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cropsync/json/device.dart';
 import 'package:cropsync/services/local_device_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
-class CameraControlScreen extends StatefulWidget {
+class CameraLiveFeed extends StatefulWidget {
   final Device device;
 
-  const CameraControlScreen({super.key, required this.device});
+  const CameraLiveFeed({super.key, required this.device});
 
   @override
-  State<CameraControlScreen> createState() => _CameraControlScreenState();
+  State<CameraLiveFeed> createState() => _CameraLiveFeedState();
 }
 
-class _CameraControlScreenState extends State<CameraControlScreen> {
+class _CameraLiveFeedState extends State<CameraLiveFeed> {
   VlcPlayerController? videoPlayerController;
 
   @override
@@ -76,19 +75,19 @@ class _CameraControlScreenState extends State<CameraControlScreen> {
     try {
       // Try VPN connection first
       NetworkInterface vpnInterface =
-          interfaces.firstWhere((element) => element.name == "tun0");
+      interfaces.firstWhere((element) => element.name == "tun0");
       return vpnInterface.addresses.first.address;
     } on StateError {
       // Try wlan connection next
       try {
         NetworkInterface interface =
-            interfaces.firstWhere((element) => element.name == "wlan0");
+        interfaces.firstWhere((element) => element.name == "wlan0");
         return interface.addresses.first.address;
       } catch (ex) {
         // Try any other connection next
         try {
           NetworkInterface interface = interfaces.firstWhere((element) =>
-              !(element.name == "tun0" || element.name == "wlan0"));
+          !(element.name == "tun0" || element.name == "wlan0"));
           return interface.addresses.first.address;
         } catch (ex) {
           return null;
