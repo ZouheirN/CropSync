@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:math';
 
 import 'package:cropsync/json/image.dart';
@@ -43,8 +44,6 @@ class ResNetModelHelper {
     final InterpreterOptions options = InterpreterOptions();
     options.threads = 4;
 
-    IsolateInterpreter? isolateInterpreter;
-
     try {
       final dataFile = File(di<OtherVars>().resNetFilePath);
       interpreter = Interpreter.fromFile(dataFile, options: options);
@@ -62,41 +61,45 @@ class ResNetModelHelper {
       return;
     }
 
-    isolateInterpreter =
-        await IsolateInterpreter.create(address: interpreter!.address);
+    final data = await Isolate.run(() {
+      var input = preprocessInput(base64image);
 
-    var input = preprocessInput(base64image);
+      var output = List.filled(1 * 5, 0).reshape([1, 5]);
 
-    var output = List.filled(1 * 5, 0).reshape([1, 5]);
+      interpreter?.run(input, output);
 
-    await Future.delayed(
-        const Duration(seconds: 1)); // bug from package, this is the fix
-    await isolateInterpreter.run(input, output);
+      // Extracting the inner list from the output
+      List<double> innerList = output[0];
 
-    // Extracting the inner list from the output
-    List<double> innerList = output[0];
-
-    // Find the index of the maximum value in the inner list
-    int maxIndex = 0;
-    double maxValue = innerList[0];
-    for (int i = 1; i < innerList.length; i++) {
-      if (innerList[i] > maxValue) {
-        maxValue = innerList[i];
-        maxIndex = i;
+      // Find the index of the maximum value in the inner list
+      int maxIndex = 0;
+      double maxValue = innerList[0];
+      for (int i = 1; i < innerList.length; i++) {
+        if (innerList[i] > maxValue) {
+          maxValue = innerList[i];
+          maxIndex = i;
+        }
       }
-    }
 
-    // Retrieve the corresponding class label
-    String predictedClassLabel = classLabels[maxIndex];
+      // Retrieve the corresponding class label
+      String predictedClassLabel = classLabels[maxIndex];
 
-    logger.i("$output\nPredicted class: $predictedClassLabel");
+      return {
+        'output': output,
+        'maxIndex': maxIndex,
+        'predictedClassLabel': predictedClassLabel,
+      };
+    });
+
+    logger.i(
+        "${data['output']}\nPredicted class: ${data['predictedClassLabel']}");
 
     interpreter?.close();
-    isolateInterpreter.close();
 
     final results = {
-      'prediction': predictedClassLabel,
-      'confidence': output[0][maxIndex] * 100,
+      'prediction': data['predictedClassLabel'],
+      'confidence':
+          (data['output'] as List<dynamic>)[0][data['maxIndex']] * 100,
     };
 
     di<ImageModel>().setResult(
