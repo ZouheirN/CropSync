@@ -359,6 +359,7 @@ class _QuickDiseaseDetectionScreenState
                             );
 
                             if (!mounted) return;
+                            ScaffoldMessenger.of(context).clearSnackBars();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Image saved to gallery'),

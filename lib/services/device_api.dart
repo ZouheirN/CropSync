@@ -414,4 +414,40 @@ class DeviceApi {
       return ReturnTypes.fail;
     }
   }
+
+  static Future<dynamic> correctImageClass({
+    required String deviceId,
+    required String imageId,
+    required String imageClass,
+  }) async {
+    final token = await UserToken.getToken();
+    if (token == '') return ReturnTypes.invalidToken;
+
+    try {
+      await dio.post(
+        '$apiUrl/user/$deviceId/image/class/$imageId',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+        data: {
+          'imageClass': imageClass,
+        },
+      );
+
+      return ReturnTypes.success;
+    } on DioException catch (e) {
+      if (e.response == null) return ReturnTypes.error;
+      logger.e(e.response?.data);
+
+      if (e.response?.data['error'] == "UnAuthorized Access!") {
+        return ReturnTypes.fail;
+      } else if (e.response?.data['error'] == "Expired token") {
+        return ReturnTypes.invalidToken;
+      }
+
+      return ReturnTypes.fail;
+    }
+  }
 }

@@ -580,6 +580,7 @@ class _CropsScreenState extends State<CropsScreen> {
 
                           if (!mounted) return;
                           if (response == ReturnTypes.success) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
@@ -587,6 +588,7 @@ class _CropsScreenState extends State<CropsScreen> {
                               ),
                             );
                           } else {
+                            ScaffoldMessenger.of(context).clearSnackBars();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(

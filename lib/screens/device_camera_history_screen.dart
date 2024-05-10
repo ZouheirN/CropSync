@@ -1,5 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cropsync/json/device.dart';
 import 'package:cropsync/json/device_camera.dart';
+import 'package:cropsync/main.dart';
+import 'package:cropsync/models/device_camera_model.dart';
+import 'package:cropsync/models/devices_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/utils/api_utils.dart';
@@ -12,6 +16,7 @@ import 'package:gal/gal.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
+import 'package:watch_it/watch_it.dart';
 
 class DeviceCameraHistoryScreen extends StatefulWidget {
   const DeviceCameraHistoryScreen({super.key});
@@ -75,6 +80,7 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
             type: StorageDirectory.pictures);
 
         if (!mounted) return;
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Downloading image...'),
@@ -89,6 +95,7 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
 
         if (response != ReturnTypes.success) {
           if (!mounted) return;
+          ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Error download image'),
@@ -100,6 +107,7 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
         await Gal.putImage(imagePath);
 
         if (!mounted) return;
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Image saved to gallery'),
@@ -113,7 +121,56 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
           return;
         }
 
-        // todo change on server
+        RegExp regExp = RegExp(r'/([a-fA-F0-9]+)$');
+        Match? match = regExp.firstMatch(images[index]);
+
+        if (match != null) {
+          String extracted = match.group(1)!;
+
+          final response = await DeviceApi.correctImageClass(
+            deviceId: deviceCamera!.deviceId!,
+            imageId: extracted,
+            imageClass: newPrediction,
+          );
+
+          if (response == ReturnTypes.success) {
+            // change status
+            setState(() {
+              status[index] = newPrediction;
+            });
+
+            // call api to fetch new updated data
+            final devices = await DeviceApi.getDevices();
+            if (devices.runtimeType == List<Device>) {
+              di<DevicesModel>().devices = devices;
+              logger.t('Fetched Updated Devices Data');
+            }
+
+            final deviceCameraData = await DeviceApi.getDeviceCamera();
+            if (deviceCameraData.runtimeType == List<DeviceCamera>) {
+              di<DeviceCameraModel>().deviceCamera = deviceCameraData;
+              logger.t('Fetched Updated Device Camera Data');
+            }
+
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Prediction corrected'),
+              ),
+            );
+          } else {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Error correcting prediction'),
+              ),
+            );
+          }
+        } else {
+          return;
+        }
 
         break;
     }
@@ -131,7 +188,7 @@ class _DeviceCameraHistoryScreenState extends State<DeviceCameraHistoryScreen> {
 
     UserToken.getToken().then(
       (value) {
-          token = value;
+        token = value;
       },
     );
 

@@ -252,6 +252,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                     //     'Success',
                     //     'Frequencies have been set for ${device.name}!',
                     //     context);
+                    ScaffoldMessenger.of(context).clearSnackBars();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
