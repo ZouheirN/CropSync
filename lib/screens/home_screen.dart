@@ -10,6 +10,7 @@ import 'package:cropsync/models/weather_model.dart';
 import 'package:cropsync/services/device_api.dart';
 import 'package:cropsync/services/user_token.dart';
 import 'package:cropsync/services/weather_api.dart';
+import 'package:cropsync/utils/other_variables.dart';
 import 'package:cropsync/utils/user_prefs.dart';
 import 'package:cropsync/widgets/buttons.dart';
 import 'package:cropsync/widgets/cards.dart';
@@ -147,6 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final Map<List<String>, List<Widget>> alerts = {};
     final Map<String, int> alertsCountForEachDevice = {};
 
+    di<OtherVars>().showBadge = false;
     // add device alerts to alerts
     for (Device device in devices) {
       if (device.crop?.alerts == null) continue;
@@ -161,6 +163,8 @@ class _HomeScreenState extends State<HomeScreen> {
         // soil alerts
         buildSoilAlerts(device, alertsCountForEachDevice),
       ];
+
+      di<OtherVars>().showBadge = true;
     }
 
     return Visibility(
