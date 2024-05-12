@@ -319,6 +319,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // Alerts
   Widget buildAlerts(Map<List<String>, List<Widget>> alerts,
       Map<String, int> alertsCountForEachDevice) {
+    // remove alerts where count is 0
+    alerts.removeWhere((key, value) => alertsCountForEachDevice[key[2]] == 0);
+
     if (alerts.isEmpty) return const SizedBox.shrink();
 
     return Padding(
