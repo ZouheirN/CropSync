@@ -148,7 +148,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final Map<List<String>, List<Widget>> alerts = {};
     final Map<String, int> alertsCountForEachDevice = {};
 
-    di<OtherVars>().showBadge = false;
+    Future.delayed(Duration.zero, () async {
+      di<OtherVars>().showBadge = false;
+    });
+
     // add device alerts to alerts
     for (Device device in devices) {
       if (device.crop?.alerts == null) continue;
@@ -163,8 +166,9 @@ class _HomeScreenState extends State<HomeScreen> {
         // soil alerts
         buildSoilAlerts(device, alertsCountForEachDevice),
       ];
-
-      di<OtherVars>().showBadge = true;
+      Future.delayed(Duration.zero, () async {
+        di<OtherVars>().showBadge = true;
+      });
     }
 
     return Visibility(
