@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://socialify.git.ci/ZouheirN/CropSync/image?description=1&amp;font=Inter&amp;language=1&amp;logo=https%3A%2F%2Fi.ibb.co%2FpXH7Jw0%2Fwejak.png&amp;name=1&amp;pattern=Solid&amp;stargazers=1&amp;theme=Auto" alt="CropSync Project Image">
+  <img src="https://socialify.git.ci/ZouheirN/CropSync/image?description=1&font=Inter&language=1&name=1&owner=1&pattern=Solid&stargazers=1&theme=Auto" alt="CropSync" width="640" height="320" />
   <p id="description">Monitor Your Crops and Receive Real-Time Updates!</p>
 </div>
 
