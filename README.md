@@ -57,6 +57,6 @@ ONESIGNAL_APP_ID=(your App ID)</code></pre>
   <img src="https://github.com/ZouheirN/CropSync/assets/61628216/197ec43f-32df-4326-be64-15b2811a5424" width="300">
   <img src="https://github.com/ZouheirN/CropSync/assets/61628216/925ded4b-da99-452e-bf0f-4d349541ea2f" width="300">
   <img src="https://github.com/ZouheirN/CropSync/assets/61628216/7718a498-7283-4bfc-95d9-c05c8fd12b84" width="300">
-  <img src="https://github.com/ZouheirN/CropSync/assets/61628216/626ac98b-1768-4bbe-a902-974a2b550260" width="300">
+  <img src="https://github.com/user-attachments/assets/1fada385-8566-4dad-8fb8-098e77929b7c" width="300">
 </div>
 
