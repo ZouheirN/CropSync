@@ -12,7 +12,7 @@ class DiseaseApi {
 
   static final apiUrl = dotenv.env['API_URL'];
 
-  static Future getDiseaseDataFromGemeni(
+  static Future getDiseaseDataFromGemini(
       Uint8List imageBytes, int index) async {
     di<ImageModel>().setResult(index, 'Processing...');
 

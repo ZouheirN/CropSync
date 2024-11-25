@@ -205,7 +205,7 @@ class ResNetModelHelper {
     ));
 
     if (!isLocal) {
-      DiseaseApi.getDiseaseDataFromGemeni(
+      DiseaseApi.getDiseaseDataFromGemini(
         img.readAsBytesSync(),
         di<ImageModel>().images.length - 1,
       );
@@ -221,12 +221,6 @@ class ResNetModelHelper {
   Future<File?> cropImage({required File imageFile}) async {
     CroppedFile? croppedImage = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
-      aspectRatioPresets: const [
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9,
-      ],
       compressQuality: 100,
       uiSettings: [
         AndroidUiSettings(
@@ -238,12 +232,24 @@ class ResNetModelHelper {
               ? Colors.black
               : Colors.white,
           lockAspectRatio: false,
+          aspectRatioPresets: const [
+            CropAspectRatioPreset.original,
+            CropAspectRatioPreset.square,
+            CropAspectRatioPreset.ratio4x3,
+            CropAspectRatioPreset.ratio16x9,
+          ],
         ),
         IOSUiSettings(
           title: 'Crop Image',
           rotateButtonsHidden: true,
           rotateClockwiseButtonHidden: true,
           aspectRatioLockEnabled: false,
+          aspectRatioPresets: const [
+            CropAspectRatioPreset.original,
+            CropAspectRatioPreset.square,
+            CropAspectRatioPreset.ratio4x3,
+            CropAspectRatioPreset.ratio16x9,
+          ],
         ),
       ],
     );

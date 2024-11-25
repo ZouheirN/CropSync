@@ -48,8 +48,8 @@ Future<void> main() async {
   OneSignal.initialize(dotenv.env['ONESIGNAL_APP_ID']!);
   OneSignal.Notifications.requestPermission(true);
 
-  await FlutterMapTileCaching.initialise();
-  await FMTC.instance('mapStore').manage.createAsync();
+  await FMTCObjectBoxBackend().initialise();
+  await FMTCStore('mapStore').manage.create();
 
   await Hive.initFlutter();
 

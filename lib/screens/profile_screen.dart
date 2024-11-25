@@ -46,8 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     di<UserModel>().setImage(img.readAsBytesSync());
 
-    final result =
-        await UserApi.updateProfilePicture(base64Image: base64Image);
+    final result = await UserApi.updateProfilePicture(base64Image: base64Image);
 
     if (!mounted) return;
     if (result == ReturnTypes.fail) {
@@ -65,9 +64,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<File?> cropImage({required File imageFile}) async {
     CroppedFile? croppedImage = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
-      aspectRatioPresets: const [
-        CropAspectRatioPreset.square,
-      ],
       compressQuality: 60,
       uiSettings: [
         AndroidUiSettings(
@@ -80,12 +76,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               : Colors.white,
           lockAspectRatio: true,
           hideBottomControls: true,
+          aspectRatioPresets: const [
+            CropAspectRatioPreset.square,
+          ],
         ),
         IOSUiSettings(
           title: 'Crop Image',
           rotateButtonsHidden: true,
           rotateClockwiseButtonHidden: true,
           aspectRatioLockEnabled: true,
+          aspectRatioPresets: const [
+            CropAspectRatioPreset.square,
+          ],
         ),
       ],
     );
@@ -250,7 +252,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             backgroundImage: MemoryImage(user.profilePicture!),
                           ),
                         ),
-                      if (user.uploadProgress != 1 && user.uploadProgress != null)
+                      if (user.uploadProgress != 1 &&
+                          user.uploadProgress != null)
                         Positioned.fill(
                           child: Center(
                             child: CircularProgressIndicator(

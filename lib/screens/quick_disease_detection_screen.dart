@@ -243,7 +243,7 @@ class _QuickDiseaseDetectionScreenState
     return Row(
       children: [
         const Expanded(
-          child: Text('Gemeni AI', textAlign: TextAlign.right),
+          child: Text('Gemini AI', textAlign: TextAlign.right),
         ),
         Expanded(
           child: Switch(
@@ -327,7 +327,7 @@ class _QuickDiseaseDetectionScreenState
                                 index: index,
                               );
                             } else {
-                              DiseaseApi.getDiseaseDataFromGemeni(
+                              DiseaseApi.getDiseaseDataFromGemini(
                                 images[index].image,
                                 index,
                               );

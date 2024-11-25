@@ -164,13 +164,13 @@ class _MainScreenState extends State<MainScreen> {
         icon: 'icon_camera',
       ),
       const ShortcutItem(
-        type: 'gemeni-camera',
-        localizedTitle: 'Camera (Gemeni AI)',
-        icon: 'icon_gemeni',
+        type: 'gemini-camera',
+        localizedTitle: 'Camera (Gemini AI)',
+        icon: 'icon_gemini',
       ),
     ]);
     quickActions.initialize((shortcutType) {
-      if (shortcutType == 'camera' || shortcutType == 'gemeni-camera') {
+      if (shortcutType == 'camera' || shortcutType == 'gemini-camera') {
         if (di<UserModel>().user.token == null) {
           return;
         }

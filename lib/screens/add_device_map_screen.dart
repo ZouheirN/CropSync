@@ -319,7 +319,7 @@ class _AddDeviceMapScreenState extends State<AddDeviceMapScreen> {
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           userAgentPackageName: 'com.zouheirn.cropsync',
-          tileProvider: FMTC.instance('mapStore').getTileProvider(),
+          tileProvider: FMTCStore('mapStore').getTileProvider(),
         ),
         CircleLayer(circles: [
           ...circles,
