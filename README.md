@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://socialify.git.ci/ZouheirN/CropSync/image?description=1&amp;font=Inter&amp;language=1&amp;logo=https%3A%2F%2Fi.ibb.co%2FpXH7Jw0%2Fwejak.png&amp;name=1&amp;pattern=Solid&amp;stargazers=1&amp;theme=Auto" alt="CropSync Project Image">
+  <img src="https://socialify.git.ci/ZouheirN/CropSync/image?description=1&font=Inter&language=1&name=1&owner=1&pattern=Solid&stargazers=1&theme=Auto" alt="CropSync" width="640" height="320" />
   <p id="description">Monitor Your Crops and Receive Real-Time Updates!</p>
 </div>
 
@@ -48,3 +48,15 @@ ONESIGNAL_APP_ID=(your App ID)</code></pre>
   </li>
   <li>Build and launch the application.</li>
 </ol>
+
+<h2 align="center">📱 Screenshots</h2>
+
+<div align="center">
+  <img src="https://github.com/ZouheirN/CropSync/assets/61628216/706b2c90-6a21-453a-a793-adee1d3b47e9" width="300">
+  <img src="https://github.com/ZouheirN/CropSync/assets/61628216/3e3d74a1-8785-4c8f-8915-d4d8b2e7391b" width="300">
+  <img src="https://github.com/ZouheirN/CropSync/assets/61628216/197ec43f-32df-4326-be64-15b2811a5424" width="300">
+  <img src="https://github.com/ZouheirN/CropSync/assets/61628216/925ded4b-da99-452e-bf0f-4d349541ea2f" width="300">
+  <img src="https://github.com/ZouheirN/CropSync/assets/61628216/7718a498-7283-4bfc-95d9-c05c8fd12b84" width="300">
+  <img src="https://github.com/ZouheirN/CropSync/assets/61628216/626ac98b-1768-4bbe-a902-974a2b550260" width="300">
+</div>
+
