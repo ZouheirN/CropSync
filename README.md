@@ -10,6 +10,12 @@
 </div>
 
 <div align="center">
+  <a href="https://doi.org/10.54729/2959-331X.1145">
+    <img src="https://img.shields.io/badge/ARTICLE-CLICK_HERE-d07d31?style=for-the-badge&logo=gitbook" alt="Article">
+  </a>
+</div>
+
+<div align="center">
   <a href="https://wakatime.com/badge/user/5a36320a-d953-4e8f-9cb9-ae08ea9dbf4a/project/018ced56-993a-482f-a0fd-a98cce92c732"><img src="https://wakatime.com/badge/user/5a36320a-d953-4e8f-9cb9-ae08ea9dbf4a/project/018ced56-993a-482f-a0fd-a98cce92c732.svg" alt="wakatime"></a>
 </div>
 
