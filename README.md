@@ -66,7 +66,7 @@ ONESIGNAL_APP_ID=(your App ID)</code></pre>
   <img src="https://github.com/user-attachments/assets/1fada385-8566-4dad-8fb8-098e77929b7c" width="300">
 </div>
 
-<h2 align="center">📝 Models</h2>
+<h2 align="center">📝 Diagrams</h2>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/1dc6642c-c9ca-4811-9d21-36435c519dd4" width="600">
   <img src="https://github.com/user-attachments/assets/3af1ee9f-0267-4bf0-abd0-92316b37c434" width="600">
